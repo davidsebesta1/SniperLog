@@ -5,7 +5,7 @@ namespace SniperLog.Models
 {
     public interface IDataAccessObject<T> where T : IDataAccessObject<T>
     {
-        public Task<bool> SaveAsync();
+        public Task<int> SaveAsync();
         public Task<bool> DeleteAsync();
 
         public static abstract Task<T?> LoadAsync(int id);

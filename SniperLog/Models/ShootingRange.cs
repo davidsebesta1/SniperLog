@@ -12,6 +12,24 @@ namespace SniperLog.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
+        public ShootingRange(int id, string? name, string? address, double latitude, double longitude)
+        {
+            ID = id;
+            Name = name;
+            Address = address;
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+
+        public ShootingRange(string? name, string? address, double latitude, double longitude)
+        {
+            ID = -1;
+            Name = name;
+            Address = address;
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+
         public static async Task<ShootingRange?> LoadAsync(int id)
         {
             SqliteDataReader? reader = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", id));
@@ -35,9 +53,13 @@ namespace SniperLog.Models
             return LoadNextFromReader(reader);
         }
 
-        public async Task<bool> SaveAsync()
+        /// <summary>
+        /// Saves or replaces the instance with newer data and returns instance ID in database
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> SaveAsync()
         {
-            return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync("INSERT OR REPLACE INTO ShootingRange(ID, Name Address, Latitude, Longitude) VALUES(SELECT ShootingRange.ID FROM ShootingRange WHERE ShootingRange.Name = @Name), @Name, @Address, @Latitude, @Longitude)", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude)) == 1;
+            return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync("INSERT OR REPLACE INTO ShootingRange(ID, Name Address, Latitude, Longitude) VALUES(SELECT ShootingRange.ID FROM ShootingRange WHERE ShootingRange.Name = @Name), @Name, @Address, @Latitude, @Longitude)", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude));
         }
 
         public async Task<bool> DeleteAsync()
@@ -89,14 +111,7 @@ namespace SniperLog.Models
 
         public static ShootingRange LoadNextFromReader(SqliteDataReader reader)
         {
-            return new ShootingRange()
-            {
-                ID = Convert.ToInt32(reader["ID"]),
-                Name = Convert.ToString(reader["Name"]),
-                Address = Convert.ToString(reader["Address"]),
-                Latitude = Convert.ToDouble(reader["Latitude"]),
-                Longitude = Convert.ToDouble(reader["Longitude"])
-            };
+            return new ShootingRange(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"]), Convert.ToString(reader["Address"]), Convert.ToDouble(reader["Latitude"]), Convert.ToDouble(reader["Longitude"]));
         }
     }
 }

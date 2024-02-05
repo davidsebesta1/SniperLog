@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 
 namespace SniperLog.Services
 {
-    public static class DataFetcherService<T> where T : IDataAccessObject<T>
+    public class DataFetcherService<T> where T : IDataAccessObject<T>
     {
-        private static ObservableCollection<T>? _cachedObservableCollection;
+        private ObservableCollection<T>? _cachedObservableCollection;
 
-        public static async Task<ObservableCollection<T>> GetAll()
+        public async Task<ObservableCollection<T>> GetAll()
         {
             if (_cachedObservableCollection == null)
             {

@@ -1,4 +1,6 @@
 ﻿using SniperLog.Pages;
+using SniperLog.ViewModels;
+using UIKit;
 
 namespace SniperLog
 {
@@ -8,21 +10,24 @@ namespace SniperLog
         {
             FlyoutBehavior = FlyoutBehavior.Flyout;
             SetTabBarIsVisible(this, false);
+
+            MainPage mainPage = new MainPage();
             Items.Add(new ShellContent()
             {
-                Title = "MainPage",
-                ContentTemplate = new DataTemplate(() => new MainPage()),
-                Route = "MainPage"
+                Title = nameof(MainPage),
+                ContentTemplate = new DataTemplate(() => mainPage),
+                Route = nameof(mainPage)
             });
 
+            ShootingRangesPage shootingRangesPage = new ShootingRangesPage(MauiProgram.App.Services.GetService<ShootingRangeViewModel>());
             Items.Add(new ShellContent()
             {
-                Title = "Shooting Ranges",
-                ContentTemplate = new DataTemplate(() => new ShootingRangesPage()),
-                Route = "ShootingRangesPage"
+                Title = shootingRangesPage.Title,
+                ContentTemplate = new DataTemplate(() => shootingRangesPage),
+                Route = nameof(shootingRangesPage)
             });
 
-            var tabbar = new FlyoutItem() { Title = "Tabbar", Route = "Tab" };
+            FlyoutItem tabbar = new FlyoutItem() { Title = "Tabbar", Route = "Tab" };
             Items.Add(tabbar);
         }
     }
