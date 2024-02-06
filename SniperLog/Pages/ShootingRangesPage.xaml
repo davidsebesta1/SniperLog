@@ -7,12 +7,34 @@
              Title="{Binding PageTitle}"
              x:Class="SniperLog.Pages.ShootingRangesPage">
     <Grid ColumnDefinitions="*,*" RowDefinitions="*, 100">
-        <CollectionView Background="Transparent" Grid.ColumnSpan="2">
+        <CollectionView Background="Transparent" Grid.ColumnSpan="2" ItemsSource="{Binding ShootingRanges}">
             <CollectionView.EmptyView>
                 <VerticalStackLayout>
                     <Label Text="No Shooting Ranges found..." HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ShootingRange">
+                    <Grid Padding="10">
+                        <Frame HeightRequest="125" BackgroundColor="Transparent">
+                            <Grid Padding="0" ColumnDefinitions="*">
+                                <VerticalStackLayout Grid.Column="0" Padding="10" VerticalOptions="Center">
+                                    <Label Text="{Binding Name}"/>
+                                    <Label Text="{Binding Address}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Button Text="Get Shooting ranges" Grid.Row="1" Margin="8" Command="{Binding GetShootingRangesCommand}" IsEnabled="{Binding IsNotBusy}"/>
+        <Button Text="Add new" Grid.Row="1" Grid.Column="1" Margin="8" Command="{Binding AddNewRangeCommand}" IsEnabled="{Binding IsNotBusy}"/>
     </Grid>
 </ContentPage>

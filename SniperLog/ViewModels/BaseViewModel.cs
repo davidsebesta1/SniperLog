@@ -11,7 +11,7 @@ namespace SniperLog.ViewModels
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-        private bool _isBusy;
+        private bool _isBusy = false;
 
         public bool IsNotBusy => !IsBusy;
 

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace SniperLog.Services
 {
     public class SqLiteDatabaseConnection
     {
-        private readonly string _connectionString = @"Data Source=c:\SniperLogDatabase.db;Version=3;Pooling=True;Max Pool Size=100;";
+        private readonly string _connectionString;
 
         private static SqLiteDatabaseConnection _instance;
 
@@ -22,6 +23,11 @@ namespace SniperLog.Services
             }
         }
 
+        private SqLiteDatabaseConnection()
+        {
+            _connectionString = $@"Data Source={Path.Combine(FileSystem.Current.AppDataDirectory, "SniperLogDatabase.db")};Pooling=True";
+        }
+
         private static void InitializeSetup()
         {
             if (_instance == null)
@@ -29,7 +35,7 @@ namespace SniperLog.Services
                 throw new Exception("Instance for database connection is null");
             }
 
-            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE,Address VARCHAR(100),Latitude DOUBLE NOT NULL,Longitude DOUBLE NOT NULL);");
+            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE NOT NULL,Address VARCHAR(100),Latitude DOUBLE NOT NULL,Longitude DOUBLE NOT NULL);");
         }
 
         #region Queries Methods
@@ -89,7 +95,7 @@ namespace SniperLog.Services
             return 0;
         }
 
-        public async Task<SqliteDataReader?> ExecuteQueryAsync(string query, params SqliteParameter[] parameters)
+        public async Task<DataTable?> ExecuteQueryAsync(string query, params SqliteParameter[] parameters)
         {
             try
             {
@@ -104,7 +110,11 @@ namespace SniperLog.Services
                             command.Parameters.AddRange(parameters);
                         }
 
-                        return await command.ExecuteReaderAsync();
+                        SqliteDataReader reader = await command.ExecuteReaderAsync();
+                        DataTable table = new DataTable();
+                        table.Load(reader);
+
+                        return table;
                     }
                 }
             }
@@ -116,7 +126,7 @@ namespace SniperLog.Services
             return null;
         }
 
-        public SqliteDataReader? ExecuteQuery(string query, params SqliteParameter[] parameters)
+        public DataTable? ExecuteQuery(string query, params SqliteParameter[] parameters)
         {
             try
             {
@@ -131,7 +141,9 @@ namespace SniperLog.Services
                             command.Parameters.AddRange(parameters);
                         }
 
-                        return command.ExecuteReader();
+                        SqliteDataReader reader = command.ExecuteReader();
+                        DataTable table = new DataTable();
+                        table.Load(reader);
                     }
                 }
             }

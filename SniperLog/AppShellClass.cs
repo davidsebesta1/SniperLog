@@ -1,6 +1,5 @@
 ﻿using SniperLog.Pages;
 using SniperLog.ViewModels;
-using UIKit;
 
 namespace SniperLog
 {

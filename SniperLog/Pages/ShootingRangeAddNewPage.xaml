@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             x:Class="SniperLog.Pages.ShootingRangeAddNewPage"
+             BackgroundColor="#AA000000"
+             Title="ShootingRangeAddNewPage">
+    <VerticalStackLayout WidthRequest="300" HeightRequest="700" VerticalOptions="FillAndExpand" BackgroundColor="{StaticResource OffBlack}">
+        <Frame Margin="10" BackgroundColor="#444444" HeightRequest="20">
+            <HorizontalStackLayout>
+                <Label Text="Name" VerticalOptions="Center" WidthRequest="30"/>
+                <Entry x:Name="ShootingRangeName" VerticalOptions="Center"></Entry>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Frame Margin="10" BackgroundColor="#444444" HeightRequest="20">
+            <HorizontalStackLayout>
+                <Label Text="Address" VerticalOptions="Center" WidthRequest="30"/>
+                <Entry x:Name="ShootingRangeAddress" VerticalOptions="Center"></Entry>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Frame Margin="10" BackgroundColor="#444444" HeightRequest="20">
+            <HorizontalStackLayout>
+                <Label Text="Latitude" VerticalOptions="Center" WidthRequest="30"/>
+                <Entry x:Name="ShootingRangeLang"></Entry>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Frame Margin="10" BackgroundColor="#444444" HeightRequest="20">
+            <HorizontalStackLayout>
+                <Label Text="Longitude" VerticalOptions="Center" WidthRequest="30"/>
+                <Entry x:Name="ShootingRangeLong" VerticalOptions="Center"></Entry>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Button Text="Add" Clicked="Button_Clicked" WidthRequest="25" HeightRequest="25" VerticalOptions="End"/>
+    </VerticalStackLayout>
+</mopups:PopupPage>

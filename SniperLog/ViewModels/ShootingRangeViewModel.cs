@@ -1,13 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using SniperLog.Models;
+using SniperLog.Pages;
 using SniperLog.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SniperLog.ViewModels
 {
     public partial class ShootingRangeViewModel : BaseViewModel
     {
-        public ObservableCollection<ShootingRange> ShootingRanges = new ObservableCollection<ShootingRange>();
+        public ObservableCollection<ShootingRange> ShootingRanges { get; } = new ObservableCollection<ShootingRange>();
 
         private DataFetcherService<ShootingRange> _dataFetcher;
 
@@ -18,17 +21,33 @@ namespace SniperLog.ViewModels
         }
 
         [RelayCommand]
-        public async Task GetShootingRanges()
+        private async Task GetShootingRanges()
+        {
+            if (IsBusy) return;
+
+            Trace.WriteLine("Test");
+            try
+            {
+                await _dataFetcher.GetAll(ShootingRanges);
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddNewRange()
         {
             if (IsBusy) return;
 
             try
             {
-                ShootingRanges = await _dataFetcher.GetAll();
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
+                await MopupService.Instance.PushAsync(new ShootingRangeAddNewPage());
             }
             finally
             {

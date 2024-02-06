@@ -5,17 +5,9 @@ namespace SniperLog.Services
 {
     public class DataFetcherService<T> where T : IDataAccessObject<T>
     {
-        private ObservableCollection<T>? _cachedObservableCollection;
-
-        public async Task<ObservableCollection<T>> GetAll()
+        public async Task GetAll(ObservableCollection<T> collection)
         {
-            if (_cachedObservableCollection == null)
-            {
-                _cachedObservableCollection = await T.LoadAllAsync();
-                return _cachedObservableCollection;
-            }
-
-            return await T.LoadAllAsync(_cachedObservableCollection);
+            await T.LoadAllAsync(collection);
         }
     }
 }

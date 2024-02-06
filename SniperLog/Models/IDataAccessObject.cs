@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
+using System.Data;
 
 namespace SniperLog.Models
 {
@@ -11,6 +12,6 @@ namespace SniperLog.Models
         public static abstract Task<T?> LoadAsync(int id);
         public static abstract Task<ObservableCollection<T>> LoadAllAsync();
         public static abstract Task<ObservableCollection<T>> LoadAllAsync(ObservableCollection<T> collection);
-        public static abstract T LoadNextFromReader(SqliteDataReader reader);
+        public static abstract T LoadNextFromRow(DataRow reader);
     }
 }

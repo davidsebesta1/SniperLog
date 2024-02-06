@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Mopups.Hosting;
 using SniperLog.Models;
 using SniperLog.Pages;
 using SniperLog.Services;
@@ -12,10 +13,14 @@ namespace SniperLog
 
         public static MauiApp CreateMauiApp()
         {
+            SQLitePCL.Batteries.Init();
+
             var builder = MauiApp.CreateBuilder();
             builder
 
                 .UseMauiApp<App>()
+                .ConfigureMopups()
+                .UseMauiMaps()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -30,8 +35,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ShootingRangeViewModel>();
 
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<ShootingRangesPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<ShootingRangesPage>();
 
             App = builder.Build();
             return App;

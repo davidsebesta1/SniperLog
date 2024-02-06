@@ -1,18 +1,19 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Services;
 using System.Collections.ObjectModel;
+using System.Data;
 
 namespace SniperLog.Models
 {
-    public class ShootingRange : IDataAccessObject<ShootingRange>
+    public class ShootingRange : IDataAccessObject<ShootingRange>, IEquatable<ShootingRange?>
     {
         public int ID { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public string? Address { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public ShootingRange(int id, string? name, string? address, double latitude, double longitude)
+        public ShootingRange(int id, string name, string? address, double latitude, double longitude)
         {
             ID = id;
             Name = name;
@@ -21,7 +22,7 @@ namespace SniperLog.Models
             Longitude = longitude;
         }
 
-        public ShootingRange(string? name, string? address, double latitude, double longitude)
+        public ShootingRange(string name, string? address, double latitude, double longitude)
         {
             ID = -1;
             Name = name;
@@ -32,25 +33,19 @@ namespace SniperLog.Models
 
         public static async Task<ShootingRange?> LoadAsync(int id)
         {
-            SqliteDataReader? reader = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", id));
+            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", id));
 
-            if (reader == null)
+            if (table == null)
             {
                 return null;
             }
 
-            int reads = 0;
-            while (await reader.ReadAsync())
+            if (table.Rows.Count > 1 || table.Rows.Count == 0)
             {
-                reads++;
-
-                if (reads > 1)
-                {
-                    throw new Exception($"There are multiple {nameof(ShootingRange)} returned rows with same ID");
-                }
+                throw new Exception($"Retrieved multiple instances from database of {nameof(ShootingRange)}, expected: 1 or 0");
             }
 
-            return LoadNextFromReader(reader);
+            return LoadNextFromRow(table.Rows[0]);
         }
 
         /// <summary>
@@ -59,7 +54,8 @@ namespace SniperLog.Models
         /// <returns></returns>
         public async Task<int> SaveAsync()
         {
-            return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync("INSERT OR REPLACE INTO ShootingRange(ID, Name Address, Latitude, Longitude) VALUES(SELECT ShootingRange.ID FROM ShootingRange WHERE ShootingRange.Name = @Name), @Name, @Address, @Latitude, @Longitude)", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude));
+            if (ID == -1) return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync("INSERT INTO ShootingRange(Name, Address, Latitude, Longitude) VALUES(@Name, @Address, @Latitude, @Longitude) RETURNING ShootingRange.ID", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude));
+            else return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync("INSERT OR REPLACE INTO ShootingRange(ID, Name, Address, Latitude, Longitude) VALUES(SELECT ShootingRange.ID FROM ShootingRange WHERE ShootingRange.Name = @Name), @Name, @Address, @Latitude, @Longitude)", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude));
         }
 
         public async Task<bool> DeleteAsync()
@@ -69,17 +65,17 @@ namespace SniperLog.Models
 
         public static async Task<ObservableCollection<ShootingRange>> LoadAllAsync()
         {
-            SqliteDataReader? reader = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
+            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
 
-            if (reader == null)
+            if (table == null)
             {
-                throw new NullReferenceException("Reader is null");
+                throw new NullReferenceException("Table is null");
             }
 
             ObservableCollection<ShootingRange> collection = new ObservableCollection<ShootingRange>();
-            while (await reader.ReadAsync())
+            foreach (DataRow row in table.Rows)
             {
-                collection.Add(LoadNextFromReader(reader));
+                collection.Add(LoadNextFromRow(row));
             }
 
             return collection;
@@ -93,25 +89,50 @@ namespace SniperLog.Models
             }
 
             collection.Clear();
-            SqliteDataReader? reader = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
+            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
 
-            if (reader == null)
+            if (table == null)
             {
-                throw new NullReferenceException("Reader is null");
+                throw new NullReferenceException("Table is null");
             }
 
-            while (await reader.ReadAsync())
+            foreach (DataRow row in table.Rows)
             {
-                collection.Add(LoadNextFromReader(reader));
+                collection.Add(LoadNextFromRow(row));
             }
 
             return collection;
         }
 
 
-        public static ShootingRange LoadNextFromReader(SqliteDataReader reader)
+        public static ShootingRange LoadNextFromRow(DataRow reader)
         {
             return new ShootingRange(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"]), Convert.ToString(reader["Address"]), Convert.ToDouble(reader["Latitude"]), Convert.ToDouble(reader["Longitude"]));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as ShootingRange);
+        }
+
+        public bool Equals(ShootingRange? other)
+        {
+            return other is not null && ID == other.ID;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Name, Address, Latitude, Longitude);
+        }
+
+        public static bool operator ==(ShootingRange? left, ShootingRange? right)
+        {
+            return EqualityComparer<ShootingRange>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(ShootingRange? left, ShootingRange? right)
+        {
+            return !(left == right);
         }
     }
 }

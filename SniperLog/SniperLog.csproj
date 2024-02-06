@@ -63,13 +63,19 @@
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.1" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="8.0.6" />
+		<PackageReference Include="Mopups" Version="1.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\MainPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ShootingRangeAddNewPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRangesPage.xaml">
