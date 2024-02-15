@@ -6,18 +6,40 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <!--White theme-->
+    <Color x:Key="Background">#FFFFFF</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    
+    <Color x:Key="Primary">#6200EE</Color>
+    <Color x:Key="PrimaryVariant">#3700B3</Color>
+    <Color x:Key="Secondary">#03DAC6</Color>
+    <Color x:Key="SecondaryVariant">#018786</Color>
+    <Color x:Key="Error">#B00020</Color>
+    
+    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+    <Color x:Key="TextOnSecondary">#000000</Color>
+    <Color x:Key="TextOnBackground">#000000</Color>
+    <Color x:Key="TextOnSurface">#000000</Color>
+    <Color x:Key="TextOnError">#FFFFFF</Color>
 
-    <Color x:Key="White">White</Color>
-    <Color x:Key="Black">Black</Color>
-    <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <!--Dark theme-->
+    <Color x:Key="BackgroundDark">#121212</Color>
+    <Color x:Key="SurfaceDark">#121212</Color>
+    
+    <Color x:Key="PrimaryDark">#BB86FC</Color>
+    <Color x:Key="PrimaryVariantDark">#3700B3</Color>
+    <Color x:Key="SecondaryDark">#03DAC6</Color>
+    <Color x:Key="SecondaryVariantDark">#03DAC6</Color>
+    <Color x:Key="ErrorDark">#CF6679</Color>
+
+    <Color x:Key="TextOnPrimaryDark">#000000</Color>
+    <Color x:Key="TextOnSecondaryDark">#000000</Color>
+    <Color x:Key="TextOnBackgroundDark">#FFFFFF</Color>
+    <Color x:Key="TextOnSurfaceDark">#FFFFFF</Color>
+    <Color x:Key="TextOnErrorDark">#000000</Color>
+
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
@@ -30,7 +52,7 @@
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
-    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
+    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource SecondaryVariant}"/>
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
 

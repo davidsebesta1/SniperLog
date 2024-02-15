@@ -1,7 +1,9 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mopups.Services;
 using SniperLog.Models;
 using SniperLog.Pages;
+using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,7 +14,10 @@ namespace SniperLog.ViewModels
     {
         public ObservableCollection<ShootingRange> ShootingRanges { get; } = new ObservableCollection<ShootingRange>();
 
-        private DataFetcherService<ShootingRange> _dataFetcher;
+        private readonly DataFetcherService<ShootingRange> _dataFetcher;
+
+        [ObservableProperty]
+        private bool _isRefreshing;
 
         public ShootingRangeViewModel(DataFetcherService<ShootingRange> dataFetcher)
         {
@@ -25,7 +30,6 @@ namespace SniperLog.ViewModels
         {
             if (IsBusy) return;
 
-            Trace.WriteLine("Test");
             try
             {
                 await _dataFetcher.GetAll(ShootingRanges);
@@ -37,6 +41,7 @@ namespace SniperLog.ViewModels
             finally
             {
                 IsBusy = false;
+                IsRefreshing = false;
             }
         }
 
@@ -53,6 +58,19 @@ namespace SniperLog.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        [RelayCommand]
+        private async Task GoToDetailsAsync(ShootingRange srange)
+        {
+            if (srange == null) return;
+
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                {"TappedShootingRange", srange }
+            };
+
+            await Shell.Current.GoToAsync($"{nameof(ShootingRangeDetailsPage)}?id={srange.ID}", true, parameters);
         }
     }
 }

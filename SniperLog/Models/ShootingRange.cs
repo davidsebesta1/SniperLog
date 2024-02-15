@@ -12,23 +12,26 @@ namespace SniperLog.Models
         public string? Address { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string? RelativeImagePathFromAppdata { get; set; }
 
-        public ShootingRange(int id, string name, string? address, double latitude, double longitude)
+        public ShootingRange(int iD, string name, string? address, double latitude, double longitude, string? relativeImagePathFromAppdata)
         {
-            ID = id;
+            ID = iD;
             Name = name;
             Address = address;
             Latitude = latitude;
             Longitude = longitude;
+            RelativeImagePathFromAppdata = relativeImagePathFromAppdata;
         }
 
-        public ShootingRange(string name, string? address, double latitude, double longitude)
+        public ShootingRange(string name, string? address, double latitude, double longitude, string? relativeImagePathFromAppdata)
         {
             ID = -1;
             Name = name;
             Address = address;
             Latitude = latitude;
             Longitude = longitude;
+            RelativeImagePathFromAppdata = relativeImagePathFromAppdata;
         }
 
         public static async Task<ShootingRange?> LoadAsync(int id)
@@ -44,14 +47,13 @@ namespace SniperLog.Models
             {
                 throw new Exception($"Retrieved multiple instances from database of {nameof(ShootingRange)}, expected: 1 or 0");
             }
-
             return LoadNextFromRow(table.Rows[0]);
         }
 
         /// <summary>
         /// Saves or replaces the instance with newer data and returns instance ID in database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>ID if the instance</returns>
         public async Task<int> SaveAsync()
         {
             if (ID == -1) return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync("INSERT INTO ShootingRange(Name, Address, Latitude, Longitude) VALUES(@Name, @Address, @Latitude, @Longitude) RETURNING ShootingRange.ID", new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude));
@@ -107,7 +109,7 @@ namespace SniperLog.Models
 
         public static ShootingRange LoadNextFromRow(DataRow reader)
         {
-            return new ShootingRange(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"]), Convert.ToString(reader["Address"]), Convert.ToDouble(reader["Latitude"]), Convert.ToDouble(reader["Longitude"]));
+            return new ShootingRange(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"]), Convert.ToString(reader["Address"]), Convert.ToDouble(reader["Latitude"]), Convert.ToDouble(reader["Longitude"]), Convert.ToString(reader["RelativeImagePathFromAppdata"]));
         }
 
         public override bool Equals(object? obj)

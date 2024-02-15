@@ -18,7 +18,7 @@ namespace SniperLog
                 Route = nameof(mainPage)
             });
 
-            ShootingRangesPage shootingRangesPage = new ShootingRangesPage(MauiProgram.App.Services.GetService<ShootingRangeViewModel>());
+            ShootingRangesPage shootingRangesPage = new ShootingRangesPage(MauiProgram.ApplicationInstance.Services.GetService<ShootingRangeViewModel>());
             Items.Add(new ShellContent()
             {
                 Title = shootingRangesPage.Title,

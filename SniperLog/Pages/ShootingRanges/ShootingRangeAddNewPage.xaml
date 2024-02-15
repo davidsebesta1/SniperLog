@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             x:Class="SniperLog.Pages.ShootingRangeAddNewPage"
+             BackgroundColor="#AA000000"
+             Title="ShootingRangeAddNewPage">
+    <VerticalStackLayout WidthRequest="300" HeightRequest="650" VerticalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
+            <VerticalStackLayout>
+                <Label Text="Name" HorizontalOptions="Start" FontSize="18"/>
+                <Entry x:Name="ShootingRangeName" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
+            <VerticalStackLayout>
+                <Label Text="Address" HorizontalOptions="Start" FontSize="18"/>
+                <Entry x:Name="ShootingRangeAddress" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
+            <VerticalStackLayout>
+                <Label Text="Latitude" HorizontalOptions="Start" FontSize="18"/>
+                <Entry x:Name="ShootingRangeLang" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
+            <VerticalStackLayout>
+                <Label Text="Longitude" HorizontalOptions="Start" FontSize="18"/>
+                <Entry x:Name="ShootingRangeLong" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Button Text="Add" Clicked="Button_Clicked" WidthRequest="150" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin="0, 0, 5, 0"/>
+    </VerticalStackLayout>
+</mopups:PopupPage>

@@ -1,19 +1,24 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Hosting;
 using Mopups.Hosting;
 using SniperLog.Models;
 using SniperLog.Pages;
 using SniperLog.Services;
 using SniperLog.ViewModels;
+using System.Resources;
 
 namespace SniperLog
 {
     public static class MauiProgram
     {
-        public static MauiApp App;
+        public static MauiApp ApplicationInstance;
 
         public static MauiApp CreateMauiApp()
         {
             SQLitePCL.Batteries.Init();
+            ApplicationConfigService.Init();
+
+            SqliteDatabaseUpdatePatcher.CheckForUpdates();
 
             var builder = MauiApp.CreateBuilder();
             builder
@@ -21,6 +26,10 @@ namespace SniperLog
                 .UseMauiApp<App>()
                 .ConfigureMopups()
                 .UseMauiMaps()
+                .ConfigureEssentials(essentials =>
+                {
+                    essentials.UseVersionTracking();
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -38,8 +47,9 @@ namespace SniperLog
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ShootingRangesPage>();
 
-            App = builder.Build();
-            return App;
+            ApplicationInstance = builder.Build();
+
+            return ApplicationInstance;
         }
     }
 }
