@@ -1,7 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Extensions;
 using System.Data;
 
-namespace SniperLog.Services
+namespace SniperLog.Services.Database
 {
     public class SqLiteDatabaseConnection
     {
@@ -25,7 +26,7 @@ namespace SniperLog.Services
 
         private SqLiteDatabaseConnection()
         {
-            _connectionString = $@"Data Source={Path.Combine(FileSystem.Current.AppDataDirectory, "SniperLogDatabase.db")};Pooling=True";
+            _connectionString = $@"Data Source={AppDataFileLoader.GetPathFromAppData("SniperLogDatabase.db")};Pooling=True";
         }
 
         private static void InitializeSetup()
@@ -35,11 +36,8 @@ namespace SniperLog.Services
                 throw new Exception("Instance for database connection is null");
             }
 
-            if (VersionTracking.Default.IsFirstLaunchEver)
-            {
-                _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE NOT NULL,Address VARCHAR(100),Latitude DOUBLE NOT NULL,Longitude DOUBLE NOT NULL);");
-                _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS SubRange(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ShootingRange_ID INTEGER NOT NULL,RangeInMeters INT NOT NULL,Altitude DOUBLE,DirectionToNorth DOUBLE,VerticalFiringOffsetDegrees DOUBLE,NotesRelativePathFromAppData VARCHAR(100),FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID));");
-            }
+            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE NOT NULL,Address VARCHAR(100),Latitude DOUBLE NOT NULL,Longitude DOUBLE NOT NULL);");
+            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS SubRange(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ShootingRange_ID INTEGER NOT NULL,RangeInMeters INT NOT NULL,Altitude DOUBLE,DirectionToNorth DOUBLE,VerticalFiringOffsetDegrees DOUBLE,NotesRelativePathFromAppData VARCHAR(100),FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID));");
         }
 
         #region Queries Methods
@@ -93,7 +91,7 @@ namespace SniperLog.Services
             }
             catch (Exception ex)
             {
-                Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
+                //Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
             }
 
             return 0;

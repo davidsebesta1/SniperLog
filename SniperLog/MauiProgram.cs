@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Hosting;
 using Mopups.Hosting;
 using SniperLog.Models;
 using SniperLog.Pages;
+using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
+using SniperLog.Services.Database;
 using SniperLog.ViewModels;
-using System.Resources;
 
 namespace SniperLog
 {
@@ -17,8 +17,6 @@ namespace SniperLog
         {
             SQLitePCL.Batteries.Init();
             ApplicationConfigService.Init();
-
-            SqliteDatabaseUpdatePatcher.CheckForUpdates();
 
             var builder = MauiApp.CreateBuilder();
             builder
@@ -40,15 +38,18 @@ namespace SniperLog
             builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<DataFetcherService<ShootingRange>>();
+            builder.Services.AddSingleton<DataService<ShootingRange>>();
 
             builder.Services.AddSingleton<ShootingRangeViewModel>();
+            builder.Services.AddSingleton<ShootingRangeDetailsViewModel>();
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ShootingRangesPage>();
+            builder.Services.AddTransient<ShootingRangeDetailsPage>();
 
             ApplicationInstance = builder.Build();
 
+            SqliteDatabaseUpdatePatcher.CheckForUpdates();
             return ApplicationInstance;
         }
     }

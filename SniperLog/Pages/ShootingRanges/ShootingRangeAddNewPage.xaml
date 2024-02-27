@@ -5,35 +5,46 @@
              x:Class="SniperLog.Pages.ShootingRangeAddNewPage"
              BackgroundColor="#AA000000"
              Title="ShootingRangeAddNewPage">
-    <VerticalStackLayout WidthRequest="300" HeightRequest="650" VerticalOptions="FillAndExpand" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
-        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
-            <VerticalStackLayout>
-                <Label Text="Name" HorizontalOptions="Start" FontSize="18"/>
-                <Entry x:Name="ShootingRangeName" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
-            </VerticalStackLayout>
-        </Frame>
+    <ScrollView>
+        <VerticalStackLayout Padding="10" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="8">
+                    <Label Text="Name" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeName" Keyboard="Text" TextColor="White" FontSize="16"/>
+                </StackLayout>
+            </Frame>
 
-        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
-            <VerticalStackLayout>
-                <Label Text="Address" HorizontalOptions="Start" FontSize="18"/>
-                <Entry x:Name="ShootingRangeAddress" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
-            </VerticalStackLayout>
-        </Frame>
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="8">
+                    <Label Text="Address" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeAddress" Keyboard="Text" TextColor="White" FontSize="16"/>
+                </StackLayout>
+            </Frame>
 
-        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
-            <VerticalStackLayout>
-                <Label Text="Latitude" HorizontalOptions="Start" FontSize="18"/>
-                <Entry x:Name="ShootingRangeLang" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
-            </VerticalStackLayout>
-        </Frame>
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="8">
+                    <Label Text="Latitude" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeLang" Keyboard="Numeric" TextColor="White" FontSize="16"/>
+                </StackLayout>
+            </Frame>
 
-        <Frame Margin="7" BackgroundColor="#444444" HeightRequest="100">
-            <VerticalStackLayout>
-                <Label Text="Longitude" HorizontalOptions="Start" FontSize="18"/>
-                <Entry x:Name="ShootingRangeLong" VerticalOptions="Center" Margin="10, 0, 0, 0" Keyboard="Text" TextColor="White" FontSize="16"></Entry>
-            </VerticalStackLayout>
-        </Frame>
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="8">
+                    <Label Text="Longitude" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeLong" Keyboard="Numeric" TextColor="White" FontSize="16"/>
+                </StackLayout>
+            </Frame>
 
-        <Button Text="Add" Clicked="Button_Clicked" WidthRequest="150" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin="0, 0, 5, 0"/>
-    </VerticalStackLayout>
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="8">
+                    <Label Text="Background Image" FontSize="18" TextColor="White"/>
+                    <Button x:Name="BackgroundImagePickerButton" Clicked="BackgroundImagePickerButton_Clicked" Text="Choose Image" HeightRequest="40" Margin="0, 5, 0, 0"/>
+                    <Label FontSize="8" x:Name="ImageFilePathLabel"/>
+                    <Image x:Name="BackgroundImageTest" WidthRequest="150" HeightRequest="50"/>
+                </StackLayout>
+            </Frame>
+
+            <Button Text="Add" Clicked="Button_Clicked" WidthRequest="150" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin="0, 10, 0, 0"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </mopups:PopupPage>

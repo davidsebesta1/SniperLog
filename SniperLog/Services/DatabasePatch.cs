@@ -1,4 +1,6 @@
 ﻿
+using SniperLog.Services.Database;
+
 namespace SniperLog.Services
 {
     public class DatabasePatch : IEquatable<DatabasePatch>

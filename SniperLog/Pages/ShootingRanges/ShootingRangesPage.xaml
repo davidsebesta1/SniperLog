@@ -23,6 +23,9 @@
                     <DataTemplate x:DataType="model:ShootingRange">
                         <Grid Padding="10">
                             <Frame HeightRequest="125" Background="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource Gray900}}" CornerRadius="5" HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ShootingRangeViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
                                 <Grid Padding="0" ColumnDefinitions="*">
                                     <VerticalStackLayout Grid.Column="0" Padding="10" VerticalOptions="Center">
                                         <Label Text="{Binding Name}"/>

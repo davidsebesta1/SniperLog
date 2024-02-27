@@ -3,7 +3,8 @@ using Android.Runtime;
 
 namespace SniperLog
 {
-    [Application]
+
+    [Application(Debuggable = true)]
     public class MainApplication : MauiApplication
     {
         public MainApplication(IntPtr handle, JniHandleOwnership ownership)

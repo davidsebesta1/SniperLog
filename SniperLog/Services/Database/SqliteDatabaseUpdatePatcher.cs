@@ -1,14 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Animations;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
-namespace SniperLog.Services
+namespace SniperLog.Services.Database
 {
     public static class SqliteDatabaseUpdatePatcher
     {
@@ -16,10 +8,9 @@ namespace SniperLog.Services
 
         private static readonly ReadOnlyCollection<DatabasePatch> _patches = new ReadOnlyCollection<DatabasePatch>
         (
-            new DatabasePatch[]
-            {
+            [
                 new DatabasePatch(new Version(0,0,2), "ALTER TABLE ShootingRange ADD RelativeImagePathFromAppdata VARCHAR(100);")
-            }
+            ]
         );
 
         public static List<Version> AppliedPatchesVersions => ApplicationConfigService.Config.AppliedPatches;

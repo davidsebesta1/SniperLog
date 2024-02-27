@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Markup;
 using SniperLog.ViewModels;
 
 namespace SniperLog.Pages;

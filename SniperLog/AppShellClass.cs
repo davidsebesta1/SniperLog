@@ -1,4 +1,5 @@
 ﻿using SniperLog.Pages;
+using SniperLog.Pages.ShootingRanges;
 using SniperLog.ViewModels;
 
 namespace SniperLog
@@ -10,6 +11,7 @@ namespace SniperLog
             FlyoutBehavior = FlyoutBehavior.Flyout;
             SetTabBarIsVisible(this, false);
 
+            #region Pages
             MainPage mainPage = new MainPage();
             Items.Add(new ShellContent()
             {
@@ -28,6 +30,14 @@ namespace SniperLog
 
             FlyoutItem tabbar = new FlyoutItem() { Title = "Tabbar", Route = "Tab" };
             Items.Add(tabbar);
+
+            #endregion
+
+            #region Routes
+
+            Routing.RegisterRoute(nameof(ShootingRangeDetailsPage), typeof(ShootingRangeDetailsPage));
+
+            #endregion
         }
     }
 }

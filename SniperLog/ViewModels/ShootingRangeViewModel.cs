@@ -6,20 +6,19 @@ using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace SniperLog.ViewModels
 {
     public partial class ShootingRangeViewModel : BaseViewModel
     {
-        public ObservableCollection<ShootingRange> ShootingRanges { get; } = new ObservableCollection<ShootingRange>();
+        public ObservableCollection<ShootingRange> ShootingRanges => _dataFetcher.Data;
 
-        private readonly DataFetcherService<ShootingRange> _dataFetcher;
+        private readonly DataService<ShootingRange> _dataFetcher;
 
         [ObservableProperty]
         private bool _isRefreshing;
 
-        public ShootingRangeViewModel(DataFetcherService<ShootingRange> dataFetcher)
+        public ShootingRangeViewModel(DataService<ShootingRange> dataFetcher) : base()
         {
             this.PageTitle = "Shooting Ranges";
             this._dataFetcher = dataFetcher;
@@ -32,7 +31,7 @@ namespace SniperLog.ViewModels
 
             try
             {
-                await _dataFetcher.GetAll(ShootingRanges);
+                await _dataFetcher.GetAllToCollection();
             }
             catch (Exception ex)
             {
@@ -52,7 +51,7 @@ namespace SniperLog.ViewModels
 
             try
             {
-                await MopupService.Instance.PushAsync(new ShootingRangeAddNewPage());
+                await MopupService.Instance.PushAsync(new ShootingRangeAddNewPage(_dataFetcher));
             }
             finally
             {
