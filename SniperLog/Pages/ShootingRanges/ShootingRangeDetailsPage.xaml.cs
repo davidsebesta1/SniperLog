@@ -2,11 +2,14 @@ using CommunityToolkit.Maui.Markup;
 using SniperLog.Extensions;
 using SniperLog.ViewModels;
 using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Maps;
+using SniperLog.Models;
 
 namespace SniperLog.Pages.ShootingRanges;
 
 public partial class ShootingRangeDetailsPage : ContentPage
 {
+    public ShootingRange SelectedRange => (BindingContext as ShootingRangeDetailsViewModel).SelectedRange;
     public ShootingRangeDetailsPage(ShootingRangeDetailsViewModel viewmodel)
     {
         BindingContext = viewmodel;
@@ -19,14 +22,14 @@ public partial class ShootingRangeDetailsPage : ContentPage
 
         try
         {
-            ShootingRangeDetailsViewModel viewModel = (BindingContext as ShootingRangeDetailsViewModel);
-            ShootingRangeImage.Source = ImageSource.FromFile(AppDataFileLoader.GetPathFromAppData(viewModel.SelectedRange.RelativeImagePathFromAppdata));
-            Map.Pins.Add(new Pin()
-            {
-                Address = viewModel.SelectedRange.Address,
-                Label = $"Shooting Range {viewModel.SelectedRange.Name}",
-                Location = viewModel.SelectedRange.Location
+            //NameLabel.Text = string.Format("{0} {1}", "Shooting Range", viewModel.SelectedRange.Name);
 
+            //ShootingRangeImage.Source = ImageSource.FromFile(AppDataFileHelper.GetPathFromAppData(viewModel.SelectedRange.RelativeImagePathFromAppdata));
+            LocationMap.Pins.Add(new Pin()
+            {
+                Location = SelectedRange.Location,
+                Label = SelectedRange.Name,
+                Address = SelectedRange.Address
             });
         }
         catch (ArgumentException ex)
@@ -34,7 +37,11 @@ public partial class ShootingRangeDetailsPage : ContentPage
             //TestLabel.Text = ex.Message;
 
             await Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
-
         }
+    }
+
+    private void SubRangeSettings_Clicked(object sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync(nameof(ShootingRangeSubRangesPage));
     }
 }

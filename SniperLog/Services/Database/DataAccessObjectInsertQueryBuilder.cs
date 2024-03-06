@@ -20,14 +20,14 @@ namespace SniperLog.Services.Database
         public static string GetInsertQueryStatement<T>(bool addReturningId = false, bool insertOrUpdate = false, params string[] excludedPropertiesNames) where T : IDataAccessObject<T>
         {
             string className = typeof(T).Name;
-            IEnumerable<PropertyInfo?> allProperties = typeof(T).GetProperties().Where(n => n.MemberType is MemberTypes.Property && !excludedPropertiesNames.Contains(n.Name) && !Attribute.IsDefined(n, typeof(SqLiteIgnore)));
+            IEnumerable<PropertyInfo?> allProperties = typeof(T).GetProperties().Where(n => n.MemberType is MemberTypes.Property && !excludedPropertiesNames.Contains(n.Name) && !Attribute.IsDefined(n, typeof(DatabaseIgnore)));
 
             if (!allProperties.Any())
             {
                 throw new ArgumentException("Unable to generate query for class with 0 properties");
             }
 
-            PropertyInfo? primaryKeyProperty = allProperties.FirstOrDefault(n => Attribute.IsDefined(n, typeof(SqLitePrimaryKey)));
+            PropertyInfo? primaryKeyProperty = allProperties.FirstOrDefault(n => Attribute.IsDefined(n, typeof(PrimaryKey)));
             if (addReturningId && primaryKeyProperty == null)
             {
                 throw new ArgumentException("Unable to generate query with returning statement for class with Undefined Primary key Property");

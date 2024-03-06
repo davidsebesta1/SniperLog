@@ -1,6 +1,6 @@
 ﻿namespace SniperLog.Extensions
 {
-    public static class AppDataFileLoader
+    public static class AppDataFileHelper
     {
         public static string GetPathFromAppData(string relativePath)
         {

@@ -30,8 +30,7 @@ namespace SniperLog
                 })
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Inter-Regular.ttf", "InterRegular");
                 });
 
 #if DEBUG
@@ -46,6 +45,7 @@ namespace SniperLog
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ShootingRangesPage>();
             builder.Services.AddTransient<ShootingRangeDetailsPage>();
+            builder.Services.AddTransient<ShootingRangeSubRangesPage>();
 
             ApplicationInstance = builder.Build();
 

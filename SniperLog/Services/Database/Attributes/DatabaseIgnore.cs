@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace SniperLog.Services.Database.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class SqLitePrimaryKey : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class SqLiteIgnore : Attribute { }
+    public class DatabaseIgnore : Attribute
+    {
+    }
 }

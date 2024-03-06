@@ -26,7 +26,7 @@ namespace SniperLog.Services.Database
 
         private SqLiteDatabaseConnection()
         {
-            _connectionString = $@"Data Source={AppDataFileLoader.GetPathFromAppData("SniperLogDatabase.db")};Pooling=True";
+            _connectionString = $@"Data Source={AppDataFileHelper.GetPathFromAppData("SniperLogDatabase.db")};Pooling=True";
         }
 
         private static void InitializeSetup()
@@ -36,7 +36,7 @@ namespace SniperLog.Services.Database
                 throw new Exception("Instance for database connection is null");
             }
 
-            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE NOT NULL,Address VARCHAR(100),Latitude DOUBLE NOT NULL,Longitude DOUBLE NOT NULL);");
+            _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS ShootingRange (ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Name VARCHAR(50) UNIQUE NOT NULL,Address VARCHAR(100),Latitude DECIMAL(2,6) NOT NULL,Longitude DECIMAL(3,6) NOT NULL);");
             _instance.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS SubRange(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,ShootingRange_ID INTEGER NOT NULL,RangeInMeters INT NOT NULL,Altitude DOUBLE,DirectionToNorth DOUBLE,VerticalFiringOffsetDegrees DOUBLE,NotesRelativePathFromAppData VARCHAR(100),FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID));");
         }
 

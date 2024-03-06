@@ -11,7 +11,23 @@ namespace SniperLog.Services
         public event EventHandler<DataServiceOnSaveOrUpdateArgs<T>> OnSave;
         public event EventHandler<DataServiceOnCollectionReSelectedArgs<T>> OnCollectionReSelected;
 
-        public ObservableCollection<T> Data { get; set; } = new ObservableCollection<T>();
+        public ObservableCollection<T> Data { get; set; }
+
+        public DataService()
+        {
+            Data = new ObservableCollection<T>();
+            GetAllToCollection();
+        }
+
+        public List<T> GetAllBy(Predicate<T> predicate)
+        {
+            return Data.Where(n => predicate(n)).ToList();
+        }
+
+        public T? GetFirstBy(Predicate<T> predicate)
+        {
+            return Data.FirstOrDefault(n => predicate(n));
+        }
 
         public async Task GetAllToCollection()
         {
@@ -46,14 +62,14 @@ namespace SniperLog.Services
             return res;
         }
 
-        public override string? ToString()
+        public override string ToString()
         {
             StringBuilder sb = StringBuilderPool.Instance.Rent();
 
             sb.AppendLine(GetType().Name);
             foreach (var value in Data)
             {
-                sb.AppendLine(sb.ToString());
+                sb.AppendLine(value.ToString());
             }
 
             return StringBuilderPool.Instance.ReturnToString(sb);

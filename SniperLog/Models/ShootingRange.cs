@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Extensions;
+using SniperLog.Services;
 using SniperLog.Services.Database;
 using SniperLog.Services.Database.Attributes;
 using System.Collections.ObjectModel;
@@ -9,7 +10,7 @@ namespace SniperLog.Models
 {
     public class ShootingRange : IDataAccessObject<ShootingRange>, IEquatable<ShootingRange?>
     {
-        [SqLitePrimaryKey]
+        [PrimaryKey]
         public int ID { get; set; }
 
         public string Name { get; set; }
@@ -49,7 +50,7 @@ namespace SniperLog.Models
         private static readonly string InsertQuery = DataAccessObjectInsertQueryBuilder.GetInsertQueryStatement<ShootingRange>(addReturningId: true, insertOrUpdate: true);
         private static readonly string InsertQueryNoId = DataAccessObjectInsertQueryBuilder.GetInsertQueryStatement<ShootingRange>(addReturningId: false, insertOrUpdate: true);
 
-        [SqLiteIgnore]
+        [DatabaseIgnore]
         public Location Location { get; set; }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace SniperLog.Models
 
         public ShootingRange(string name, string? address, double latitude, double longitude, string? relativeImagePathFromAppdata) : this(-1, name, address, latitude, longitude, relativeImagePathFromAppdata) { }
 
-        public static async Task<ShootingRange?> LoadAsync(int id)
+        public static async Task<ShootingRange?> LoadNewAsync(int id)
         {
             DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", id));
 
@@ -107,7 +108,7 @@ namespace SniperLog.Models
             {
                 if (result)
                 {
-                    AppDataFileLoader.DeleteFolderFromLocation(Path.GetDirectoryName(RelativeImagePathFromAppdata));
+                    AppDataFileHelper.DeleteFolderFromLocation(Path.GetDirectoryName(RelativeImagePathFromAppdata));
                 }
             }
             catch (Exception ex)
@@ -166,7 +167,7 @@ namespace SniperLog.Models
 
         public bool TryGetBackgroundImage(out string path)
         {
-            string dataPath = AppDataFileLoader.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name));
+            string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name));
             foreach (string file in Directory.GetFiles(dataPath))
             {
                 if (Path.GetFileNameWithoutExtension(file).Contains("BackgroundImage"))
@@ -195,7 +196,7 @@ namespace SniperLog.Models
             string extension = Path.GetExtension(originalFilePathFull);
             byte[] data = await File.ReadAllBytesAsync(originalFilePathFull);
 
-            string dataPath = AppDataFileLoader.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name, $"BackgroundImage{extension}"));
+            string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name, $"BackgroundImage{extension}"));
 
             if (!Directory.Exists(Path.GetDirectoryName(dataPath)))
             {
@@ -206,9 +207,17 @@ namespace SniperLog.Models
             await Shell.Current.DisplayAlert("Debug", dataPath, "Okay");
         }
 
+        public static ShootingRange? GetById(int id)
+        {
+            DataService<ShootingRange> service = Application.Current.MainPage.Handler.MauiContext.Services.GetService<DataService<ShootingRange>>();
+            ShootingRange? range = service.GetFirstBy(n => n.ID == id);
+
+            return range;
+        }
+
         public string GetBackgroundImagePath(string extension)
         {
-            return AppDataFileLoader.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name, $"BackgroundImage{extension}"));
+            return AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name, $"BackgroundImage{extension}"));
         }
 
         public override bool Equals(object? obj)
@@ -225,6 +234,7 @@ namespace SniperLog.Models
         {
             return HashCode.Combine(ID, Name, Address, Latitude, Longitude);
         }
+
 
         public static bool operator ==(ShootingRange? left, ShootingRange? right)
         {
