@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model="clr-namespace:SniperLog.Models"
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             x:Class="SniperLog.Pages.ShootingRanges.ShootingRangesPage"
              x:DataType="viewmodel:ShootingRangeViewModel"
-             Title="{Binding PageTitle}"
-             x:Class="SniperLog.Pages.ShootingRangesPage">
+             Title="{Binding PageTitle}">
     <Grid ColumnDefinitions="*,*" RowDefinitions="*, 60">
         <RefreshView Grid.ColumnSpan="2" Command="{Binding GetShootingRangesCommand}" IsRefreshing="{Binding IsRefreshing}">
             <CollectionView Background="Transparent" Grid.ColumnSpan="2" ItemsSource="{Binding ShootingRanges}">

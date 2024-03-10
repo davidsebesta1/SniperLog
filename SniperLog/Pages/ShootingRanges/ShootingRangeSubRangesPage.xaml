@@ -6,10 +6,28 @@
              x:Class="SniperLog.Pages.ShootingRanges.ShootingRangeSubRangesPage"
              x:DataType="viewmodel:SubRangesSettingsViewModel"
              Title="{Binding SelectedRange.Name}">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="150, *">
+        <Frame BackgroundColor="Transparent" HeightRequest="85" MinimumWidthRequest="450" HorizontalOptions="FillAndExpand" Grid.Row="0">
+            <Grid RowDefinitions="30, *" RowSpacing="5" HorizontalOptions="FillAndExpand">
+                <Label Grid.Row="0" Text="Sub Ranges" FontSize="20" Margin="35, 0, 0, 0"/>
+                <Frame Grid.Row="1" BackgroundColor="{StaticResource Gray600}" CornerRadius="0"></Frame>
+            </Grid>
+        </Frame>
+
+        <Frame Margin="15, -25, 15, 15" Grid.Row="1" BackgroundColor="Transparent" Padding="5">
+            <FlexLayout JustifyContent="Start" AlignItems="Start" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent">
+                <CollectionView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:SubRange">
+                            <Grid>
+                                <Frame HeightRequest="110" WidthRequest="110" Background="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource Gray600}}" CornerRadius="5" HasShadow="True">
+                                    <Label Text="{Binding ID}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28"/>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </FlexLayout>
+        </Frame>
+    </Grid>
 </ContentPage>

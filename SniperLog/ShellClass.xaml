@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:SniperLog.Pages"
+       xmlns:pagesInner="clr-namespace:SniperLog.Pages.ShootingRanges"
+       FlyoutBehavior="Flyout"
+       FlyoutHeaderBehavior="CollapseOnScroll"
+       x:Class="SniperLog.ShellClass">
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Main Page" ContentTemplate="{DataTemplate pages:MainPage}"></ShellContent>
+        <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate pagesInner:ShootingRangesPage}"></ShellContent>
+    </FlyoutItem>
+    <ShellContent Title="Import/Export" ContentTemplate="{DataTemplate pages:ImportExportPage}"></ShellContent>
+</Shell>

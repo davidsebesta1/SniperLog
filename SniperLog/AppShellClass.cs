@@ -1,5 +1,7 @@
-﻿using SniperLog.Pages;
+﻿using SniperLog.Models;
+using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;
+using SniperLog.Services;
 using SniperLog.ViewModels;
 
 namespace SniperLog
@@ -20,7 +22,7 @@ namespace SniperLog
                 Route = nameof(mainPage)
             });
 
-            ShootingRangesPage shootingRangesPage = new ShootingRangesPage(MauiProgram.ApplicationInstance.Services.GetService<ShootingRangeViewModel>());
+            ShootingRangesPage shootingRangesPage = new ShootingRangesPage(ServicesHelper.GetService<ShootingRangeViewModel>());
 
             Items.Add(new ShellContent()
             {
@@ -29,7 +31,7 @@ namespace SniperLog
                 Route = nameof(shootingRangesPage),
             });
 
-            FlyoutItem flyoutItems = new FlyoutItem() { Title = "FlyoutBar", Route = "Flyout" };
+            FlyoutItem flyoutItems = new FlyoutItem() { Title = "FlyoutBar", Route = "Flyout", FlyoutDisplayOptions = FlyoutDisplayOptions.AsMultipleItems };
             Items.Add(flyoutItems);
 
             #endregion

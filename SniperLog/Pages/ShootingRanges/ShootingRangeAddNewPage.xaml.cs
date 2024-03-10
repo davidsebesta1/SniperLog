@@ -3,7 +3,7 @@ using Mopups.Services;
 using SniperLog.Models;
 using SniperLog.Services;
 
-namespace SniperLog.Pages;
+namespace SniperLog.Pages.ShootingRanges;
 
 public partial class ShootingRangeAddNewPage : PopupPage
 {
@@ -23,15 +23,22 @@ public partial class ShootingRangeAddNewPage : PopupPage
         _dataService = service;
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void AddButton_Clicked(object sender, EventArgs e)
     {
         try
         {
+            if (_valuesValidation.Values.Any(n => n == false))
+            {
+                await Shell.Current.DisplayAlert("Error", "Please fill out mandatory fields and fix any invalid inputs", "Okay");
+                return;
+            }
+
             string name = ShootingRangeName.Text;
             string address = ShootingRangeAddress.Text;
-            double latitude = double.Parse(ShootingRangeLang.Text);
+            double latitude = double.Parse(ShootingRangeLat.Text);
             double longitude = double.Parse(ShootingRangeLong.Text);
             string imagePathRel = string.Empty;
+
 
             string fullPath = ImageFilePathLabel.Text;
             if (!string.IsNullOrEmpty(fullPath))
@@ -41,8 +48,20 @@ public partial class ShootingRangeAddNewPage : PopupPage
 
             ShootingRange range = new ShootingRange(name, address, latitude, longitude, imagePathRel);
             if (!string.IsNullOrEmpty(imagePathRel)) await range.SaveBackgroundImageAsync(fullPath);
-            _dataService.AddOrUpdateAsync(range);
+            await _dataService.AddOrUpdateAsync(range);
 
+            await MopupService.Instance.PopAsync();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
+        }
+    }
+
+    private async void ReturnButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
             await MopupService.Instance.PopAsync();
         }
         catch (Exception ex)
@@ -73,7 +92,7 @@ public partial class ShootingRangeAddNewPage : PopupPage
     {
         bool res = !string.IsNullOrEmpty(e.NewTextValue);
         _valuesValidation["Name"] = res;
-        NameErrText.IsVisible = res;
+        NameErrText.IsVisible = !res;
     }
 
     private void ShootingRangeAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -81,15 +100,27 @@ public partial class ShootingRangeAddNewPage : PopupPage
         _valuesValidation["Address"] = true;
     }
 
-    private void ShootingRangeLang_TextChanged(object sender, TextChangedEventArgs e)
+    private void ShootingRangeLat_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (!double.TryParse(e.NewTextValue, out double result))
         {
             _valuesValidation["Latitude"] = true;
-            NameErrText.IsVisible = false;
+            LatitudeErrText.IsVisible = false;
             return;
         }
 
-        NameErrText.IsVisible = true;
-    }//do the longitude etc
+        LatitudeErrText.IsVisible = true;
+    }
+
+    private void ShootingRangeLong_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!double.TryParse(e.NewTextValue, out double result))
+        {
+            _valuesValidation["Longitude"] = true;
+            LongitudeErrText.IsVisible = false;
+            return;
+        }
+
+        LongitudeErrText.IsVisible = true;
+    }
 }

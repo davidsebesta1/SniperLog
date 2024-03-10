@@ -1,6 +1,6 @@
 using SniperLog.ViewModels;
 
-namespace SniperLog.Pages;
+namespace SniperLog.Pages.ShootingRanges;
 
 public partial class ShootingRangesPage : ContentPage
 {
