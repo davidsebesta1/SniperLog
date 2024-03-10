@@ -1,9 +1,6 @@
-using CommunityToolkit.Maui.Markup;
-using SniperLog.Extensions;
-using SniperLog.ViewModels;
 using Microsoft.Maui.Controls.Maps;
-using Microsoft.Maui.Maps;
 using SniperLog.Models;
+using SniperLog.ViewModels;
 
 namespace SniperLog.Pages.ShootingRanges;
 
@@ -38,10 +35,5 @@ public partial class ShootingRangeDetailsPage : ContentPage
 
             await Shell.Current.DisplayAlert("Error", ex.ToString(), "Okay");
         }
-    }
-
-    private void SubRangeSettings_Clicked(object sender, EventArgs e)
-    {
-        Shell.Current.GoToAsync(nameof(ShootingRangeSubRangesPage));
     }
 }

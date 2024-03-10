@@ -1,11 +1,6 @@
 ﻿using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog
 {

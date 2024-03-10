@@ -20,7 +20,6 @@ namespace SniperLog
 
             var builder = MauiApp.CreateBuilder();
             builder
-
                 .UseMauiApp<App>()
                 .ConfigureMopups()
                 .UseMauiMaps()
@@ -37,20 +36,35 @@ namespace SniperLog
             builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<DataService<ShootingRange>>();
+            builder.SetupServices();
 
+            ApplicationInstance = builder.Build();
+
+            ServicesHelper.Init(ApplicationInstance.Services);
+
+            SqliteDatabaseUpdatePatcher.CheckForUpdates();
+            return ApplicationInstance;
+        }
+
+        public static void SetupServices(this MauiAppBuilder builder)
+        {
+            #region Data Cacher Services
+            builder.Services.AddSingleton<DataCacherService<ShootingRange>>();
+            builder.Services.AddSingleton<DataCacherService<SubRange>>();
+            #endregion
+
+            #region View Models
             builder.Services.AddSingleton<ShootingRangeViewModel>();
             builder.Services.AddSingleton<ShootingRangeDetailsViewModel>();
+            builder.Services.AddSingleton<SubRangesSettingsViewModel>();
+            #endregion
 
+            #region Pages
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ShootingRangesPage>();
             builder.Services.AddTransient<ShootingRangeDetailsPage>();
             builder.Services.AddTransient<ShootingRangeSubRangesPage>();
-
-            ApplicationInstance = builder.Build();
-
-            SqliteDatabaseUpdatePatcher.CheckForUpdates();
-            return ApplicationInstance;
+            #endregion
         }
     }
 }

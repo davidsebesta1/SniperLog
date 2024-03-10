@@ -10,21 +10,24 @@
             <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
                 <StackLayout Padding="8">
                     <Label Text="Name" FontSize="18" TextColor="White"/>
-                    <Entry x:Name="ShootingRangeName" Keyboard="Text" TextColor="White" FontSize="16"/>
+                    <Entry x:Name="ShootingRangeName" Keyboard="Text" TextColor="White" FontSize="16" TextChanged="ShootingRangeName_TextChanged"/>
+                    <Label x:Name="NameErrText" Text="Name must be filled" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
                 </StackLayout>
             </Frame>
 
             <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
                 <StackLayout Padding="8">
                     <Label Text="Address" FontSize="18" TextColor="White"/>
-                    <Entry x:Name="ShootingRangeAddress" Keyboard="Text" TextColor="White" FontSize="16"/>
+                    <Entry x:Name="ShootingRangeAddress" Keyboard="Text" TextColor="White" FontSize="16" TextChanged="ShootingRangeAddress_TextChanged"/>
+                    <Label x:Name="AddrErrText" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
                 </StackLayout>
             </Frame>
 
             <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
                 <StackLayout Padding="8">
                     <Label Text="Latitude" FontSize="18" TextColor="White"/>
-                    <Entry x:Name="ShootingRangeLang" Keyboard="Numeric" TextColor="White" FontSize="16"/>
+                    <Entry x:Name="ShootingRangeLang" Keyboard="Numeric" TextColor="White" FontSize="16" TextChanged="ShootingRangeLang_TextChanged"/>
+                    <Label x:Name="LatitudeErrText" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
                 </StackLayout>
             </Frame>
 
@@ -32,6 +35,7 @@
                 <StackLayout Padding="8">
                     <Label Text="Longitude" FontSize="18" TextColor="White"/>
                     <Entry x:Name="ShootingRangeLong" Keyboard="Numeric" TextColor="White" FontSize="16"/>
+                    <Label x:Name="LongitudeErrText" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
                 </StackLayout>
             </Frame>
 

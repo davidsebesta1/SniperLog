@@ -11,14 +11,15 @@ namespace SniperLog.ViewModels
 {
     public partial class ShootingRangeViewModel : BaseViewModel
     {
-        public ObservableCollection<ShootingRange> ShootingRanges => _dataFetcher.Data;
+        [ObservableProperty]
+        public ObservableCollection<ShootingRange> _shootingRanges = new ObservableCollection<ShootingRange>();
 
-        private readonly DataService<ShootingRange> _dataFetcher;
+        private readonly DataCacherService<ShootingRange> _dataFetcher;
 
         [ObservableProperty]
         private bool _isRefreshing;
 
-        public ShootingRangeViewModel(DataService<ShootingRange> dataFetcher) : base()
+        public ShootingRangeViewModel(DataCacherService<ShootingRange> dataFetcher) : base()
         {
             this.PageTitle = "Shooting Ranges";
             this._dataFetcher = dataFetcher;
@@ -31,7 +32,11 @@ namespace SniperLog.ViewModels
 
             try
             {
-                await _dataFetcher.GetAllToCollection();
+                ShootingRanges.Clear();
+                foreach (ShootingRange shootingRange in _dataFetcher.GetAll())
+                {
+                    ShootingRanges.Add(shootingRange);
+                }
             }
             catch (Exception ex)
             {

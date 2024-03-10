@@ -1,16 +1,14 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Extensions;
-using SniperLog.Services;
 using SniperLog.Services.Database;
 using SniperLog.Services.Database.Attributes;
-using System.Collections.ObjectModel;
 using System.Data;
 
 namespace SniperLog.Models
 {
-    public class ShootingRange : IDataAccessObject<ShootingRange>, IEquatable<ShootingRange?>
+    public class ShootingRange : IDataAccessObject
     {
-        [PrimaryKey]
+        #region Properties
         public int ID { get; set; }
 
         public string Name { get; set; }
@@ -47,12 +45,20 @@ namespace SniperLog.Models
 
         public string? RelativeImagePathFromAppdata { get; set; }
 
-        private static readonly string InsertQuery = DataAccessObjectInsertQueryBuilder.GetInsertQueryStatement<ShootingRange>(addReturningId: true, insertOrUpdate: true);
-        private static readonly string InsertQueryNoId = DataAccessObjectInsertQueryBuilder.GetInsertQueryStatement<ShootingRange>(addReturningId: false, insertOrUpdate: true);
-
         [DatabaseIgnore]
         public Location Location { get; set; }
 
+        public static string SelectAllQuery => DataAccessObjectQueryBuilder.GetSelectQuery<ShootingRange>();
+
+        public static string InsertQuery => DataAccessObjectQueryBuilder.GetInsertQuery<ShootingRange>(insertOrUpdate: true, includeReturning: true);
+
+        public static string InsertQueryNoId => DataAccessObjectQueryBuilder.GetInsertQuery<ShootingRange>(insertOrUpdate: true, includeReturning: true);
+
+        public static string DeleteQuery => DataAccessObjectQueryBuilder.GetDeleteQuery<ShootingRange>();
+
+        #endregion
+
+        #region Constructors
         /// <summary>
         /// Primary constructor
         /// </summary>
@@ -72,99 +78,60 @@ namespace SniperLog.Models
             RelativeImagePathFromAppdata = relativeImagePathFromAppdata;
         }
 
-        public ShootingRange(string name, string? address, double latitude, double longitude, string? relativeImagePathFromAppdata) : this(-1, name, address, latitude, longitude, relativeImagePathFromAppdata) { }
-
-        public static async Task<ShootingRange?> LoadNewAsync(int id)
-        {
-            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", id));
-
-            if (table == null)
-            {
-                return null;
-            }
-
-            if (table.Rows.Count > 1 || table.Rows.Count == 0)
-            {
-                throw new Exception($"Retrieved multiple instances from database of {nameof(ShootingRange)}, expected: 1 or 0");
-            }
-            return LoadFromRow(table.Rows[0]);
-        }
-
         /// <summary>
-        /// Saves or replaces the instance with newer data and returns instance ID in database
+        /// New object constructor
         /// </summary>
-        /// <returns>ID if the instance</returns>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="relativeImagePathFromAppdata"></param>
+        public ShootingRange(string name, string? address, double latitude, double longitude, string? relativeImagePathFromAppdata) : this(-1, name, address, latitude, longitude, relativeImagePathFromAppdata) { }
+        #endregion
+
+        #region DAO Methods
         public async Task<int> SaveAsync()
         {
-            if (ID == -1) return ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQuery, new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude), new SqliteParameter("@RelativeImagePathFromAppdata", RelativeImagePathFromAppdata));
-            else return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId, new SqliteParameter("@Name", Name), new SqliteParameter("@Address", Address), new SqliteParameter("@Latitude", Latitude), new SqliteParameter("@Longitude", Longitude), new SqliteParameter("@RelativeImagePathFromAppdata", RelativeImagePathFromAppdata));
+            if (ID == -1)
+            {
+                ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId,
+                    new SqliteParameter("@Name", Name),
+                    new SqliteParameter("@Address", Address),
+                    new SqliteParameter("@Longitude", Longitude),
+                    new SqliteParameter("@Latitude", Latitude),
+                    new SqliteParameter("@RelativeImagePathFromAppdata", RelativeImagePathFromAppdata));
+                return ID;
+            }
+
+            return await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQuery,
+                new SqliteParameter("@ID", ID),
+                new SqliteParameter("@Name", Name),
+                new SqliteParameter("@Address", Address),
+                new SqliteParameter("@Longitude", Longitude),
+                new SqliteParameter("@Latitude", Latitude),
+                new SqliteParameter("@RelativeImagePathFromAppdata", RelativeImagePathFromAppdata));
         }
 
         public async Task<bool> DeleteAsync()
         {
-            bool result = await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync("DELETE FROM ShootingRange WHERE ShootingRange.ID = @ID", new SqliteParameter("@ID", ID)) == 1;
-
-            try
-            {
-                if (result)
-                {
-                    AppDataFileHelper.DeleteFolderFromLocation(Path.GetDirectoryName(RelativeImagePathFromAppdata));
-                }
-            }
-            catch (Exception ex)
-            {
-                //add log
-            }
-
-            return result;
+            return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(DeleteQuery, new SqliteParameter("@ID", ID)) == 1;
         }
 
-        public static async Task<ObservableCollection<ShootingRange>> LoadAllAsync()
+        public static IDataAccessObject LoadFromRow(DataRow row)
         {
-            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
-
-            if (table == null)
-            {
-                throw new NullReferenceException("Table is null");
-            }
-
-            ObservableCollection<ShootingRange> collection = new ObservableCollection<ShootingRange>();
-            foreach (DataRow row in table.Rows)
-            {
-                collection.Add(LoadFromRow(row));
-            }
-
-            return collection;
+            return new ShootingRange(
+                row.GetConverted<int>("ID"),
+                row.GetConverted<string?>("Name"),
+                row.GetConverted<string>("Address"),
+                row.GetConverted<double>("Latitude"),
+                row.GetConverted<double>("Longitude"),
+                row.GetConverted<string>("RelativeImagePathFromAppdata")
+                );
         }
 
-        public static async Task<ObservableCollection<ShootingRange>> LoadAllAsync(ObservableCollection<ShootingRange> collection)
-        {
-            if (collection == null)
-            {
-                throw new ArgumentNullException("Passed observable collection cannot be null");
-            }
+        #endregion
 
-            collection.Clear();
-            DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync("SELECT * FROM ShootingRange");
-
-            if (table == null)
-            {
-                throw new NullReferenceException("Table is null");
-            }
-
-            foreach (DataRow row in table.Rows)
-            {
-                collection.Add(LoadFromRow(row));
-            }
-
-            return collection;
-        }
-
-        public static ShootingRange LoadFromRow(DataRow reader)
-        {
-            return new ShootingRange(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Name"]), Convert.ToString(reader["Address"]), Convert.ToDouble(reader["Latitude"]), Convert.ToDouble(reader["Longitude"]), Convert.ToString(reader["RelativeImagePathFromAppdata"]));
-        }
-
+        #region Model Specific Methods
         public bool TryGetBackgroundImage(out string path)
         {
             string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name));
@@ -207,43 +174,10 @@ namespace SniperLog.Models
             await Shell.Current.DisplayAlert("Debug", dataPath, "Okay");
         }
 
-        public static ShootingRange? GetById(int id)
-        {
-            DataService<ShootingRange> service = Application.Current.MainPage.Handler.MauiContext.Services.GetService<DataService<ShootingRange>>();
-            ShootingRange? range = service.GetFirstBy(n => n.ID == id);
-
-            return range;
-        }
-
         public string GetBackgroundImagePath(string extension)
         {
             return AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRanges", Name, $"BackgroundImage{extension}"));
         }
-
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as ShootingRange);
-        }
-
-        public bool Equals(ShootingRange? other)
-        {
-            return other is not null && ID == other.ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(ID, Name, Address, Latitude, Longitude);
-        }
-
-
-        public static bool operator ==(ShootingRange? left, ShootingRange? right)
-        {
-            return EqualityComparer<ShootingRange>.Default.Equals(left, right);
-        }
-
-        public static bool operator !=(ShootingRange? left, ShootingRange? right)
-        {
-            return !(left == right);
-        }
+        #endregion
     }
 }

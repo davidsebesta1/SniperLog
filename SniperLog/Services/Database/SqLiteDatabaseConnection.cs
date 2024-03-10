@@ -54,7 +54,7 @@ namespace SniperLog.Services.Database
                         if (parameters != null)
                         {
                             command.Parameters.AddRange(parameters);
-                        }
+                        };
 
                         return await command.ExecuteNonQueryAsync();
                     }
@@ -146,6 +146,7 @@ namespace SniperLog.Services.Database
                         SqliteDataReader reader = command.ExecuteReader();
                         DataTable table = new DataTable();
                         table.Load(reader);
+                        return table;
                     }
                 }
             }

@@ -1,17 +1,22 @@
-﻿using System.Collections.ObjectModel;
+﻿using SniperLog.Services.Database.Attributes;
 using System.Data;
+using System.Reflection;
 
 namespace SniperLog.Models
 {
-    public interface IDataAccessObject<T> where T : IDataAccessObject<T>
+    public interface IDataAccessObject
     {
+        [PrimaryKey]
+        public int ID { get; set; }
+
         public Task<int> SaveAsync();
         public Task<bool> DeleteAsync();
 
-        public static abstract Task<T?> LoadNewAsync(int id);
-        public static abstract T? GetById(int id);
-        public static abstract Task<ObservableCollection<T>> LoadAllAsync();
-        public static abstract Task<ObservableCollection<T>> LoadAllAsync(ObservableCollection<T> collection);
-        public static abstract T LoadFromRow(DataRow reader);
+        public static abstract string SelectAllQuery { get; }
+        public static abstract string InsertQuery { get; }
+        public static abstract string InsertQueryNoId { get; }
+        public static abstract string DeleteQuery { get; }
+
+        public static abstract IDataAccessObject LoadFromRow(DataRow row);
     }
 }

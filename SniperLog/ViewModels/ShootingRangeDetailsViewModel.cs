@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Data.Sqlite;
 using SniperLog.Models;
+using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
-using SniperLog.Services.Database;
 
 namespace SniperLog.ViewModels
 {
@@ -13,9 +12,9 @@ namespace SniperLog.ViewModels
         [ObservableProperty]
         private ShootingRange _selectedRange;
 
-        private DataService<ShootingRange> _dataService;
+        private DataCacherService<ShootingRange> _dataService;
 
-        public ShootingRangeDetailsViewModel(DataService<ShootingRange> service) : base()
+        public ShootingRangeDetailsViewModel(DataCacherService<ShootingRange> service) : base()
         {
             _dataService = service;
         }
@@ -23,13 +22,24 @@ namespace SniperLog.ViewModels
         [RelayCommand]
         private async Task DeleteThisRange()
         {
-            bool confirm = await Shell.Current.DisplayAlert("Delete Confirmation", $"Are you sure you want to delete shooting range {_selectedRange.Name}", "Delete", "Cancel");
+            bool confirm = await Shell.Current.DisplayAlert("Delete Confirmation", $"Are you sure you want to delete shooting range {SelectedRange.Name}", "Delete", "Cancel");
 
             if (confirm)
             {
-                await _dataService.DeleteAsync(_selectedRange);
+                await _dataService.RemoveAsync(SelectedRange);
                 await Shell.Current.GoToAsync("..");
             }
+        }
+
+        [RelayCommand]
+        private async Task GoToSubRangeSettings()
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                {"BaseShootingRange", SelectedRange }
+            };
+
+            await Shell.Current.GoToAsync(nameof(ShootingRangeSubRangesPage), true, parameters);
         }
     }
 }

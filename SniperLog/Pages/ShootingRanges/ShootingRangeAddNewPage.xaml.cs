@@ -1,17 +1,23 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mopups.Pages;
 using Mopups.Services;
-using SniperLog.Extensions;
 using SniperLog.Models;
 using SniperLog.Services;
-using System.Security.Cryptography;
 
 namespace SniperLog.Pages;
 
 public partial class ShootingRangeAddNewPage : PopupPage
 {
-    private DataService<ShootingRange> _dataService;
-    public ShootingRangeAddNewPage(DataService<ShootingRange> service)
+    private DataCacherService<ShootingRange> _dataService;
+
+    private Dictionary<string, bool> _valuesValidation = new Dictionary<string, bool>()
+    {
+        {"Name", false },
+        {"Address", true },
+        {"Latitude", false },
+        {"Longitude", false },
+        {"RelativeImagePathFromAppdata", false }
+    };
+    public ShootingRangeAddNewPage(DataCacherService<ShootingRange> service)
     {
         InitializeComponent();
         _dataService = service;
@@ -21,7 +27,6 @@ public partial class ShootingRangeAddNewPage : PopupPage
     {
         try
         {
-
             string name = ShootingRangeName.Text;
             string address = ShootingRangeAddress.Text;
             double latitude = double.Parse(ShootingRangeLang.Text);
@@ -36,7 +41,7 @@ public partial class ShootingRangeAddNewPage : PopupPage
 
             ShootingRange range = new ShootingRange(name, address, latitude, longitude, imagePathRel);
             if (!string.IsNullOrEmpty(imagePathRel)) await range.SaveBackgroundImageAsync(fullPath);
-            await _dataService.SaveOrUpdateAsync(range);
+            _dataService.AddOrUpdateAsync(range);
 
             await MopupService.Instance.PopAsync();
         }
@@ -63,4 +68,28 @@ public partial class ShootingRangeAddNewPage : PopupPage
 
         BackgroundImageTest.Source = ImageSource.FromFile(result.FullPath);
     }
+
+    private void ShootingRangeName_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        bool res = !string.IsNullOrEmpty(e.NewTextValue);
+        _valuesValidation["Name"] = res;
+        NameErrText.IsVisible = res;
+    }
+
+    private void ShootingRangeAddress_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        _valuesValidation["Address"] = true;
+    }
+
+    private void ShootingRangeLang_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!double.TryParse(e.NewTextValue, out double result))
+        {
+            _valuesValidation["Latitude"] = true;
+            NameErrText.IsVisible = false;
+            return;
+        }
+
+        NameErrText.IsVisible = true;
+    }//do the longitude etc
 }

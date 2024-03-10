@@ -35,7 +35,7 @@
                                 <Label x:Name="AltitudeLabel" Text="Altitude: " FontSize="15"/>
                                 <Label x:Name="FiringDirectionLabel" Text="Firing Direction: " FontSize="15"/>
                             </VerticalStackLayout>
-                            <ImageButton Grid.Column="1" HeightRequest="30" Aspect="AspectFill" Source="settings_icon_dark.png" VerticalOptions="Start" Clicked="SubRangeSettings_Clicked"/>
+                            <ImageButton Grid.Column="1" HeightRequest="30" Aspect="AspectFill" Source="settings_icon_dark.png" VerticalOptions="Start" Command="{Binding GoToSubRangeSettingsCommand}"/>
                         </Grid>
                     </Frame>
                 </Grid>
