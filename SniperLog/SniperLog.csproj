@@ -40,33 +40,53 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<AndroidSigningKeyStore>debug.keystore</AndroidSigningKeyStore>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
+	  <AndroidSigningStorePass>Markiplier</AndroidSigningStorePass>
+	  <AndroidSigningKeyPass>Mork</AndroidSigningKeyPass>
+	  <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
 	  <MtouchDebug>True</MtouchDebug>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
+	  <AndroidSigningStorePass>Markiplier</AndroidSigningStorePass>
+	  <AndroidSigningKeyPass>Mork</AndroidSigningKeyPass>
+	  <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
 	  <MtouchDebug>True</MtouchDebug>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationDisplayVersion>0.0.2</ApplicationDisplayVersion>
+	  <ApplicationId>com.sniperlog.app</ApplicationId>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(RunConfiguration)'=='Default'" />
 
 	<ItemGroup>
 		<!-- App Icon -->
