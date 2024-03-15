@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
-using SniperLog.Extensions;
-using SniperLog.Extensions.Pools;
-using SniperLog.Models;
+﻿using SniperLog.Extensions;
 using SniperLog.Services.Database.Attributes;
 using System.Reflection;
 using System.Text;

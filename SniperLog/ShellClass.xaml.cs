@@ -4,9 +4,9 @@ namespace SniperLog;
 
 public partial class ShellClass : Shell
 {
-	public ShellClass()
-	{
-		InitializeComponent();
+    public ShellClass()
+    {
+        InitializeComponent();
         SetTabBarIsVisible(this, false);
 
         #region Routes

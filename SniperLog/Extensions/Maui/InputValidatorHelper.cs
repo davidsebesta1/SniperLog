@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SniperLog.Extensions.Maui
+﻿namespace SniperLog.Extensions.Maui
 {
     public static class InputValidatorHelper
     {

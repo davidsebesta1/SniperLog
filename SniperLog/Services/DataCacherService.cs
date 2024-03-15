@@ -3,7 +3,6 @@ using SniperLog.Services.Database;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Runtime.CompilerServices;
 
 namespace SniperLog.Services
 {

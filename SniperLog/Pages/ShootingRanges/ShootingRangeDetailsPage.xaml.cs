@@ -1,4 +1,3 @@
-using Microsoft.Maui.Controls.Maps;
 using SniperLog.Models;
 using SniperLog.ViewModels;
 

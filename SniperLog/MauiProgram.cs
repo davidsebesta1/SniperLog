@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
-using SniperLog.Extensions;
 using SniperLog.Models;
 using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;

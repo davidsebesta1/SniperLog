@@ -1,5 +1,4 @@
-﻿using SniperLog.Models;
-using SniperLog.Pages;
+﻿using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
 using SniperLog.ViewModels;

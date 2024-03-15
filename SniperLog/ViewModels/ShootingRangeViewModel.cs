@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Services;
 using SniperLog.Models;
-using SniperLog.Pages;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services;
 using System.Collections.ObjectModel;

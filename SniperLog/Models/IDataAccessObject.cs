@@ -1,6 +1,5 @@
 ﻿using SniperLog.Services.Database.Attributes;
 using System.Data;
-using System.Reflection;
 
 namespace SniperLog.Models
 {

@@ -3,10 +3,7 @@ using SniperLog.Extensions;
 using SniperLog.Services;
 using SniperLog.Services.Database;
 using SniperLog.Services.Database.Attributes;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Net;
-using System.Xml.Linq;
 
 namespace SniperLog.Models
 {
