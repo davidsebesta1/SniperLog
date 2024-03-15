@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials"
+             x:DataType="viewmodel:ShootingRangeDetailsViewModel"
+             x:Class="SniperLog.Pages.ShootingRanges.ShootingRangeDetailsPage"
+             Title="{Binding SelectedRange.Name}">
+    <Grid ColumnDefinitions="*" RowDefinitions="*, 25" Padding="10, 0, 10, 0">
+        <VerticalStackLayout Padding="0, 5, 0, 0">
+            <!--Weather-->
+            <Frame BackgroundColor="Transparent" HeightRequest="200" MinimumWidthRequest="410" HorizontalOptions="CenterAndExpand">
+                <Grid RowDefinitions="30, *" RowSpacing="5" HorizontalOptions="FillAndExpand">
+                    <Label Grid.Row="0" Text="Weather" FontSize="20" Margin="15, 0, 0, 0"/>
+                    <Frame Grid.Row="1" BackgroundColor="{StaticResource Gray600}" CornerRadius="3">
+                        <VerticalStackLayout Spacing="7" VerticalOptions="Center">
+                            <Label x:Name="TemperatureLabel" Text="Temperature: " FontSize="15"/>
+                            <Label x:Name="PressureLabel" Text="Pressure: " FontSize="15"/>
+                            <Label x:Name="WindLabel" Text="Wind: " FontSize="15"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+            </Frame>
+
+            <!--Shooting Range Information-->
+            <Frame BackgroundColor="Transparent" HeightRequest="200" MinimumWidthRequest="410" HorizontalOptions="CenterAndExpand">
+                <Grid RowDefinitions="30, *" RowSpacing="5" HorizontalOptions="FillAndExpand">
+                    <Label Grid.Row="0" Text="Shooting Range Information" FontSize="20" Margin="15, 0, 0, 0"/>
+                    <Frame Grid.Row="1" BackgroundColor="{StaticResource Gray600}" CornerRadius="3">
+                        <Grid ColumnDefinitions="*, 30">
+                            <VerticalStackLayout Grid.Column="0" Spacing="7" VerticalOptions="Center">
+                                <Label x:Name="MaxRangeLabel" Text="Max Range: " FontSize="15"/>
+                                <Label x:Name="AltitudeLabel" Text="Altitude: " FontSize="15"/>
+                                <Label x:Name="FiringDirectionLabel" Text="Firing Direction: " FontSize="15"/>
+                            </VerticalStackLayout>
+                            <ImageButton Grid.Column="1" HeightRequest="30" Aspect="AspectFill" Source="settings_icon_dark.png" VerticalOptions="Start" Command="{Binding GoToSubRangeSettingsCommand}"/>
+                        </Grid>
+                    </Frame>
+                </Grid>
+            </Frame>
+
+            <!--Location-->
+            <Frame BackgroundColor="Transparent" HeightRequest="210" MinimumWidthRequest="410" HorizontalOptions="CenterAndExpand">
+                <Grid RowDefinitions="30, *" RowSpacing="5" HorizontalOptions="FillAndExpand">
+                    <Label Grid.Row="0" Text="Location" FontSize="20" Margin="15, 0, 0, 0"/>
+                    <Frame Grid.Row="1" BackgroundColor="{StaticResource Gray600}" CornerRadius="3" Padding="0">
+                        <!-- <maps:Map x:Name="LocationMap" VerticalOptions="FillAndExpand" MinimumWidthRequest="365" WidthRequest="365" HorizontalOptions="FillAndExpand"></maps:Map>-->
+                    </Frame>
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+
+        <Button Text="Delete" FontAutoScalingEnabled="True" FontSize="20" Padding="1, -5, 0, 0" WidthRequest="100" HeightRequest="35" Grid.Row="2" HorizontalOptions="End" VerticalOptions="End" Margin="0, 0, 15, 15" Command="{Binding DeleteThisRangeCommand}"/>
+    </Grid>
+</ContentPage>

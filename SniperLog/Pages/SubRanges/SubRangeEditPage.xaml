@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             x:Class="SniperLog.Pages.SubRanges.SubRangeEditPage"
+             BackgroundColor="#AA000000"
+             Title="SubRangeEditPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Range In Meters*" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="RangeInMetersLabel" Keyboard="Numeric"  TextColor="White" FontSize="16" TextChanged="RangeInMetersLabel_TextChanged"/>
+                    <Label x:Name="RangeInMetersErrText" Text="Range must be numeric value and not empty" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Altitude" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="AltitudeLabel" Keyboard="Numeric"  TextColor="White" FontSize="16" TextChanged="AltitudeLabel_TextChanged"/>
+                    <Label x:Name="AltitudeErrText" Text="Altitude must be numeric positive value and not empty" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="DirectionToNorth" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="DirectionToNorthLabel" Keyboard="Numeric"  TextColor="White" FontSize="16" TextChanged="DirectionToNorthLabel_TextChanged"/>
+                    <Label x:Name="DirectionToNorthErrText" Text="DirectionToNorth must be numeric value and not empty" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="VerticalFiringOffsetDegrees" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="VerticalFiringOffsetDegreesLabel" Keyboard="Numeric"  TextColor="White" FontSize="16" TextChanged="VerticalFiringOffsetDegreesLabel_TextChanged"/>
+                    <Label x:Name="VerticalFiringOffsetDegreesErrText" Text="VerticalFiringOffsetDegrees must be numeric value and not empty" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Notes" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="NotesRelativePathFromAppDataLabel" Keyboard="Text"  TextColor="White" FontSize="16" TextChanged="NotesRelativePathFromAppDataLabel_TextChanged"/>
+                    <Label x:Name="NotesRelativePathFromAppDataErrText" Text="Notes must be valid" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Grid HeightRequest="50" HorizontalOptions="CenterAndExpand" ColumnDefinitions="150, *, 150" RowDefinitions="50" ColumnSpacing="25" Margin="0, 10, 0, 0">
+                <Button Text="Save" Grid.Column="0" Clicked="SaveButton_Clicked"  WidthRequest="150" HeightRequest="50" VerticalOptions="End"/>
+                <Button Text="Back" Grid.Column="2" Clicked="BackButton_Clicked"  WidthRequest="150" HeightRequest="50" VerticalOptions="End"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</mopups:PopupPage>

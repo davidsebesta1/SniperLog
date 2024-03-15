@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             x:Class="SniperLog.Pages.ShootingRanges.ShootingRangesPage"
+             x:DataType="viewmodel:ShootingRangeViewModel"
+             Title="{Binding PageTitle}">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*, 60">
+        <RefreshView Grid.ColumnSpan="2" Command="{Binding GetShootingRangesCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView Background="Transparent" Grid.ColumnSpan="2" ItemsSource="{Binding ShootingRanges}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout>
+                        <Label Text="No Shooting Ranges found..." HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:ShootingRange">
+                        <Grid Padding="10">
+                            <Frame HeightRequest="125" Background="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource Gray900}}" CornerRadius="5" HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ShootingRangeViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid Padding="0" ColumnDefinitions="*">
+                                    <VerticalStackLayout Grid.Column="0" Padding="10" VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"/>
+                                        <Label Text="{Binding Address}"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Text="+" FontAutoScalingEnabled="True" FontSize="42" Padding="1, -5, 0, 0" WidthRequest="50" HeightRequest="50" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" VerticalOptions="End" Margin="0, 0, 15, 15" Command="{Binding AddNewRangeCommand}" IsEnabled="{Binding IsNotBusy}"/>
+    </Grid>
+</ContentPage>

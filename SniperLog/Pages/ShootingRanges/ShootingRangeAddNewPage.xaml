@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             x:Class="SniperLog.Pages.ShootingRanges.ShootingRangeAddNewPage"
+             BackgroundColor="#AA000000"
+             Title="ShootingRangeAddNewPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" BackgroundColor="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}">
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Name*" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeName" Keyboard="Text" TextColor="White" FontSize="16" TextChanged="ShootingRangeName_TextChanged"/>
+                    <Label x:Name="NameErrText" Text="Name must be filled" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Address" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeAddress" Keyboard="Text" TextColor="White" FontSize="16" TextChanged="ShootingRangeAddress_TextChanged"/>
+                    <Label x:Name="AddrErrText" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Latitude*" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeLat" Keyboard="Numeric" TextColor="White" FontSize="16" TextChanged="ShootingRangeLat_TextChanged"/>
+                    <Label x:Name="LatitudeErrText" Text="Please enter valid decimal value" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Longitude*" FontSize="18" TextColor="White"/>
+                    <Entry x:Name="ShootingRangeLong" Keyboard="Numeric" TextColor="White" FontSize="16" TextChanged="ShootingRangeLong_TextChanged"/>
+                    <Label x:Name="LongitudeErrText" Text="Please enter valid decimal value" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                </StackLayout>
+            </Frame>
+
+            <Frame Margin="0,10,0,0" BackgroundColor="#444444" CornerRadius="10">
+                <StackLayout Padding="5">
+                    <Label Text="Background Image" FontSize="18" TextColor="White"/>
+                    <Button x:Name="BackgroundImagePickerButton" Clicked="BackgroundImagePickerButton_Clicked" Text="Choose Image" HeightRequest="40" Margin="0, 5, 0, 0"/>
+                    <Label FontSize="8" x:Name="ImageFilePathLabel"/>
+                    <Label x:Name="BackgroundImageErrText" Text="Please enter valid decimal value" IsVisible="False" TextColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource ErrorDark}}"/>
+                    <Image x:Name="BackgroundImageTest" WidthRequest="150" HeightRequest="50"/>
+                </StackLayout>
+            </Frame>
+
+            <Grid HeightRequest="50" HorizontalOptions="CenterAndExpand" ColumnDefinitions="150, *, 150" RowDefinitions="50" ColumnSpacing="25" Margin="0, 10, 0, 0">
+                <Button Text="Add" Grid.Column="0" Clicked="AddButton_Clicked" WidthRequest="150" HeightRequest="50" VerticalOptions="End"/>
+                <Button Text="Back" Grid.Column="2" Clicked="ReturnButton_Clicked" WidthRequest="150" HeightRequest="50" VerticalOptions="End"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</mopups:PopupPage>
