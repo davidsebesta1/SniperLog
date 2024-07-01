@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.MainPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             x:DataType="viewmodel:MainPageViewModel"
+             BackgroundColor="{StaticResource Background}"
+             Title="{Binding PageTitle}"
+>
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="10,*,80">
+            <Label Grid.Column="1" Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <VerticalStackLayout>
+        <Label 
+            Text="Markiplier"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>

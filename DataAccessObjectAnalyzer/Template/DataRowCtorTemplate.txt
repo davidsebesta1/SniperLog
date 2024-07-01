@@ -1,0 +1,8 @@
+﻿/// <summary>
+/// Auto generated constructor for conversion from DataRow
+/// </summary>
+/// <param name=""row""></param>
+public %ClassName%(DataRow row) : this(%rowCtorParams%) 
+{
+
+}

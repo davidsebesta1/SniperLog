@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SniperLog.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SniperLog.Pages"
+    Title="SniperLog"
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutHeaderBehavior="CollapseOnScroll"
+    FlyoutIcon="hambugermenuicon.png"
+    FlyoutWidth="250">
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Main Page" ContentTemplate="{DataTemplate local:MainPage}" Icon="homeicon.png"></ShellContent>
+    </FlyoutItem>
+
+</Shell>

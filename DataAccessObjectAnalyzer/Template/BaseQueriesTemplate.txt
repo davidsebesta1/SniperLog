@@ -1,0 +1,7 @@
+﻿public static string SelectAllQuery => %selectAllQuery%
+
+public static string InsertQuery => %insertQuery%
+
+public static string InsertQueryNoId => %insertQueryNoId%
+
+public static string DeleteQuery => %deleteQuery%

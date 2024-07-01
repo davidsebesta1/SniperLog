@@ -1,0 +1,8 @@
+﻿/// <summary>
+/// Auto generated method to return new instances of all needed Sqlite parameters
+/// </summary>
+public SqliteParameter[] GetSqliteParams(bool includeID = false)
+{
+    if (includeID) return [%sqliteParams%];
+    return [%sqliteParamsNoId%];
+}

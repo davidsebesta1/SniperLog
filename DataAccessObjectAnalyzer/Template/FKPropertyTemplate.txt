@@ -1,0 +1,10 @@
+﻿// <summary>
+// Auto generated reference for %refClass% as Foreign Key property 
+//</summary>
+public %refClass% Referenced%refClass%
+{
+    get 
+    {
+        return ServicesHelper.GetService<DataCacherService<%refClass%>>().GetFirstBy(n => n.%refClassId% == %thisId%);
+    }
+}
