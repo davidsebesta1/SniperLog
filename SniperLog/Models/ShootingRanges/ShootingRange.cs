@@ -117,7 +117,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<ShootingRange>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<ShootingRange>>().AddOrUpdate(this);
             }
         }
 
@@ -129,7 +129,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<ShootingRange>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<ShootingRange>>().Remove(this);
             }
         }
 

@@ -31,10 +31,10 @@ namespace SniperLog.Models
 
         #region CSV
 
-        public static ICsvProcessable DeserializeFromCsvRow(string row)
+        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             string[] split = row.Split(',');
-            FirearmSight sight = ServicesHelper.GetService<DataCacherService<FirearmSight>>().GetFirstBy(n => n.Name == split[0]);
+            FirearmSight sight = await ServicesHelper.GetService<DataCacherService<FirearmSight>>().GetFirstBy(n => n.Name == split[0]);
             return new FirearmSightSetting(sight.ID, int.Parse(split[2]), int.Parse(split[2]), int.Parse(split[2]), int.Parse(split[2]));
         }
 
@@ -80,7 +80,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>().AddOrUpdate(this);
             }
         }
 
@@ -92,7 +92,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>().Remove(this);
             }
         }
 

@@ -3,9 +3,12 @@ namespace SniperLog.Models.Interfaces
 {
     public interface ICsvProcessable
     {
-        public static abstract string CsvHeader { get; }
+        public static virtual string CsvHeader { get; }
 
-        public static abstract ICsvProcessable DeserializeFromCsvRow(string row);
+        public static virtual Task<ICsvProcessable> DeserializeFromCsvRow(string row)
+        {
+            throw new NotImplementedException();
+        }
 
         public abstract string SerializeToCsvRow();
     }

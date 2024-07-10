@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.ShootingRanges.SRangesPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.SRanges"
+             x:DataType="viewmodel:SRangesPageViewModel"
+             BackgroundColor="{StaticResource Background}"
+             Title="{Binding PageTitle}">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15,15,15,0">
+            <Label Text="Shooting Ranges" Style="{StaticResource Headline}"/>
+
+            <Frame HeightRequest="65" BackgroundColor="{StaticResource PanelBackgroundDark}">
+                <Grid ColumnDefinitions="25,10,*" HeightRequest="50">
+                    <ImageButton Source="searchicon.png" Grid.Column="0" />
+                    <Entry Grid.Column="2" HeightRequest="70" Placeholder="Shooting range..." ClearButtonVisibility="Never"/>
+                    <ImageButton Source="searchicon.png" Grid.Column="0" />
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

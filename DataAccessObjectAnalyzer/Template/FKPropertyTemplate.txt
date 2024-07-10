@@ -5,6 +5,6 @@ public %refClass% Referenced%refClass%
 {
     get 
     {
-        return ServicesHelper.GetService<DataCacherService<%refClass%>>().GetFirstBy(n => n.%refClassId% == %thisId%);
+        return ServicesHelper.GetService<DataCacherService<%refClass%>>().GetFirstBy(n => n.%refClassId% == %thisId%).GetAwaiter().GetResult();
     }
 }

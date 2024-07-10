@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Extensions;
-using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
@@ -88,7 +87,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Firearm>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<Firearm>>().AddOrUpdate(this);
             }
         }
 
@@ -100,7 +99,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Firearm>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<Firearm>>().Remove(this);
             }
         }
 

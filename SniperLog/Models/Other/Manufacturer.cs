@@ -60,7 +60,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Manufacturer>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<Manufacturer>>().AddOrUpdate(this);
             }
 
 
@@ -73,7 +73,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Manufacturer>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<Manufacturer>>().Remove(this);
             }
         }
 
@@ -86,10 +86,10 @@ namespace SniperLog.Models
             return string.Join(',', Name, ReferencedCountry.Code);
         }
 
-        public static ICsvProcessable DeserializeFromCsvRow(string row)
+        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             string[] splits = row.Split(',');
-            return new Manufacturer(ServicesHelper.GetService<DataCacherService<Country>>().GetFirstBy(n => n.Code == splits[1]).ID, splits[0]);
+            return new Manufacturer((await ServicesHelper.GetService<DataCacherService<Country>>().GetFirstBy(n => n.Code == splits[1])).ID, splits[0]);
         }
 
         #endregion

@@ -62,7 +62,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmSight>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmSight>>().AddOrUpdate(this);
             }
         }
 
@@ -75,24 +75,24 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmSight>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmSight>>().Remove(this);
             }
         }
         #endregion
 
         #region CSV
 
-        public static ICsvProcessable DeserializeFromCsvRow(string row)
+        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             string[] split = row.Split(',');
-            SightClickType sightClickType = ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == split[1]);
-            Manufacturer manufacturer = ServicesHelper.GetService<DataCacherService<Manufacturer>>().GetFirstBy(n => n.Name == split[2]);
+            SightClickType sightClickType = await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == split[1]);
+            Manufacturer manufacturer = await ServicesHelper.GetService<DataCacherService<Manufacturer>>().GetFirstBy(n => n.Name == split[2]);
             return new FirearmSight(sightClickType.ID, manufacturer.ID, split[0], double.Parse(split[3]));
         }
 
         public string SerializeToCsvRow()
         {
-            return string.Join(',', Name, ReferencedSightClickType.ClickTypeName, ReferencedManufacturer.Name, _oneClickValue);
+            return string.Join(',', Name, ReferencedSightClickType.ClickTypeName, ReferencedManufacturer.Name, OneClickValue);
         }
 
         #endregion

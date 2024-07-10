@@ -58,7 +58,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<SightClickType>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<SightClickType>>().Remove(this);
             }
         }
 
@@ -78,7 +78,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<SightClickType>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<SightClickType>>().AddOrUpdate(this);
             }
         }
 

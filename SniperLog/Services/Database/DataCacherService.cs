@@ -9,15 +9,19 @@ namespace SniperLog.Services.Database
         private readonly ConcurrentDictionary<int, T> _cachedPerId = new ConcurrentDictionary<int, T>();
         private readonly ObservableCollection<T> _objects = new ObservableCollection<T>();
 
-        public static event EventHandler<DataServiceOnSaveOrUpdateArgs<T>> OnSaveOrUpdate;
-        public static event EventHandler<DataServiceOnDeleteArgs<T>> OnDelete;
-        public static event EventHandler OnChanged;
+        public event EventHandler<DataServiceOnSaveOrUpdateArgs<T>> OnSaveOrUpdate;
+        public event EventHandler<DataServiceOnDeleteArgs<T>> OnDelete;
 
-        public ObservableCollection<T> GetAll()
+        public DataCacherService()
+        {
+
+        }
+
+        public async Task<ObservableCollection<T>> GetAll()
         {
             if (_cachedPerId.IsEmpty)
             {
-                DataTable table = SqLiteDatabaseConnection.Instance.ExecuteQuery(T.SelectAllQuery);
+                DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync(T.SelectAllQuery);
 
                 if (table == null) return _objects;
 
@@ -31,12 +35,11 @@ namespace SniperLog.Services.Database
             return _objects;
         }
 
-        public async Task<bool> AddOrUpdateAsync(T item)
+        public bool AddOrUpdate(T item)
         {
             if (_cachedPerId.ContainsKey(item.ID))
             {
                 OnSaveOrUpdate?.Invoke(this, new DataServiceOnSaveOrUpdateArgs<T>(item, true));
-                OnChanged?.Invoke(this, null);
                 return false;
             }
 
@@ -44,26 +47,24 @@ namespace SniperLog.Services.Database
             _cachedPerId.TryAdd(item.ID, item);
             _objects.Add(item);
             OnSaveOrUpdate?.Invoke(this, new DataServiceOnSaveOrUpdateArgs<T>(item, false));
-            OnChanged?.Invoke(this, null);
             return true;
         }
 
-        public async Task<bool> RemoveAsync(T item)
+        public bool Remove(T item)
         {
             bool res = _cachedPerId.Remove(item.ID, out var val) && _objects.Remove(item);
             OnDelete?.Invoke(this, new DataServiceOnDeleteArgs<T>(item));
-            OnChanged?.Invoke(this, null);
             return res;
         }
 
-        public ObservableCollection<T> GetAllBy(Predicate<T> predicate)
+        public async Task<ObservableCollection<T>> GetAllBy(Predicate<T> predicate)
         {
-            return new ObservableCollection<T>(GetAll().Where(n => predicate(n)));
+            return new ObservableCollection<T>((await GetAll()).Where(n => predicate(n)));
         }
 
-        public T? GetFirstBy(Predicate<T> predicate)
+        public async Task<T?> GetFirstBy(Predicate<T> predicate)
         {
-            if (!_objects.Any()) GetAll();
+            if (!_objects.Any()) await GetAll();
             return _objects.FirstOrDefault(n => predicate(n));
         }
     }

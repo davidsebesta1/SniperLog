@@ -68,7 +68,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Country>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<Country>>().AddOrUpdate(this);
             }
         }
 
@@ -80,7 +80,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<Country>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<Country>>().Remove(this);
             }
         }
 

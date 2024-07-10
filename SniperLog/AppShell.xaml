@@ -4,14 +4,36 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SniperLog.Pages"
+    xmlns:sRanges="clr-namespace:SniperLog.Pages.ShootingRanges"
     Title="SniperLog"
     Shell.FlyoutBehavior="Flyout"
     FlyoutHeaderBehavior="CollapseOnScroll"
     FlyoutIcon="hambugermenuicon.png"
+    FlyoutBackgroundColor="{StaticResource PanelBackgroundDark}"
+    Shell.TabBarIsVisible="False"
     FlyoutWidth="250">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Main Page" ContentTemplate="{DataTemplate local:MainPage}" Icon="homeicon.png"></ShellContent>
+        <ShellContent Title="Main Page" ContentTemplate="{DataTemplate local:MainPage}" Icon="recordsicon.png"></ShellContent>
+        <ShellContent Title="Firearms" ContentTemplate="{DataTemplate local:MainPage}" Icon="firearmsicon.png"></ShellContent>
+        <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate sRanges:SRangesPage}" Icon="shootingrangesicon.png"></ShellContent>
+        <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate local:MainPage}" Icon="manufacturersicon.png"></ShellContent>
+        <ShellContent Title="Sights" ContentTemplate="{DataTemplate local:MainPage}" Icon="sightsicon.png"></ShellContent>
+        <ShellContent Title="Reticles" ContentTemplate="{DataTemplate local:MainPage}" Icon="reticlesicon.png"></ShellContent>
     </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <Frame BackgroundColor="Transparent" HeightRequest="50" Padding="20,0,0,15">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer/>
+            </Frame.GestureRecognizers>
+
+            <HorizontalStackLayout HeightRequest="50">
+                <Image Source="settingsicon.png" HeightRequest="25"/>
+                <Label Text="Settings" VerticalTextAlignment="Center" Padding="30,0,0,0" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+        </Frame>
+    </Shell.FlyoutFooter>
+
 
 </Shell>

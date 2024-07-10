@@ -31,7 +31,7 @@ namespace SniperLog.Models
         {
             get
             {
-                var subRanges = ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ShootingRange_ID);
+                var subRanges = ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ShootingRange_ID).GetAwaiter().GetResult();
                 int index = subRanges.IndexOf(this);
 
                 char letter = (char)(65 + index);
@@ -96,7 +96,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<SubRange>>().AddOrUpdateAsync(this);
+               ServicesHelper.GetService<DataCacherService<SubRange>>().AddOrUpdate(this);
             }
         }
 
@@ -108,7 +108,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<SubRange>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<SubRange>>().Remove(this);
             }
         }
 

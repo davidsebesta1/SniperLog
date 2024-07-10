@@ -53,7 +53,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmType>>().AddOrUpdateAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmType>>().AddOrUpdate(this);
             }
         }
 
@@ -65,7 +65,7 @@ namespace SniperLog.Models
             }
             finally
             {
-                await ServicesHelper.GetService<DataCacherService<FirearmType>>().RemoveAsync(this);
+                ServicesHelper.GetService<DataCacherService<FirearmType>>().Remove(this);
             }
         }
 
