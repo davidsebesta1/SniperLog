@@ -39,7 +39,7 @@ namespace SniperLog.Models
             return new Country(row);
         }
 
-        public static ICsvProcessable DeserializeFromCsvRow(string row)
+        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             string[] data = row.Split(',');
             return new Country(data[1], data[0]);

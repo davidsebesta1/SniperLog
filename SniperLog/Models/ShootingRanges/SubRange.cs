@@ -22,7 +22,7 @@ namespace SniperLog.Models
 
         public double? Altitude { get; set; }
 
-        public double? DirectionToNorth { get; set; }
+        public double? DirectionToNorthDegrees { get; set; }
 
         public double? VerticalFiringOffsetDegrees { get; set; }
 
@@ -34,7 +34,7 @@ namespace SniperLog.Models
                 var subRanges = ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ShootingRange_ID).GetAwaiter().GetResult();
                 int index = subRanges.IndexOf(this);
 
-                char letter = (char)(65 + index);
+                char letter = (char)('A' + index);
 
                 return letter;
             }
@@ -61,7 +61,7 @@ namespace SniperLog.Models
             ShootingRange_ID = shootingRange_ID;
             RangeInMeters = rangeInMeters;
             Altitude = altitude;
-            DirectionToNorth = directionToNorth;
+            DirectionToNorthDegrees = directionToNorth;
             VerticalFiringOffsetDegrees = verticalFiringOffsetDegrees;
         }
 
@@ -96,7 +96,7 @@ namespace SniperLog.Models
             }
             finally
             {
-               ServicesHelper.GetService<DataCacherService<SubRange>>().AddOrUpdate(this);
+                ServicesHelper.GetService<DataCacherService<SubRange>>().AddOrUpdate(this);
             }
         }
 

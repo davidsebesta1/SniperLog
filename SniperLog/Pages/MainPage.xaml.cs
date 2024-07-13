@@ -1,3 +1,6 @@
+using Mopups.Services;
+using SniperLog.Config;
+using SniperLog.Pages.Other;
 using SniperLog.ViewModels;
 
 namespace SniperLog.Pages
@@ -10,9 +13,16 @@ namespace SniperLog.Pages
             BindingContext = vm;
         }
 
-        private void ImageButton_Clicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
+            base.OnAppearing();
 
+            await Task.Delay(1000);
+            VersionControl tracking = ApplicationConfigService.GetConfig<VersionControl>();
+            if (tracking.FirstLaunchEver)
+            {
+                await MopupService.Instance.PushAsync(ServicesHelper.GetService<InitialSetupPopupPage>());
+            }
         }
     }
 }

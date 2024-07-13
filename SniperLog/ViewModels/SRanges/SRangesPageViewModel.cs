@@ -33,5 +33,11 @@ namespace SniperLog.ViewModels.SRanges
             ShootingRanges = null;
             ShootingRanges = await _sRangeDataCacher.GetAllBy(n => n.Name.Contains(input, StringComparison.CurrentCultureIgnoreCase));
         }
+
+        [RelayCommand]
+        private async Task AddNewRangeCommand()
+        {
+
+        }
     }
 }

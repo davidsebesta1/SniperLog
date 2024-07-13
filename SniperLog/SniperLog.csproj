@@ -88,9 +88,9 @@
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\homeicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\deleteicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\deleteicon.svg" Resize="True" BaseSize="64,64" TintColor="#FF7A7A" />
 		<MauiImage Update="Resources\Images\editicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\hamburgermenuicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		
 		<MauiImage Update="Resources\Images\FlyoutIcons\firearmsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\menufacturersicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\recordsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
@@ -98,9 +98,14 @@
 		<MauiImage Update="Resources\Images\FlyoutIcons\shootingrangesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\sightsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\settingsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		
 		<MauiImage Update="Resources\Images\searchicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
 		<MauiImage Update="Resources\Images\cancelicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
-
+		<MauiImage Update="Resources\Images\hamburgermenuicon.svg" Resize="True" BaseSize="20,15" TintColor="#6D758C" />
+		
+		<MauiImage Update="Resources\Images\stariconfav.svg" Resize="True" BaseSize="64,64" TintColor="#FFF177" />
+		<MauiImage Update="Resources\Images\stariconnormal.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
@@ -114,10 +119,13 @@
 	  <None Remove="Resources\Images\deleteicon.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
-	  <None Remove="Resources\Images\hamburgermenuicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
 	  <None Remove="Resources\Images\logo.svg" />
+	  <None Remove="Resources\Images\olesko.png" />
 	  <None Remove="Resources\Images\searchicon.svg" />
+	  <None Remove="Resources\Images\stariconfav.svg" />
+	  <None Remove="Resources\Images\stariconnormal.svg" />
+	  <None Remove="Resources\Images\Untitled.png" />
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
@@ -155,9 +163,19 @@
 	  <MauiXaml Update="Pages\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ShootingRanges\SRangesAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRanges\SRangesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\ShootingRangeBackgroundIcons\srangebackground.png" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionSniperLogHideInfoBar="True" /></VisualStudio></ProjectExtensions>

@@ -8,16 +8,13 @@ namespace SniperLog.Pages.ShootingRanges
         {
             InitializeComponent();
             BindingContext = vm;
-
-
         }
 
-        public FirearmType ReferencedFirearmType
+        protected override async void OnAppearing()
         {
-            get
-            {
-                return ServicesHelper.GetService<DataCacherService<FirearmType>>().GetFirstBy(n => n.ID == 1).GetAwaiter().GetResult();
-            }
+            base.OnAppearing();
+
+            await (BindingContext as SRangesPageViewModel).RefreshShootingRangesCommandCommand.ExecuteAsync(null);
         }
     }
 }

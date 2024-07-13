@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             BackgroundColor="#AA111111"
+             x:Class="SniperLog.Pages.Other.InitialSetupPopupPage"
+             BindingContext="viewmodel:InitialSetupPopupPageViewModel"
+             CloseWhenBackgroundIsClicked="False">
+
+    <VerticalStackLayout HorizontalOptions="FillAndExpand" HeightRequest="125" VerticalOptions="Center" Padding="25">
+        <Label x:Name="InfoLabel" Text="Performing first time setup" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+        <Frame Margin="0, 15, 0, 0" BackgroundColor="{StaticResource PanelBackgroundDark}" CornerRadius="5" HorizontalOptions="FillAndExpand" HeightRequest="40">
+            <ProgressBar x:Name="ProgressBar" HorizontalOptions="FillAndExpand" Progress="0" BackgroundColor="Transparent" ProgressColor="#E4FFFF" HeightRequest="40" Margin="5">
+                <ProgressBar.ScaleY>2</ProgressBar.ScaleY>
+            </ProgressBar>
+        </Frame>
+    </VerticalStackLayout>
+</mopups:PopupPage>

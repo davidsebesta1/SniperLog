@@ -258,7 +258,7 @@ namespace DataAccessObjectAnalyzer.Generators
                 pkVarName = char.ToUpper(firstLetter).ToString() + tmp;
             }
 
-            return $"\"SELECT * FROM {_targetClassNode.Identifier.Text} WHERE {_targetClassNode.Identifier.Text}.{pkVarName} = @{pkVarName}\";";
+            return $"\"SELECT * FROM {_targetClassNode.Identifier.Text}\";";
         }
     }
 }

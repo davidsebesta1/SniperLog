@@ -3,10 +3,12 @@ using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using SniperLog.Config;
 using SniperLog.Pages;
+using SniperLog.Pages.Other;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
+using SniperLog.ViewModels.Other;
 using SniperLog.ViewModels.SRanges;
 
 namespace SniperLog
@@ -31,13 +33,6 @@ namespace SniperLog
                      fonts.AddFont("Inter-Regular.ttf", "InterRegular");
                  });
 
-            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(Entry), (handler, view) =>
-            {
-#if ANDROID
-                handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-#endif
-            });
-
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
@@ -55,6 +50,7 @@ namespace SniperLog
         {
             #region Data Cacher Services
 
+            
             var types = typeof(IDataAccessObject).Assembly.GetTypes().Where(n => !n.IsAbstract && n.GetInterface("IDataAccessObject") != null);
 
             foreach (Type type in types)
@@ -63,6 +59,7 @@ namespace SniperLog
                 var cacher = Activator.CreateInstance(dataCacherServiceTypeGenerics);
                 builder.Services.AddSingleton(dataCacherServiceTypeGenerics, cacher);
             }
+            
 
             #endregion
 
@@ -70,6 +67,7 @@ namespace SniperLog
 
             builder.Services.AddSingleton<MainPageViewModel>();
             builder.Services.AddSingleton<SRangesPageViewModel>();
+            builder.Services.AddSingleton<InitialSetupPopupPageViewModel>();
 
             #endregion
 
@@ -77,6 +75,7 @@ namespace SniperLog
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<SRangesPage>();
+            builder.Services.AddSingleton<InitialSetupPopupPage>();
 
 
             #endregion

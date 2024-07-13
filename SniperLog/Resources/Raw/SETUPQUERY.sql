@@ -4,7 +4,9 @@ CREATE TABLE IF NOT EXISTS ShootingRange(
     Name VARCHAR(30) UNIQUE NOT NULL,
     Address VARCHAR(100),
     Latitude DOUBLE,
-    Longitude DOUBLE
+    Longitude DOUBLE,
+    IsMarkedAsFavourite BOOLEAN NOT NULL,
+    BackgroundImgPath VARCHAR(100)
 );
 
 -- Sub range

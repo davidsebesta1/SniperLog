@@ -74,7 +74,7 @@ namespace SniperLog.Services.Configuration
 
             Type type = config.GetType();
             string serialized = YamlParser.Serializer.Serialize(Convert.ChangeType(config, config.GetType()));
-            File.WriteAllText(fullPath + ".yaml", serialized);
+            File.WriteAllText(fullPath.EndsWith(".yaml") ? fullPath : fullPath + ".yaml", serialized);
         }
     }
 }

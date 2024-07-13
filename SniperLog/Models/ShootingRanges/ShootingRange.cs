@@ -4,10 +4,16 @@ using System.Data;
 using SniperLogNetworkLibrary;
 using SniperLog.Services.ConnectionToServer;
 using SniperLogNetworkLibrary.Networking.Messages;
+using System.Resources;
+using SniperLog.Extensions;
 
 namespace SniperLog.Models
 {
 
+    /// <summary>
+    /// A class representing shooting range and its properties.<br></br>
+    /// Background image is not automatically saved with the object itself and the method must be called seperately.
+    /// </summary>
     public partial class ShootingRange : ObservableObject, IDataAccessObject, IEquatable<ShootingRange?>
     {
         #region Properties
@@ -57,12 +63,31 @@ namespace SniperLog.Models
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
+        private string _backgroundImgPath;
+
+        public string BackgroundImgFullPath => AppDataFileHelper.GetPathFromAppData(BackgroundImgPath);
+
         [DatabaseIgnore]
         public Location? Location { get; set; }
 
         [DatabaseIgnore]
         [ObservableProperty]
         private WeatherResponseMessage? _currentWeather;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FavStarImageName))]
+        private bool _isMarkedAsFavourite;
+
+        [DatabaseIgnore]
+        public string FavStarImageName => IsMarkedAsFavourite ? _favImage : _normalImage;
+
+        [DatabaseIgnore]
+        private readonly string _normalImage = "stariconnormal.png";
+
+        [DatabaseIgnore]
+        private readonly string _favImage = "stariconfav.png";
 
         #endregion
 
@@ -76,13 +101,14 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude)
+        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite)
         {
             ID = iD;
             Name = name;
             Address = address;
             Latitude = latitude;
             Longitude = longitude;
+            IsMarkedAsFavourite = isMarkedAsFavourite;
         }
 
         /// <summary>
@@ -93,7 +119,7 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(string name, string? address, double? latitude, double? longitude) : this(-1, name, address, latitude, longitude)
+        public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite)
         {
 
         }
@@ -125,6 +151,12 @@ namespace SniperLog.Models
         {
             try
             {
+                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", Name));
+                if (Directory.Exists(dataPath))
+                {
+                    Directory.Delete(dataPath, true);
+                }
+
                 return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(DeleteQuery, new SqliteParameter("@ID", ID)) == 1;
             }
             finally
@@ -141,6 +173,7 @@ namespace SniperLog.Models
         #endregion
 
         #region Model Specific Methods
+
         public async Task InitDefaultSubRangeForInstance()
         {
             SubRange subRange = new SubRange(ID, true, 0, 0, 0, 0);
@@ -188,6 +221,13 @@ namespace SniperLog.Models
         partial void OnCurrentWeatherChanged(WeatherResponseMessage? value)
         {
             OnPropertyChanged(nameof(CurrentWeather));
+        }
+
+        private async Task SaveImageAsync(byte[] data)
+        {
+            string fulPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", Name, "backgroundimage.png"));
+
+            await File.WriteAllBytesAsync(fulPath, data);
         }
 
         #endregion

@@ -30,7 +30,7 @@ namespace SniperLog.Services.Serialization
                 string line = string.Empty;
                 while (!string.IsNullOrEmpty((line = await reader.ReadLineAsync())))
                 {
-                    IDataAccessObject? obj = (IDataAccessObject?)T.DeserializeFromCsvRow(line);
+                    IDataAccessObject? obj = (IDataAccessObject?)await T.DeserializeFromCsvRow(line);
 
                     if (obj != null)
                     {

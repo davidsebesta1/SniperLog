@@ -16,6 +16,10 @@ namespace %Namespace%
     /// The following additional sources may be generated:
     /// <list type="bullet">
     /// <item>
+    /// SQlite queries for insert, update, select all and delete
+    /// </item>
+    ///
+    /// <item>
     /// A constructor from DataRow data type
     /// </item>
     /// 

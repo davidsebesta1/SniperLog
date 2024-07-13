@@ -18,7 +18,7 @@ namespace SniperLog.Models
 
         #region CSV
 
-        public static ICsvProcessable DeserializeFromCsvRow(string row)
+        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             return new SightClickType(row);
         }
