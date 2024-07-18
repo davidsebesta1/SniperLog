@@ -1,11 +1,11 @@
-﻿
+﻿using SniperLog.Extensions.CustomXamlComponents.Abstract;
+
 namespace SniperLog.Services
 {
     public class ValidatorService
     {
-        private readonly Dictionary<Element, bool> _validationValues = new Dictionary<Element, bool>();
-        private readonly Dictionary<Element, Func<object, bool>> _validationFunctions = new Dictionary<Element, Func<object, bool>>();
-        private readonly Dictionary<Element, Label> _errorLabels = new Dictionary<Element, Label>();
+        private readonly Dictionary<CustomEntryBase, bool> _validationValues = new Dictionary<CustomEntryBase, bool>();
+        private readonly Dictionary<CustomEntryBase, Func<object, bool>> _validationFunctions = new Dictionary<CustomEntryBase, Func<object, bool>>();
 
         public bool AllValid => _validationValues.Values.All(x => x == true);
 
@@ -14,104 +14,52 @@ namespace SniperLog.Services
 
         }
 
-        public bool TryAddValidation(Element element, Label errorLabel, Func<object, bool> validationFunc, bool defaultValue = false)
+
+        public bool TryAddValidation(CustomEntryBase entry, Func<object, bool> func, bool defaultValidation = false)
         {
-            if (_validationValues.ContainsKey(element))
+            if (_validationFunctions.ContainsKey(entry))
             {
                 return false;
             }
 
-            switch (element)
-            {
-                case Entry entry:
-                    entry.TextChanged += Entry_TextChanged;
-                    break;
-                case CheckBox checkBox:
-                    checkBox.CheckedChanged += CheckBox_CheckedChanged;
-                    break;
-                case CollectionView collectionView:
-                    collectionView.SelectionChanged += CollectionView_SelectionChanged;
-                    break;
-                case ListView listView:
-                    listView.ItemSelected += ListView_ItemSelected;
-                    break;
-                default:
-                    return false;
-            }
+            _validationValues.Add(entry, defaultValidation);
+            _validationFunctions.Add(entry, func);
 
-            _validationValues.Add(element, defaultValue);
-            _validationFunctions.Add(element, validationFunc);
-            _errorLabels.Add(element, errorLabel);
+            entry.OnEntryInputChanged += EntryInput;
 
             return true;
         }
 
-        public bool RemoveValidation(Element el)
+        public bool TryRemoveValidation(CustomEntryBase entry)
         {
-            return _validationValues.Remove(el) && _validationFunctions.Remove(el) && _errorLabels.Remove(el);
-        }
+            bool res = _validationValues.Remove(entry) && _validationFunctions.Remove(entry);
 
-        public void Clear()
-        {
-            _validationValues.Clear();
-            _validationFunctions.Clear();
-            _errorLabels.Clear();
-        }
-
-        public void RevalidateAll()
-        {
-            for (int i = 0; i < _validationValues.Count; i++)
+            if (res)
             {
-                Element element = _validationValues.ElementAt(i).Key;
+                entry.OnEntryInputChanged -= EntryInput;
+            }
 
-                switch (element)
-                {
-                    case Entry entry:
-                        HandleValidationAndUpdate(element, entry.Text);
-                        break;
-                    case CheckBox checkBox:
-                        HandleValidationAndUpdate(element, checkBox.IsChecked);
-                        break;
-                    case CollectionView collectionView:
-                        HandleValidationAndUpdate(element, collectionView.SelectedItems);
-                        break;
-                    case ListView listView:
-                        HandleValidationAndUpdate(element, listView.SelectedItem);
-                        break;
-                }
+            return res;
+        }
+
+        public void ClearAll()
+        {
+            while (_validationValues.Count > 0)
+            {
+                CustomEntryBase entry = _validationValues.ElementAt(0).Key;
+                TryRemoveValidation(entry);
             }
         }
 
-        private void HandleValidationAndUpdate(Element el, object args)
+        private void EntryInput(object? caller, object args)
         {
-            bool success = _validationFunctions[el].Invoke(args);
-
-            if (_errorLabels.TryGetValue(el, out Label label) && label != null)
+            if (caller is CustomEntryBase entryBase)
             {
-                label.IsVisible = !success;
+                bool res = _validationFunctions[entryBase].Invoke(args);
+                entryBase.ErrorTextVisible = !res;
+
+                _validationValues[entryBase] = res;
             }
-
-            _validationValues[el] = success;
-        }
-
-        private void ListView_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
-        {
-            HandleValidationAndUpdate((Element)sender, e.SelectedItem);
-        }
-
-        private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            HandleValidationAndUpdate((Element)sender, e.CurrentSelection);
-        }
-
-        private void CheckBox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
-        {
-            HandleValidationAndUpdate((Element)sender, e.Value);
-        }
-
-        private void Entry_TextChanged(object? sender, TextChangedEventArgs e)
-        {
-            HandleValidationAndUpdate((Element)sender, e.NewTextValue);
         }
     }
 }

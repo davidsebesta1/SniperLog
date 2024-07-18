@@ -15,7 +15,7 @@
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Main Page" ContentTemplate="{DataTemplate local:MainPage}" Icon="recordsicon.png"></ShellContent>
-        <ShellContent Title="Firearms" ContentTemplate="{DataTemplate local:MainPage}" Icon="firearmsicon.png"></ShellContent>
+        <ShellContent Title="Firearms" ContentTemplate="{DataTemplate sRanges:SRangesAddOrEditPage}" Icon="firearmsicon.png"></ShellContent>
         <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate sRanges:SRangesPage}" Icon="shootingrangesicon.png"></ShellContent>
         <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate local:MainPage}" Icon="manufacturersicon.png"></ShellContent>
         <ShellContent Title="Sights" ContentTemplate="{DataTemplate local:MainPage}" Icon="sightsicon.png"></ShellContent>

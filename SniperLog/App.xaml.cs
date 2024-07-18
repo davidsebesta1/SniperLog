@@ -8,6 +8,13 @@ namespace SniperLog
         {
             InitializeComponent();
 
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("CursorColor", (handler, view) =>
+            {
+#if __ANDROID__
+        handler.PlatformView.TextCursorDrawable.SetTint(Colors.White.ToInt());
+#endif
+            });
+
             MainPage = new AppShell();
         }
     }

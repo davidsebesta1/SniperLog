@@ -105,6 +105,11 @@
 		
 		<MauiImage Update="Resources\Images\stariconfav.svg" Resize="True" BaseSize="64,64" TintColor="#FFF177" />
 		<MauiImage Update="Resources\Images\stariconnormal.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+
+		<MauiImage Update="Resources\Images\uploadicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
+
+		<MauiImage Update="Resources\Images\galleryicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\cameraicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -115,10 +120,12 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\Inter-Regular.ttf" />
+	  <None Remove="Resources\Images\cameraicon.svg" />
 	  <None Remove="Resources\Images\cancelicon.svg" />
 	  <None Remove="Resources\Images\deleteicon.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
+	  <None Remove="Resources\Images\galleryicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
 	  <None Remove="Resources\Images\logo.svg" />
 	  <None Remove="Resources\Images\olesko.png" />
@@ -126,6 +133,7 @@
 	  <None Remove="Resources\Images\stariconfav.svg" />
 	  <None Remove="Resources\Images\stariconnormal.svg" />
 	  <None Remove="Resources\Images\Untitled.png" />
+	  <None Remove="Resources\Images\uploadicon.svg" />
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
@@ -160,6 +168,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml.cs">
+	    <DependentUpon>CustomTextEntry.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomImagePickerEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomMultilineTextEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomSwitchEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -172,10 +198,6 @@
 	  <MauiXaml Update="Pages\ShootingRanges\SRangesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiImage Include="Resources\Images\ShootingRangeBackgroundIcons\srangebackground.png" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionSniperLogHideInfoBar="True" /></VisualStudio></ProjectExtensions>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomEntryBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SniperLog.Extensions.CustomXamlComponents.Abstract"
+             x:Name="this"
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomTextEntry">
+
+    <Grid x:Name="MainGrid" BindingContext="{x:Reference this}" HeightRequest="{Binding EntryHeightFinal}" RowDefinitions="{Binding EntryRowDefs}">
+        <Grid Grid.Row="0">
+            <HorizontalStackLayout>
+                <Label Text="{Binding EntryTitle}" FontSize="18"/>
+                <Label IsVisible="{Binding IsMandatory}" Text="*" TextColor="{StaticResource Red}" FontSize="18"/>
+            </HorizontalStackLayout>
+            <Label Text="{Binding ErrorText}" IsVisible="{Binding ErrorTextVisible}" TextColor="{StaticResource Red}" VerticalTextAlignment="Center" FontSize="13" HorizontalOptions="End"/>
+        </Grid>
+
+        <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand">
+            <Entry Keyboard="{Binding KeyboardType}" Text="{Binding TextValue}" HeightRequest="{Binding EntryHeightFinal}" FontSize="18" TextColor="{StaticResource Text}" />
+        </Frame>
+    </Grid>
+</local:CustomEntryBase>

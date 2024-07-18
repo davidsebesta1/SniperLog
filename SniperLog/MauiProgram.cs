@@ -68,6 +68,7 @@ namespace SniperLog
             builder.Services.AddSingleton<MainPageViewModel>();
             builder.Services.AddSingleton<SRangesPageViewModel>();
             builder.Services.AddSingleton<InitialSetupPopupPageViewModel>();
+            builder.Services.AddSingleton<SRangesAddOrEditPageViewModel>();
 
             #endregion
 
@@ -76,7 +77,7 @@ namespace SniperLog
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<SRangesPage>();
             builder.Services.AddSingleton<InitialSetupPopupPage>();
-
+            builder.Services.AddSingleton<SRangesAddOrEditPage>();
 
             #endregion
 

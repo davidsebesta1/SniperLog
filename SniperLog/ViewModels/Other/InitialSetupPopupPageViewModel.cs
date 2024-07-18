@@ -33,8 +33,8 @@ namespace SniperLog.ViewModels.Other
             await _csvProcessor.LoadToDatabase<FirearmType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmTypes.csv")));
             await _csvProcessor.LoadToDatabase<FirearmCaliber>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmCalibers.csv")));
 
-            ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false);
-            ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true);
+            ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false, "");
+            ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true, "");
 
             await s1.SaveAsync();
             await s2.SaveAsync();

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomEntryBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SniperLog.Extensions.CustomXamlComponents.Abstract"
+             x:Name="this"
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomSwitchEntry">
+
+    <Grid x:Name="MainGrid" BindingContext="{x:Reference this}" HeightRequest="100" RowDefinitions="30,50">
+        <Grid Grid.Row="0">
+            <HorizontalStackLayout>
+                <Label Text="{Binding EntryTitle}" FontSize="18"/>
+                <Label IsVisible="{Binding IsMandatory}" Text="*" TextColor="{StaticResource Red}" FontSize="18"/>
+            </HorizontalStackLayout>
+            <Label Text="{Binding ErrorText}" IsVisible="{Binding ErrorTextVisible}" TextColor="{StaticResource Red}" VerticalTextAlignment="Center" FontSize="16" HorizontalOptions="End"/>
+        </Grid>
+
+        <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="0" CornerRadius="12">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Tapped"/>
+            </Frame.GestureRecognizers>
+
+            <Grid ColumnDefinitions="*,*" HeightRequest="50">
+                <Frame BackgroundColor="{StaticResource Primary}" CornerRadius="0" Grid.Column="{Binding SelectedOption}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Tapped"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+                <Label HeightRequest="50" FontSize="16" Grid.Column="0" Text="{Binding LeftOptionText}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                <Label HeightRequest="50" FontSize="16" Grid.Column="1" Text="{Binding RightOptionText}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+            </Grid>
+        </Frame>
+    </Grid>
+
+</local:CustomEntryBase>

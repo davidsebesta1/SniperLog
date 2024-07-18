@@ -3,13 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SniperLog.Pages.ShootingRanges.SRangesAddOrEditPage"
              xmlns:model="clr-namespace:SniperLog.Models"
-             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.SRanges"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
              x:DataType="viewmodel:SRangesAddOrEditPageViewModel"
              Title="{Binding PageTitle}">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="New Shooting Range" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty"/>
+
+            <custom:CustomMultilineTextEntry x:Name="AddressEntry" IsMandatory="False" EntryTitle="Address" EntryHeight="10"/>
+
+            <custom:CustomTextEntry x:Name="LatEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Latitude" EntryHeight="1" KeyboardType="Numeric" ErrorText="Latitude must be a value between -90 and 90"/>
+            <custom:CustomTextEntry x:Name="LongEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Longitude" EntryHeight="1" KeyboardType="Numeric" ErrorText="Longitude must be a value between -180 and 180"/>
+
+            <custom:CustomSwitchEntry x:Name="LocationTypeEntry" EntryTitle="Type of Location" LeftOptionText="GPS Coordinates" RightOptionText="Address" IsMandatory="False"/>
+
+            <custom:CustomImagePickerEntry x:Name="BackgroundImageEntry" EntryTitle="Image" IsMandatory="False" EntryHeight="1"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -63,12 +63,6 @@ namespace SniperLog.Models
             }
         }
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
-        private string _backgroundImgPath;
-
-        public string BackgroundImgFullPath => AppDataFileHelper.GetPathFromAppData(BackgroundImgPath);
-
         [DatabaseIgnore]
         public Location? Location { get; set; }
 
@@ -89,6 +83,25 @@ namespace SniperLog.Models
         [DatabaseIgnore]
         private readonly string _favImage = "stariconfav.png";
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
+        private string _backgroundImgPath;
+
+        [DatabaseIgnore]
+        public string BackgroundImgFullPath
+        {
+            get
+            {
+                string path = AppDataFileHelper.GetPathFromAppData(BackgroundImgPath);
+                if (!Path.Exists(path))
+                {
+                    return "defaultbackground.png";
+                }
+
+                return path;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -101,7 +114,7 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite)
+        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite, string imageRelPath)
         {
             ID = iD;
             Name = name;
@@ -109,6 +122,7 @@ namespace SniperLog.Models
             Latitude = latitude;
             Longitude = longitude;
             IsMarkedAsFavourite = isMarkedAsFavourite;
+            BackgroundImgPath = imageRelPath;
         }
 
         /// <summary>
@@ -119,7 +133,7 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite)
+        public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite, string imageRelPath) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite, imageRelPath)
         {
 
         }

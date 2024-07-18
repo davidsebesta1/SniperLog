@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.SRanges
 {
-    public class SRangesAddOrEditViewModel
+    public partial class SRangesAddOrEditPageViewModel : BaseViewModel
     {
     }
 }
