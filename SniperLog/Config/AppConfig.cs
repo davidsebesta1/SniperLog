@@ -14,6 +14,6 @@ namespace SniperLog.Config
         public List<Version> AppliedPatches = new List<Version>();
 
         public string ServerHostname { get; set; } = "dev.spsejecna.net";
-        public ushort ServerPort { get; set; } = 20190;
+        public ushort ServerPort { get; set; } = 8000;
     }
 }

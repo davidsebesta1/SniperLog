@@ -169,7 +169,7 @@ namespace DataAccessObjectAnalyzer.Generators
             var all = _propertiesAndFields.OrderBy(n => n.SpanStart);
             var lastMember = all.Last();
 
-            stringBuilder.Append($"\"INSERT OR UPDATE INTO {_targetClassNode.Identifier.Text}(");
+            stringBuilder.Append($"\"INSERT OR REPLACE INTO {_targetClassNode.Identifier.Text}(");
 
             foreach (MemberDeclarationSyntax property in all)
             {

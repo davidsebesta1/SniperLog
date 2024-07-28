@@ -5,6 +5,7 @@ namespace SniperLog.Extensions.CustomXamlComponents;
 public partial class CustomTextEntry : CustomEntryBase
 {
     public static readonly BindableProperty TextValueProperty = BindableProperty.Create(nameof(TextValue), typeof(string), typeof(Entry), string.Empty);
+    public static readonly BindableProperty PlaceholderTextValueProperty = BindableProperty.Create(nameof(PlaceholderText), typeof(string), typeof(Entry), string.Empty);
 
     public static readonly BindableProperty KeyboardTypeProperty = BindableProperty.Create(nameof(KeyboardType), typeof(Keyboard), typeof(Entry), Keyboard.Plain);
 
@@ -92,6 +93,18 @@ public partial class CustomTextEntry : CustomEntryBase
             SetValue(TextValueProperty, value);
             OnEntryInputChanged?.Invoke(this, value);
             EntryInputChangedCommand?.Execute(value);
+        }
+    }
+
+    public string PlaceholderText
+    {
+        get
+        {
+            return (string)GetValue(PlaceholderTextValueProperty);
+        }
+        set
+        {
+            SetValue(PlaceholderTextValueProperty, value);
         }
     }
 }

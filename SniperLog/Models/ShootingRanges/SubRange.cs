@@ -22,9 +22,9 @@ namespace SniperLog.Models
 
         public double? Altitude { get; set; }
 
-        public double? DirectionToNorthDegrees { get; set; }
+        public int? DirectionToNorthDegrees { get; set; }
 
-        public double? VerticalFiringOffsetDegrees { get; set; }
+        public int? VerticalFiringOffsetDegrees { get; set; }
 
         [DatabaseIgnore]
         public char DisplayLetter
@@ -45,16 +45,16 @@ namespace SniperLog.Models
         #region Constructors
 
         /// <summary>
-        /// Primary constructor
+        /// Primary ctor
         /// </summary>
         /// <param name="iD"></param>
+        /// <param name="isDefault"></param>
         /// <param name="shootingRange_ID"></param>
         /// <param name="rangeInMeters"></param>
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        /// <param name="notesRelativePathFromAppData"></param>
-        public SubRange(int iD, bool isDefault, int shootingRange_ID, int rangeInMeters, double? altitude, double? directionToNorth, double? verticalFiringOffsetDegrees)
+        public SubRange(int iD, bool isDefault, int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees)
         {
             ID = iD;
             IsDefault = isDefault;
@@ -66,15 +66,15 @@ namespace SniperLog.Models
         }
 
         /// <summary>
-        /// ID-less constructor
+        /// Primary ctor
         /// </summary>
         /// <param name="shootingRange_ID"></param>
+        /// <param name="isDefault"></param>
         /// <param name="rangeInMeters"></param>
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        /// <param name="notesRelativePathFromAppData"></param>
-        public SubRange(int shootingRange_ID, bool isDefault, int rangeInMeters, double? altitude, double? directionToNorth, double? verticalFiringOffsetDegrees) : this(-1, isDefault, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees)
+        public SubRange(int shootingRange_ID, bool isDefault, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees) : this(-1, isDefault, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees)
         {
 
         }

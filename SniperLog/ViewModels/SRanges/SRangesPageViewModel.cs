@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.SRanges
 {
@@ -21,23 +16,58 @@ namespace SniperLog.ViewModels.SRanges
         }
 
         [RelayCommand]
-        private async Task RefreshShootingRangesCommand()
+        private async Task RefreshShootingRanges()
         {
             ShootingRanges = null;
             ShootingRanges = await _sRangeDataCacher.GetAll();
+
+            foreach (ShootingRange range in ShootingRanges)
+            {
+                await range.TrySendWeatherRequestMessage();
+            }
         }
 
         [RelayCommand]
-        private async Task ShootingRangesSearchCommand(string input)
+        private async Task ShootingRangesSearch(string input)
         {
             ShootingRanges = null;
             ShootingRanges = await _sRangeDataCacher.GetAllBy(n => n.Name.Contains(input, StringComparison.CurrentCultureIgnoreCase));
         }
 
         [RelayCommand]
-        private async Task AddNewRangeCommand()
+        private async Task GoToDetails(ShootingRange range)
         {
+            await Shell.Current.GoToAsync("RangeDetails", new Dictionary<string, object>() { { "ShootingRange", range } });
+        }
 
+        [RelayCommand]
+        private async Task AddNewRange()
+        {
+            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>() { { "ShootingRange", null } });
+        }
+
+        [RelayCommand]
+        private async Task EditRange(ShootingRange range)
+        {
+            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>() { { "ShootingRange", range } });
+        }
+
+        [RelayCommand]
+        private async Task DeleteRange(ShootingRange range)
+        {
+            bool res = await Shell.Current.DisplayAlert("Confirmation", $"Are you sure you want to delete shooting range {range.Name}?", "Yes", "No");
+
+            if (res)
+            {
+                await range.DeleteAsync();
+            }
+        }
+
+        [RelayCommand]
+        private async Task ToggleFavouriteRange(ShootingRange range)
+        {
+            range.IsMarkedAsFavourite = !range.IsMarkedAsFavourite;
+            await range.SaveAsync();
         }
     }
 }

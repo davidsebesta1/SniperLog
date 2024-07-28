@@ -6,6 +6,8 @@ public partial class CustomMultilineTextEntry : CustomEntryBase
 {
     public static readonly BindableProperty TextValueProperty = BindableProperty.Create(nameof(TextValue), typeof(string), typeof(Entry), string.Empty);
 
+    public static readonly BindableProperty PlaceholderTextValueProperty = BindableProperty.Create(nameof(PlaceholderText), typeof(string), typeof(Entry), string.Empty);
+
     public static readonly BindableProperty EntryHeightProperty = BindableProperty.Create(nameof(EntryHeight), typeof(int), typeof(Grid), 0, propertyChanged: OnEntryHeightChanged);
 
     public static readonly BindableProperty EntryHeightFinalProperty = BindableProperty.Create(nameof(EntryHeightFinal), typeof(int), typeof(Grid), BaseHeight);
@@ -95,6 +97,18 @@ public partial class CustomMultilineTextEntry : CustomEntryBase
             SetValue(TextValueProperty, value);
             OnEntryInputChanged?.Invoke(this, value);
             EntryInputChangedCommand?.Execute(value);
+        }
+    }
+
+    public string PlaceholderText
+    {
+        get
+        {
+            return (string)GetValue(PlaceholderTextValueProperty);
+        }
+        set
+        {
+            SetValue(PlaceholderTextValueProperty, value);
         }
     }
 }

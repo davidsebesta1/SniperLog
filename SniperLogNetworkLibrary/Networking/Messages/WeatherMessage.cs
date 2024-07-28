@@ -66,6 +66,7 @@ namespace SniperLogNetworkLibrary
 
         public readonly byte WindSpeed { get; }
         public readonly ushort DirectionDegrees { get; }
+        public readonly string DirectionName { get; }
 
         public WeatherResponseMessage(DateTime timeTaken, string clouds, double temperature, ushort pressure, byte humidity, byte windSpeed, ushort directionDegrees, TcpClient requester = null)
         {
@@ -77,6 +78,8 @@ namespace SniperLogNetworkLibrary
             Humidity = humidity;
             WindSpeed = windSpeed;
             DirectionDegrees = directionDegrees;
+
+            DirectionName = CardinalDirectionConverter.GetNameByDegree(directionDegrees);
         }
 
         public byte[] Serialize()

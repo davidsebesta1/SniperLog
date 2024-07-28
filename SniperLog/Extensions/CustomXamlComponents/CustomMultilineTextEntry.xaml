@@ -14,8 +14,10 @@
             <Label Text="{Binding ErrorText}" IsVisible="{Binding ErrorTextVisible}" TextColor="{StaticResource Red}" VerticalTextAlignment="Center" FontSize="16" HorizontalOptions="End"/>
         </Grid>
 
-        <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand">
-            <Editor  Text="{Binding TextValue}" HeightRequest="{Binding EditorHeight}" FontSize="18" TextColor="{StaticResource Text}" />
+        <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="5">
+            <Grid>
+                <Editor Text="{Binding TextValue}" HeightRequest="{Binding EditorHeight}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" FontSize="18" TextColor="{StaticResource Text}" />
+            </Grid>
         </Frame>
     </Grid>
 </local:CustomEntryBase>

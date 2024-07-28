@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS SubRange(
     ShootingRange_ID INT NOT NULL,
     RangeInMeters INTEGER NOT NULL,
     Altitude DOUBLE,
-    DirectionToNorthDegrees DOUBLE,
-    VerticalFiringOffsetDegrees DOUBLE,
+    DirectionToNorthDegrees INT,
+    VerticalFiringOffsetDegrees INT,
     
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID)
 );

@@ -7,22 +7,9 @@ namespace SniperLog.Services.ConnectionToServer
 {
     public class ConnectionToDataServer
     {
-        private string _hostName;
-        public string HostName
-        {
-            get
-            {
-                return _hostName;
-            }
-            set
-            {
-                _hostName = value;
-                Task.Run(TryResolveIp);
-            }
-        }
         public ushort Port;
 
-        private IPAddress? _ipAddress;
+        public IPAddress? IpAddress;
         private TcpClient _tcpClient;
 
         private readonly Dictionary<int, Type> _idToNetMessageType = new Dictionary<int, Type>();
@@ -44,6 +31,7 @@ namespace SniperLog.Services.ConnectionToServer
             }
         }
 
+        /*
         private async Task TryResolveIp()
         {
             try
@@ -51,22 +39,30 @@ namespace SniperLog.Services.ConnectionToServer
                 var addresses = await Dns.GetHostAddressesAsync(_hostName);
                 if (addresses.Length > 0)
                 {
-                    _ipAddress = addresses[0];
+                    IpAddress = addresses[0];
                 }
             }
             catch (Exception ex)
             {
-                _ipAddress = null;
+                IpAddress = null;
             }
         }
+        */
 
         public async Task<INetworkMessage?> SendRequest(INetworkMessage request)
         {
             try
             {
-                if (!await TryOpen())
+                try
                 {
-                    return new ErrorMessage("Error has occured, connection couldnt be setup");
+                    if (!await TryOpen())
+                    {
+                        return new ErrorMessage("Error has occured, connection couldnt be setup");
+                    }
+                }
+                catch (Exception e)
+                {
+                    return new ErrorMessage($"Error has occured, connection couldnt be setup: {e.Message}");
                 }
 
 
@@ -127,17 +123,10 @@ namespace SniperLog.Services.ConnectionToServer
 
         public async Task<bool> TryOpen()
         {
-            if (_ipAddress == null || (_tcpClient != null && _tcpClient.Connected)) return false;
+            if (IpAddress == null || (_tcpClient != null && _tcpClient.Connected)) return false;
 
-            try
-            {
-                _tcpClient = new TcpClient();
-                await _tcpClient.ConnectAsync(_ipAddress, Port);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            _tcpClient = new TcpClient();
+            await _tcpClient.ConnectAsync(IpAddress, Port);
 
             return true;
         }

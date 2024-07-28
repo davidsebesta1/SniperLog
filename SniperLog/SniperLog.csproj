@@ -110,6 +110,11 @@
 
 		<MauiImage Update="Resources\Images\galleryicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\cameraicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+
+		<MauiImage Update="Resources\Images\arrowback.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\arrowforward.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\refreshicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\directionicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -123,6 +128,7 @@
 	  <None Remove="Resources\Images\cameraicon.svg" />
 	  <None Remove="Resources\Images\cancelicon.svg" />
 	  <None Remove="Resources\Images\deleteicon.svg" />
+	  <None Remove="Resources\Images\directionicon.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
 	  <None Remove="Resources\Images\galleryicon.svg" />
@@ -174,6 +180,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDataViewCell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomImagePickerEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -192,7 +201,7 @@
 	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ShootingRanges\SRangesAddOrEditPage.xaml">
+	  <MauiXaml Update="Pages\ShootingRanges\SRangeDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRanges\SRangesPage.xaml">
@@ -200,6 +209,6 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionSniperLogHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionSniperLogHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionSniperLogHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

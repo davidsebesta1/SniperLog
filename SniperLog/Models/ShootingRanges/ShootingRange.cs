@@ -6,6 +6,8 @@ using SniperLog.Services.ConnectionToServer;
 using SniperLogNetworkLibrary.Networking.Messages;
 using System.Resources;
 using SniperLog.Extensions;
+using System.Reflection.PortableExecutable;
+using SniperLogNetworkLibrary.CommonLib;
 
 namespace SniperLog.Models
 {
@@ -13,6 +15,7 @@ namespace SniperLog.Models
     /// <summary>
     /// A class representing shooting range and its properties.<br></br>
     /// Background image is not automatically saved with the object itself and the method must be called seperately.
+    /// All saved data are in Data/ShootingRanges/RangeName/
     /// </summary>
     public partial class ShootingRange : ObservableObject, IDataAccessObject, IEquatable<ShootingRange?>
     {
@@ -41,6 +44,7 @@ namespace SniperLog.Models
                 if (_longitude != null && _latitude != null)
                 {
                     Location = new Location((double)_latitude, (double)_longitude);
+                    OnPropertyChanged(nameof(LatLongString));
                 }
             }
         }
@@ -59,6 +63,7 @@ namespace SniperLog.Models
                 if (_longitude != null && _latitude != null)
                 {
                     Location = new Location((double)_latitude, (double)_longitude);
+                    OnPropertyChanged(nameof(LatLongString));
                 }
             }
         }
@@ -67,8 +72,11 @@ namespace SniperLog.Models
         public Location? Location { get; set; }
 
         [DatabaseIgnore]
+        public string LatLongString => $"{Latitude}, {Longitude}";
+
+        [DatabaseIgnore]
         [ObservableProperty]
-        private WeatherResponseMessage? _currentWeather;
+        private WeatherResponseMessage _currentWeather;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(FavStarImageName))]
@@ -101,6 +109,18 @@ namespace SniperLog.Models
                 return path;
             }
         }
+
+        [DatabaseIgnore]
+        public int? MaxRange => ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().MaxBy(n => n.RangeInMeters).RangeInMeters;
+
+        [DatabaseIgnore]
+        public double? AverageAltitude => ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Average(n => n.Altitude);
+
+        [DatabaseIgnore]
+        public string FiringDirectionsStrings => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Where(n => n.DirectionToNorthDegrees != null).Select(n => CardinalDirectionConverter.GetNameByDegree((int)n.DirectionToNorthDegrees)));
+
+        [DatabaseIgnore]
+        public string FiringDirectionsDegrees => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Where(n => n.DirectionToNorthDegrees != null).Select(n => n.DirectionToNorthDegrees + '°'));
 
         #endregion
 
@@ -165,7 +185,7 @@ namespace SniperLog.Models
         {
             try
             {
-                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", Name));
+                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRange", Name));
                 if (Directory.Exists(dataPath))
                 {
                     Directory.Delete(dataPath, true);
@@ -196,13 +216,13 @@ namespace SniperLog.Models
 
         public async Task TrySendWeatherRequestMessage()
         {
-            if (CurrentWeather == null)
+            if (CurrentWeather.Equals(default(WeatherResponseMessage)))
             {
                 await SendWeatherRequestMessage();
                 return;
             }
 
-            if ((CurrentWeather.Value.TimeTaken - DateTime.UtcNow).TotalMinutes > 5d)
+            if ((CurrentWeather.TimeTaken - DateTime.UtcNow).TotalMinutes > 5d)
             {
                 await SendWeatherRequestMessage();
                 return;
@@ -229,19 +249,24 @@ namespace SniperLog.Models
                 return;
             }
 
+            CurrentWeather = default(WeatherResponseMessage);
             CurrentWeather = (WeatherResponseMessage)message;
         }
 
-        partial void OnCurrentWeatherChanged(WeatherResponseMessage? value)
+        partial void OnCurrentWeatherChanged(WeatherResponseMessage value)
         {
             OnPropertyChanged(nameof(CurrentWeather));
         }
 
-        private async Task SaveImageAsync(byte[] data)
+        public async Task SaveImageAsync(FileStream stream)
         {
-            string fulPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", Name, "backgroundimage.png"));
+            string dirPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRange", Name));
+            Directory.CreateDirectory(dirPath);
 
-            await File.WriteAllBytesAsync(fulPath, data);
+            using (FileStream localFileStream = File.OpenWrite(Path.Combine(dirPath, "backgroundimage.png")))
+            {
+                await stream.CopyToAsync(localFileStream);
+            }
         }
 
         #endregion

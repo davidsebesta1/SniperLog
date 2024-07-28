@@ -10,6 +10,7 @@ using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
 using SniperLog.ViewModels.Other;
 using SniperLog.ViewModels.SRanges;
+using System.Net;
 
 namespace SniperLog
 {
@@ -50,16 +51,16 @@ namespace SniperLog
         {
             #region Data Cacher Services
 
-            
-            var types = typeof(IDataAccessObject).Assembly.GetTypes().Where(n => !n.IsAbstract && n.GetInterface("IDataAccessObject") != null);
 
-            foreach (Type type in types)
+            var cacherTypes = typeof(IDataAccessObject).Assembly.GetTypes().Where(n => !n.IsAbstract && n.GetInterface("IDataAccessObject") != null);
+
+            foreach (Type type in cacherTypes)
             {
                 Type dataCacherServiceTypeGenerics = typeof(DataCacherService<>).MakeGenericType(type);
                 var cacher = Activator.CreateInstance(dataCacherServiceTypeGenerics);
                 builder.Services.AddSingleton(dataCacherServiceTypeGenerics, cacher);
             }
-            
+
 
             #endregion
 
@@ -69,6 +70,7 @@ namespace SniperLog
             builder.Services.AddSingleton<SRangesPageViewModel>();
             builder.Services.AddSingleton<InitialSetupPopupPageViewModel>();
             builder.Services.AddSingleton<SRangesAddOrEditPageViewModel>();
+            builder.Services.AddSingleton<SRangeDetailsPageViewModel>();
 
             #endregion
 
@@ -78,6 +80,7 @@ namespace SniperLog
             builder.Services.AddSingleton<SRangesPage>();
             builder.Services.AddSingleton<InitialSetupPopupPage>();
             builder.Services.AddSingleton<SRangesAddOrEditPage>();
+            builder.Services.AddSingleton<SRangeDetailsPage>();
 
             #endregion
 
@@ -89,12 +92,13 @@ namespace SniperLog
 
             #region Other
 
-            builder.Services.AddTransient<ValidatorService>();
+            builder.Services.AddSingleton<ValidatorService>();
 
             AppConfig config = ApplicationConfigService.GetConfig<AppConfig>();
             ConnectionToDataServer connectionToDataServer = new ConnectionToDataServer()
             {
-                HostName = config.ServerHostname,
+                //HostName = config.ServerHostname,
+                IpAddress = IPAddress.Parse("10.0.2.2"),
                 Port = config.ServerPort,
             };
 

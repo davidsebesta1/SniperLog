@@ -8,7 +8,7 @@
              x:DataType="viewmodel:SRangesPageViewModel"
              BackgroundColor="{StaticResource Background}"
              Title="{Binding PageTitle}">
-    
+
     <Shell.TitleView>
         <Grid ColumnDefinitions="45,*,80">
             <HorizontalStackLayout Grid.Column="1">
@@ -42,11 +42,15 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:ShootingRange">
                         <Frame CornerRadius="10" HeightRequest="300" HorizontalOptions="FillAndExpand" Padding="0">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            
                             <Grid RowDefinitions="200,100">
                                 <Grid Grid.Row="0" ColumnDefinitions="60,*,60">
                                     <Image Source="{Binding BackgroundImgFullPath}" Aspect="AspectFill" Grid.ColumnSpan="3"/>
-                                    <Label Text="{Binding CurrentWeather.Value.Temperature, StringFormat='{0:F1}°C', FallbackValue='--°C'}" Grid.Column="0" HorizontalTextAlignment="Center" Margin="0,8,0,0" FontSize="18"/>
-                                    <Image Grid.Column="2" Source="{Binding FavStarImageName}" VerticalOptions="Start" HeightRequest="28" Margin="12,10,0,0"/>
+                                    <Label Text="{Binding CurrentWeather.Temperature, StringFormat='{0:F1}°C', FallbackValue='--°C'}" Grid.Column="0" HorizontalTextAlignment="Center" Margin="0,8,0,0" FontSize="18"/>
+                                    <ImageButton Grid.Column="2" Source="{Binding FavStarImageName}" VerticalOptions="Start" HeightRequest="28" Margin="12,10,0,0" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=ToggleFavouriteRangeCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
 
                                 <Grid Grid.Row="1" BackgroundColor="{StaticResource PanelBackgroundDark}" ColumnDefinitions="*,40">
@@ -57,8 +61,8 @@
                                         <Label Text="{Binding Address}" FontSize="15"/>
                                     </VerticalStackLayout>
 
-                                    <Image Source="settingsicon.png" Grid.Column="1" HeightRequest="25" VerticalOptions="Start" Margin="0,10,0,0"/>
-                                    <Image Source="deleteicon.png" Grid.Column="1" HeightRequest="25" VerticalOptions="End" Margin="0,0,0,15"/>
+                                    <ImageButton Source="settingsicon.png" Grid.Column="1" HeightRequest="25" VerticalOptions="Start" Margin="0,10,0,0" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=EditRangeCommand}" CommandParameter="{Binding .}"/>
+                                    <ImageButton Source="deleteicon.png" Grid.Column="1" HeightRequest="25" VerticalOptions="End" Margin="0,0,0,15" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=DeleteRangeCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Grid>
                         </Frame>
@@ -66,7 +70,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" HorizontalOptions="End" VerticalOptions="End"/>
+            <Button HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" HorizontalOptions="End" VerticalOptions="End" Command="{Binding AddNewRangeCommand}"/>
         </Grid>
     </Grid>
 </ContentPage>
