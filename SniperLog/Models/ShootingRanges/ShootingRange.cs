@@ -1,12 +1,9 @@
 ﻿using Microsoft.Data.Sqlite;
-using SniperLog.Services.Database;
 using System.Data;
 using SniperLogNetworkLibrary;
 using SniperLog.Services.ConnectionToServer;
 using SniperLogNetworkLibrary.Networking.Messages;
-using System.Resources;
 using SniperLog.Extensions;
-using System.Reflection.PortableExecutable;
 using SniperLogNetworkLibrary.CommonLib;
 
 namespace SniperLog.Models
@@ -19,6 +16,12 @@ namespace SniperLog.Models
     /// </summary>
     public partial class ShootingRange : ObservableObject, IDataAccessObject, IEquatable<ShootingRange?>
     {
+        #region Constants
+
+        public const string BackgroundImageFileName = "backgroundimage.png";
+
+        #endregion
+
         #region Properties
 
         [PrimaryKey]
@@ -208,12 +211,20 @@ namespace SniperLog.Models
 
         #region Model Specific Methods
 
+        /// <summary>
+        /// Initializes default subrange for this range on first save
+        /// </summary>
+        /// <returns></returns>
         public async Task InitDefaultSubRangeForInstance()
         {
-            SubRange subRange = new SubRange(ID, true, 0, 0, 0, 0);
+            SubRange subRange = new SubRange(ID, true, 0, 0, 0, 0, 'A', string.Empty);
             await subRange.SaveAsync();
         }
 
+        /// <summary>
+        /// Attempts to send a request while checking if the current weather is either null or the 5 minute time has elapsed locally
+        /// </summary>
+        /// <returns></returns>
         public async Task TrySendWeatherRequestMessage()
         {
             if (CurrentWeather.Equals(default(WeatherResponseMessage)))
@@ -222,13 +233,17 @@ namespace SniperLog.Models
                 return;
             }
 
-            if ((CurrentWeather.TimeTaken - DateTime.UtcNow).TotalMinutes > 5d)
+            if ((CurrentWeather.TimeTaken - DateTime.UtcNow).Value.TotalMinutes > 5d)
             {
                 await SendWeatherRequestMessage();
                 return;
             }
         }
 
+        /// <summary>
+        /// Sends request to the server and asynchronously sets the CurrentWeather property
+        /// </summary>
+        /// <returns></returns>
         private async Task SendWeatherRequestMessage()
         {
             if (Location == null)
@@ -258,15 +273,42 @@ namespace SniperLog.Models
             OnPropertyChanged(nameof(CurrentWeather));
         }
 
+        /// <summary>
+        /// Saves the image to the predefined path
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public async Task SaveImageAsync(FileStream stream)
         {
-            string dirPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRange", Name));
-            Directory.CreateDirectory(dirPath);
+            string localPath = Path.Combine("Data", "ShootingRange", Name);
+            string localFilePath = Path.Combine(localPath, BackgroundImageFileName);
 
-            using (FileStream localFileStream = File.OpenWrite(Path.Combine(dirPath, "backgroundimage.png")))
+            string fullDirPath = AppDataFileHelper.GetPathFromAppData(localPath);
+            Directory.CreateDirectory(fullDirPath);
+
+            string fullFilepath = Path.Combine(fullDirPath, BackgroundImageFileName);
+
+            using (FileStream localFileStream = File.OpenWrite(fullFilepath))
             {
                 await stream.CopyToAsync(localFileStream);
             }
+
+            BackgroundImgPath = localFilePath;
+        }
+
+        /// <summary>
+        /// Returns a next prefix for a new subrange. If no subrange for this range exists, letter 'A' is returned.
+        /// </summary>
+        /// <returns>Prefix for next possible subrange</returns>
+        public async Task<char> GetNextPrefix()
+        {
+            var subranges = await ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID);
+            if (subranges.Count == 0)
+            {
+                return 'A';
+            }
+
+            return (char)(subranges.MaxBy(n => (int)n.Prefix).Prefix + 1);
         }
 
         #endregion

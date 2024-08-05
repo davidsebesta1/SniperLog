@@ -8,7 +8,12 @@ namespace SniperLog.ViewModels.SRanges
     {
         private readonly ValidatorService _validatorService;
 
+        public string HeadlineText => Range != null ? "Edit shooting range" : "New shooting range";
+        public string CreateOrEditButtonText => Range != null ? "Edit" : "Create";
+
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HeadlineText))]
+        [NotifyPropertyChangedFor(nameof(CreateOrEditButtonText))]
         private ShootingRange _range;
 
         [ObservableProperty]
@@ -53,20 +58,43 @@ namespace SniperLog.ViewModels.SRanges
         [RelayCommand]
         private async Task CreateSRange()
         {
+            _validatorService.RevalidateAll();
             if (!_validatorService.AllValid)
             {
                 await Shell.Current.DisplayAlert("Validation", "Please fix any invalid fields and try again", "Okay");
                 return;
             }
 
-            ShootingRange range = new ShootingRange(Name, Address, double.Parse(Lat, CultureInfo.InvariantCulture), double.Parse(Lon, CultureInfo.InvariantCulture), false, BackgroundImagePath);
-
-            using (FileStream reader = File.OpenRead(BackgroundImagePath))
+            if (Range == null)
             {
-                await range.SaveImageAsync(reader);
+                Range = new ShootingRange(Name, Address, double.Parse(Lat, CultureInfo.InvariantCulture), double.Parse(Lon, CultureInfo.InvariantCulture), false, string.Empty);
+
+                if (!string.IsNullOrEmpty(BackgroundImagePath))
+                {
+                    using (FileStream reader = File.OpenRead(BackgroundImagePath))
+                    {
+                        await Range.SaveImageAsync(reader);
+                    }
+                }
+            }
+            else
+            {
+                Range.Name = Name;
+                Range.Address = Address;
+                Range.Latitude = double.Parse(Lat, CultureInfo.InvariantCulture);
+                Range.Longitude = double.Parse(Lon, CultureInfo.InvariantCulture);
+
+                if (!string.IsNullOrEmpty(BackgroundImagePath) && BackgroundImagePath != Range.BackgroundImgPath)
+                {
+                    using (FileStream reader = File.OpenRead(BackgroundImagePath))
+                    {
+                        await Range.SaveImageAsync(reader);
+                    }
+                }
             }
 
-            await range.SaveAsync();
+
+            await Range.SaveAsync();
 
             await Shell.Current.GoToAsync("..");
         }

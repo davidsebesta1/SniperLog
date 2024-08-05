@@ -12,7 +12,7 @@ namespace SniperLog.Services.ConnectionToServer
         public IPAddress? IpAddress;
         private TcpClient _tcpClient;
 
-        private readonly Dictionary<int, Type> _idToNetMessageType = new Dictionary<int, Type>();
+        private Dictionary<int, Type> _idToNetMessageType;
 
         public ConnectionToDataServer()
         {
@@ -22,6 +22,7 @@ namespace SniperLog.Services.ConnectionToServer
         private void AutoRegisterMessages()
         {
             var msgTypes = typeof(INetworkMessage).Assembly.GetTypes().Where(n => n.GetInterface("INetworkMessage") != null);
+            _idToNetMessageType = new Dictionary<int, Type>(msgTypes.Count());
 
             foreach (Type msgType in msgTypes)
             {
@@ -86,7 +87,7 @@ namespace SniperLog.Services.ConnectionToServer
             }
             catch (Exception ex)
             {
-                return new ErrorMessage($"Error has occured {ex.Message}");
+                return new ErrorMessage($"Error has occured: {ex.Message}");
             }
             finally
             {

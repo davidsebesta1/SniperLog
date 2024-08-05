@@ -1,4 +1,5 @@
-﻿using SniperLog.Extensions.CustomXamlComponents.Abstract;
+﻿using SniperLog.Extensions.CustomXamlComponents;
+using SniperLog.Extensions.CustomXamlComponents.Abstract;
 
 namespace SniperLog.Services
 {
@@ -48,6 +49,28 @@ namespace SniperLog.Services
             {
                 CustomEntryBase entry = _validationValues.ElementAt(0).Key;
                 TryRemoveValidation(entry);
+            }
+        }
+
+        public void RevalidateAll()
+        {
+            foreach (var entry in _validationValues)
+            {
+                switch (entry.Key)
+                {
+                    case CustomTextEntry txtEntry:
+                        EntryInput(txtEntry, txtEntry.TextValue);
+                        break;
+                    case CustomMultilineTextEntry customMultilineTextEntry:
+                        EntryInput(customMultilineTextEntry, customMultilineTextEntry.TextValue);
+                        break;
+                    case CustomSwitchEntry switchEntry:
+                        EntryInput(switchEntry, switchEntry.SelectedOption);
+                        break;
+                    case CustomImagePickerEntry imagePickerEntry:
+                        EntryInput(imagePickerEntry, imagePickerEntry.SelectedImagePath);
+                        break;
+                }
             }
         }
 

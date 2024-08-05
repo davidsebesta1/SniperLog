@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS ShootingRange(
     Latitude DOUBLE,
     Longitude DOUBLE,
     IsMarkedAsFavourite BOOLEAN NOT NULL,
-    BackgroundImgPath VARCHAR(100)
+    BackgroundImgPath VARCHAR(255)
 );
 
 -- Sub range
@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS SubRange(
     Altitude DOUBLE,
     DirectionToNorthDegrees INT,
     VerticalFiringOffsetDegrees INT,
+    Prefix VARCHAR(1),
+    NotesPath VARCHAR(255),
     
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID)
 );

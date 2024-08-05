@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.ShootingRanges.Subranges.SubRangeAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.SRanges.Subranges"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:SubRangeAddOrEditPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomTextEntry x:Name="PrefixEntry" EntryTitle="Prefix" EntryHeight="1" KeyboardType="Text" ErrorText="Prefix must be a single character" TextValue="{Binding Prefix, Mode=TwoWay}" PlaceholderText="Just a single character..."/>
+            <custom:CustomTextEntry x:Name="RangeEntry" EntryTitle="Range" EntryTitleSubtext="m" EntryHeight="1" KeyboardType="Number" ErrorText="Range is a numeric value" TextValue="{Binding RangeInMeters, Mode=TwoWay}" PlaceholderText="Range from the target..."/>
+            <custom:CustomTextEntry x:Name="AltEntry" EntryTitle="Altitude" EntryTitleSubtext="m" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Altitude is a numeric value" TextValue="{Binding Altitude, Mode=TwoWay}" PlaceholderText="Altitude above the sea..."/>
+            <custom:CustomTextEntry x:Name="FiringDirEntry" EntryTitle="Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding DirectionToNorthDegrees, Mode=TwoWay}" PlaceholderText="Degrees to the north"/>
+            <custom:CustomTextEntry x:Name="VerticalDirEntry" EntryTitle="Vertical Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding VerticalFiringOffsetDegrees, Mode=TwoWay}" PlaceholderText="Firing from higher/lower ground..."/>
+
+            <custom:CustomMultilineTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" EntryHeight="15" TextValue="{Binding Notes, Mode=TwoWay}" PlaceholderText="Notes text..."/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateSubrangeCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

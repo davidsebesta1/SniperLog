@@ -5,11 +5,13 @@ using SniperLog.Config;
 using SniperLog.Pages;
 using SniperLog.Pages.Other;
 using SniperLog.Pages.ShootingRanges;
+using SniperLog.Pages.ShootingRanges.Subranges;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
 using SniperLog.ViewModels.Other;
 using SniperLog.ViewModels.SRanges;
+using SniperLog.ViewModels.SRanges.Subranges;
 using System.Net;
 
 namespace SniperLog
@@ -67,20 +69,28 @@ namespace SniperLog
             #region View Models
 
             builder.Services.AddSingleton<MainPageViewModel>();
-            builder.Services.AddSingleton<SRangesPageViewModel>();
             builder.Services.AddSingleton<InitialSetupPopupPageViewModel>();
+
+            builder.Services.AddSingleton<SRangesPageViewModel>();
             builder.Services.AddSingleton<SRangesAddOrEditPageViewModel>();
             builder.Services.AddSingleton<SRangeDetailsPageViewModel>();
+
+            builder.Services.AddSingleton<SubRangesPageViewModel>();
+            builder.Services.AddSingleton<SubRangeAddOrEditPageViewModel>();
 
             #endregion
 
             #region Pages
 
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<SRangesPage>();
             builder.Services.AddSingleton<InitialSetupPopupPage>();
+
+            builder.Services.AddSingleton<SRangesPage>();
             builder.Services.AddSingleton<SRangesAddOrEditPage>();
             builder.Services.AddSingleton<SRangeDetailsPage>();
+
+            builder.Services.AddSingleton<SubRangesPage>();
+            builder.Services.AddSingleton<SubRangeAddOrEditPage>();
 
             #endregion
 

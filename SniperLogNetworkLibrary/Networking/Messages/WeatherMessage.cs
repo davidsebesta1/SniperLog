@@ -56,17 +56,17 @@ namespace SniperLogNetworkLibrary
         /// <summary>
         /// Utc time of time taken of this weather snapshot
         /// </summary>
-        public readonly DateTime TimeTaken { get; }
+        public readonly DateTime? TimeTaken { get; }
 
-        public readonly string Clouds { get; }
+        public readonly string? Clouds { get; }
 
-        public readonly double Temperature { get; }
-        public readonly ushort Pressure { get; }
-        public readonly byte Humidity { get; }
+        public readonly double? Temperature { get; }
+        public readonly ushort? Pressure { get; }
+        public readonly byte? Humidity { get; }
 
-        public readonly byte WindSpeed { get; }
-        public readonly ushort DirectionDegrees { get; }
-        public readonly string DirectionName { get; }
+        public readonly byte? WindSpeed { get; }
+        public readonly ushort? DirectionDegrees { get; }
+        public readonly string? DirectionName { get; }
 
         public WeatherResponseMessage(DateTime timeTaken, string clouds, double temperature, ushort pressure, byte humidity, byte windSpeed, ushort directionDegrees, TcpClient requester = null)
         {
@@ -89,12 +89,12 @@ namespace SniperLogNetworkLibrary
             bytes.AddRange(BitConverter.GetBytes(ID));
             bytes.Add((byte)Clouds.Length);
             bytes.AddRange(Encoding.UTF8.GetBytes(Clouds));
-            bytes.AddRange(BitConverter.GetBytes(Temperature));
-            bytes.AddRange(BitConverter.GetBytes(Pressure));
-            bytes.Add(Humidity);
-            bytes.Add(WindSpeed);
-            bytes.AddRange(BitConverter.GetBytes(DirectionDegrees));
-            bytes.AddRange(BitConverter.GetBytes(TimeTaken.ToBinary()));
+            bytes.AddRange(BitConverter.GetBytes((double)Temperature));
+            bytes.AddRange(BitConverter.GetBytes((ushort)Pressure));
+            bytes.Add((byte)Humidity);
+            bytes.Add((byte)WindSpeed);
+            bytes.AddRange(BitConverter.GetBytes((ushort)DirectionDegrees));
+            bytes.AddRange(BitConverter.GetBytes(((DateTime)TimeTaken).ToBinary()));
 
             return bytes.GetInternalArray();
         }

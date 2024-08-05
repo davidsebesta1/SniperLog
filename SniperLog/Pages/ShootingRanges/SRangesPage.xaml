@@ -49,7 +49,7 @@
                             <Grid RowDefinitions="200,100">
                                 <Grid Grid.Row="0" ColumnDefinitions="60,*,60">
                                     <Image Source="{Binding BackgroundImgFullPath}" Aspect="AspectFill" Grid.ColumnSpan="3"/>
-                                    <Label Text="{Binding CurrentWeather.Temperature, StringFormat='{0:F1}°C', FallbackValue='--°C'}" Grid.Column="0" HorizontalTextAlignment="Center" Margin="0,8,0,0" FontSize="18"/>
+                                    <Label Text="{Binding CurrentWeather.Temperature, StringFormat='{0:F1}°C', TargetNullValue='--°C'}" Grid.Column="0" HorizontalTextAlignment="Center" Margin="0,8,0,0" FontSize="18"/>
                                     <ImageButton Grid.Column="2" Source="{Binding FavStarImageName}" VerticalOptions="Start" HeightRequest="28" Margin="12,10,0,0" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=ToggleFavouriteRangeCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
 

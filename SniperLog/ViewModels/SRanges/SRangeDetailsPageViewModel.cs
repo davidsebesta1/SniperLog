@@ -33,7 +33,7 @@ namespace SniperLog.ViewModels.SRanges
         [RelayCommand]
         private async Task GoToSubranges()
         {
-            //todo
+            await Shell.Current.GoToAsync("Subranges", new Dictionary<string, object>() { { "ShootingRange", Range } });
         }
 
         [RelayCommand]

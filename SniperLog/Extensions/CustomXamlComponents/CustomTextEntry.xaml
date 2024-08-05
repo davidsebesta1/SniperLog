@@ -9,14 +9,16 @@
         <Grid Grid.Row="0">
             <HorizontalStackLayout>
                 <Label Text="{Binding EntryTitle}" FontSize="18"/>
+                <Label Text="{Binding EntryTitleSubtext, TargetNullValue='', StringFormat=' ({0})'}" FontSize="14" VerticalTextAlignment="Center"/>
                 <Label IsVisible="{Binding IsMandatory}" Text="*" TextColor="{StaticResource Red}" FontSize="18"/>
             </HorizontalStackLayout>
+
             <Label Text="{Binding ErrorText}" IsVisible="{Binding ErrorTextVisible}" TextColor="{StaticResource Red}" VerticalTextAlignment="Center" FontSize="13" HorizontalOptions="End"/>
         </Grid>
 
         <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="5">
-            <Grid Padding="0">
-                <Entry Keyboard="{Binding KeyboardType}" Text="{Binding TextValue}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" HeightRequest="{Binding EntryHeightFinal}" FontSize="18" TextColor="{StaticResource Text}" />
+            <Grid Padding="5,0,0,5">
+                <Entry Keyboard="{Binding KeyboardType}" Text="{Binding TextValue}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" HeightRequest="{Binding EntryHeightFinal}" FontSize="18" TextColor="{StaticResource Text}"/>
             </Grid>
         </Frame>
     </Grid>

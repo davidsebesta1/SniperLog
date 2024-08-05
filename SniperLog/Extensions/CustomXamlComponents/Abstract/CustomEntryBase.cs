@@ -17,6 +17,7 @@ public partial class CustomEntryBase : ContentView
     public static readonly BindableProperty EntryTitleProperty = BindableProperty.Create(nameof(EntryTitle), typeof(string), typeof(Label), string.Empty);
     public static readonly BindableProperty ErrorTextProperty = BindableProperty.Create(nameof(ErrorText), typeof(string), typeof(Label), string.Empty);
     public static readonly BindableProperty ErrorTextVisibleProperty = BindableProperty.Create(nameof(ErrorTextVisible), typeof(bool), typeof(Label), false);
+    public static readonly BindableProperty EntryTitleSubtextProperty = BindableProperty.Create(nameof(EntryTitleSubtext), typeof(string), typeof(Label), null);
 
     public ICommand EntryInputChangedCommand
     {
@@ -52,6 +53,18 @@ public partial class CustomEntryBase : ContentView
         set
         {
             SetValue(EntryTitleProperty, value);
+        }
+    }
+
+    public string EntryTitleSubtext
+    {
+        get
+        {
+            return (string)GetValue(EntryTitleSubtextProperty);
+        }
+        set
+        {
+            SetValue(EntryTitleSubtextProperty, value);
         }
     }
 

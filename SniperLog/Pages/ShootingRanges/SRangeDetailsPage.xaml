@@ -48,12 +48,12 @@
                                         </LinearGradientBrush>
                                     </Grid.Background>
 
-                                    <Label Grid.Column="0" FontSize="24" Margin="15,15" Text="{Binding Range.CurrentWeather.Clouds, FallbackValue='Unknown'}"/>
-                                    <Label Grid.Column="1" FontSize="24" HorizontalOptions="End" Margin="0,5,15,0" Text="{Binding Range.CurrentWeather.Temperature, StringFormat='{0:F1}°C', FallbackValue='--°C'}"/>
+                                    <Label Grid.Column="0" FontSize="24" Margin="15,15" Text="{Binding Range.CurrentWeather.Clouds, TargetNullValue='Unknown'}"/>
+                                    <Label Grid.Column="1" FontSize="24" HorizontalOptions="End" Margin="0,5,15,0" Text="{Binding Range.CurrentWeather.Temperature, StringFormat='{0:F1}°C', TargetNullValue='--°C'}"/>
                                 </Grid>
 
                                 <Grid Grid.Row="1" BackgroundColor="Transparent">
-                                    <Label HorizontalOptions="End" Margin="0,0,20,0" VerticalOptions="Center" Text="{Binding Range.CurrentWeather.TimeTaken, StringFormat='Last updated: {hh:mm DD.MM.YYYYY}', FallbackValue='Refresh to update weather'}" TextColor="{StaticResource TextGrey}"/>
+                                    <Label HorizontalOptions="End" Margin="0,0,20,0" VerticalOptions="Center" Text="{Binding Range.CurrentWeather.TimeTaken, StringFormat='Last updated: {hh:mm DD.MM.YYYYY}', TargetNullValue='Refresh to update weather'}" TextColor="{StaticResource TextGrey}"/>
                                 </Grid>
 
                             </Grid>
@@ -61,11 +61,11 @@
 
                         <!-- Weather bottom -->
                         <Grid ColumnDefinitions="115,*,115,*,115" Margin="0,15,0,0">
-                            <custom:CustomDataViewCell Grid.Column="0" DataText="{Binding Range.CurrentWeather.Pressure, FallbackValue='--'}" LabelText="hPa" DescriptionText="Pressure"/>
+                            <custom:CustomDataViewCell Grid.Column="0" DataText="{Binding Range.CurrentWeather.Pressure, TargetNullValue='--'}" LabelText="hPa" DescriptionText="Pressure"/>
 
-                            <custom:CustomDataViewCell Grid.Column="2" DataText="{Binding Range.CurrentWeather.WindSpeed, FallbackValue='--'}" LabelText="m/s" DescriptionText="Wind Speed"/>
+                            <custom:CustomDataViewCell Grid.Column="2" DataText="{Binding Range.CurrentWeather.WindSpeed, TargetNullValue='--'}" LabelText="m/s" DescriptionText="Wind Speed"/>
 
-                            <custom:CustomDataViewCell Grid.Column="4" DataText="{Binding Range.CurrentWeather.DirectionName, FallbackValue='Unknown'}" LabelText="{Binding Range.CurrentWeather.DirectionDegrees, StringFormat='{0:F1}°', FallbackValue='--°'}" DescriptionText="Wind Direction" DataTextFontSize="18"/>
+                            <custom:CustomDataViewCell Grid.Column="4" DataText="{Binding Range.CurrentWeather.DirectionName, TargetNullValue='Unknown'}" LabelText="{Binding Range.CurrentWeather.DirectionDegrees, StringFormat='{0:F1}°', TargetNullValue='--°'}" DescriptionText="Wind Direction" DataTextFontSize="18"/>
                         </Grid>
 
                         <!-- Address -->
@@ -91,14 +91,14 @@
                         <Frame BackgroundColor="Transparent" Padding="0" BorderColor="Transparent">
                             <Grid ColumnDefinitions="175,*,175" Margin="0,5,0,0">
 
-                                <custom:CustomDataViewCell Grid.Column="0" DataText="{Binding Range.MaxRange, FallbackValue='--'}" LabelText="Meters" DescriptionText="Max Range"/>
+                                <custom:CustomDataViewCell Grid.Column="0" DataText="{Binding Range.MaxRange, TargetNullValue='--'}" LabelText="Meters" DescriptionText="Max Range"/>
 
-                                <custom:CustomDataViewCell Grid.Column="2" DataText="{Binding Range.AverageAltitude, FallbackValue='--'}" LabelText="Meters" DescriptionText="Avg. Altitude"/>
+                                <custom:CustomDataViewCell Grid.Column="2" DataText="{Binding Range.AverageAltitude, TargetNullValue='--'}" LabelText="Meters" DescriptionText="Avg. Altitude"/>
                             </Grid>
                         </Frame>
 
                         <!-- Firing directions -->
-                        <custom:CustomDataViewCell Grid.Column="2" Margin="0,15,0,0" DataText="{Binding Range.FiringDirectionsStrings, FallbackValue='Unknown'}" LabelText="{Binding Range.FiringDirectionsDegrees}" DescriptionText="Firing Directions"/>
+                        <custom:CustomDataViewCell Grid.Column="2" Margin="0,15,0,0" DataText="{Binding Range.FiringDirectionsStrings, TargetNullValue='Unknown'}" LabelText="{Binding Range.FiringDirectionsDegrees}" DescriptionText="Firing Directions"/>
 
 
                         <!-- SubRanges menu -->

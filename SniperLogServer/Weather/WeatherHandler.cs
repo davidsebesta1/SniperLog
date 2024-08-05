@@ -29,7 +29,7 @@ namespace SniperLogServer.Weather
 
             if (_weatherCache.TryGetValue(latLongStruct, out WeatherResponseMessage weather))
             {
-                if ((DateTime.UtcNow - weather.TimeTaken).TotalMinutes > 5)
+                if ((DateTime.UtcNow - weather.TimeTaken).Value.TotalMinutes > 5)
                 {
                     weather = await DeserializeFromJson(await SendWeatherRequestAsync(latitude, longitude));
                     _weatherCache[latLongStruct] = weather;

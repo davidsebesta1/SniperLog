@@ -26,6 +26,15 @@ namespace SniperLog.Pages.ShootingRanges
             LocationTypeEntry.OnEntryInputChanged += LocationTypeInputChanged;
         }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            LocationTypeEntry.OnEntryInputChanged -= LocationTypeInputChanged;
+
+            _validatorService.ClearAll();
+        }
+
         private void LocationTypeInputChanged(object? caller, object args)
         {
             bool value = (int)args == 0;

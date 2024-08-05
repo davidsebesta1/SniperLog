@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Extensions;
 using SniperLog.Models.Interfaces;
 using SniperLog.Services.Database;
 using SniperLog.Services.Database.Attributes;
@@ -6,39 +7,48 @@ using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class SubRange : IDataAccessObject, IEquatable<SubRange?>
+    /// <summary>
+    /// A class representing subrange of a shooting range.<br></br>
+    /// Notes are saved in a txt file saved in Data/ShootingRanges/RangeName/SubRanges/Notes%ID%.txt
+    /// </summary>
+    public partial class SubRange : ObservableObject, IDataAccessObject, IEquatable<SubRange?>
     {
         #region Properties
 
         [PrimaryKey]
         public int ID { get; set; }
 
-        public bool IsDefault { get; set; }
+        [ObservableProperty]
+        public bool _isDefault;
 
         [ForeignKey(typeof(ShootingRange), nameof(ShootingRange.ID))]
-        public int ShootingRange_ID { get; set; }
+        [ObservableProperty]
+        public int _shootingRange_ID;
 
-        public int RangeInMeters { get; set; }
+        [ObservableProperty]
+        public int _rangeInMeters;
 
-        public double? Altitude { get; set; }
+        [ObservableProperty]
+        public double? _altitude;
 
-        public int? DirectionToNorthDegrees { get; set; }
+        [ObservableProperty]
+        public int? _directionToNorthDegrees;
 
-        public int? VerticalFiringOffsetDegrees { get; set; }
+        [ObservableProperty]
+        public int? _verticalFiringOffsetDegrees;
+
+        [ObservableProperty]
+        private char _prefix;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(NotesPathFull))]
+        private string _notesPath;
 
         [DatabaseIgnore]
-        public char DisplayLetter
-        {
-            get
-            {
-                var subRanges = ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ShootingRange_ID).GetAwaiter().GetResult();
-                int index = subRanges.IndexOf(this);
+        public string NotesPathFull => AppDataFileHelper.GetPathFromAppData(NotesPath);
 
-                char letter = (char)('A' + index);
-
-                return letter;
-            }
-        }
+        [DatabaseIgnore]
+        public string NotesText => string.IsNullOrEmpty(NotesPath) ? string.Empty : File.ReadAllText(NotesPathFull);
 
         #endregion
 
@@ -54,7 +64,7 @@ namespace SniperLog.Models
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        public SubRange(int iD, bool isDefault, int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees)
+        public SubRange(int iD, bool isDefault, int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter, string notesPath)
         {
             ID = iD;
             IsDefault = isDefault;
@@ -63,10 +73,12 @@ namespace SniperLog.Models
             Altitude = altitude;
             DirectionToNorthDegrees = directionToNorth;
             VerticalFiringOffsetDegrees = verticalFiringOffsetDegrees;
+            Prefix = displayLetter;
+            NotesPath = notesPath;
         }
 
         /// <summary>
-        /// Primary ctor
+        /// Idless ctor
         /// </summary>
         /// <param name="shootingRange_ID"></param>
         /// <param name="isDefault"></param>
@@ -74,7 +86,7 @@ namespace SniperLog.Models
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        public SubRange(int shootingRange_ID, bool isDefault, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees) : this(-1, isDefault, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees)
+        public SubRange(int shootingRange_ID, bool isDefault, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter, string notesPath) : this(-1, isDefault, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees, displayLetter, notesPath)
         {
 
         }
@@ -109,12 +121,41 @@ namespace SniperLog.Models
             finally
             {
                 ServicesHelper.GetService<DataCacherService<SubRange>>().Remove(this);
+                DeleteNotes();
             }
         }
 
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
             return new SubRange(row);
+        }
+
+        #endregion
+
+        #region Object specific methods
+
+        public async Task SaveNotesAsync(string notesText)
+        {
+            if (string.IsNullOrEmpty(NotesPath))
+            {
+                NotesPath = Path.Combine("Data", "ShootingRanges", ReferencedShootingRange.Name, "SubRanges", $"Notes{ID}.txt");
+
+                Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
+
+                await SaveAsync();
+            }
+
+            await File.WriteAllTextAsync(NotesPathFull, notesText);
+        }
+
+        public void DeleteNotes()
+        {
+            if (string.IsNullOrEmpty(NotesPath))
+            {
+                return;
+            }
+
+            File.Delete(NotesPathFull);
         }
 
         #endregion
