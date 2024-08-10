@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SniperLog.Extensions.CustomXamlComponents.Abstract"
+             x:Name="this"
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomSearchBar">
+
+    <Frame x:Name="Main" BindingContext="{x:Reference this}" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}">
+        <Grid ColumnDefinitions="20,10,*,20" HeightRequest="50">
+            <ImageButton Source="searchicon.png" Grid.Column="0" Command="{Binding EnterCommand}"/>
+            <Entry Grid.Column="2" HeightRequest="70" Placeholder="{Binding PlaceholderText}" Text="{Binding TextValue, Mode=TwoWay}" ClearButtonVisibility="Never" TextChanged="Entry_TextChanged"/>
+            <ImageButton Source="cancelicon.png" Grid.Column="3" Pressed="ImageButton_Pressed" />
+        </Grid>
+    </Frame>
+</ContentView>

@@ -17,60 +17,59 @@
     </Shell.TitleView>
 
     <Grid Padding="0">
-        <VerticalStackLayout Padding="0">
-            <Grid Padding="0" RowDefinitions="200,*">
+        <Grid Padding="0" RowDefinitions="200,*">
 
-                <!-- Image -->
-                <Grid Grid.Row="0" ColumnDefinitions="50,*,60" RowDefinitions="50,*">
-                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Aspect="AspectFill" HeightRequest="200" Source="{Binding Range.BackgroundImgFullPath}"/>
-                    <Button Grid.Row="0" Grid.Column="0" ImageSource="arrowback.png" BackgroundColor="Transparent" Command="{Binding ReturnToRangeCommand}"/>
-                    <Button Grid.Row="0" Grid.Column="2" ImageSource="{Binding Range.FavStarImageName}" BackgroundColor="Transparent" Command="{Binding ToggleFavouriteRangeCommand}"/>
-                </Grid>
-
-                <VerticalStackLayout Grid.Row="1" Padding="15,15,15,15">
-                    <Label FontSize="36" Text="{Binding Range.Name}"/>
-
-                    <Label FontSize="18" Text="Subranges"/>
-                    <CollectionView ItemsSource="{Binding SubRanges}" Margin="0,10,0,0">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
-                        </CollectionView.ItemsLayout>
-
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:SubRange">
-                                <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="140" Padding="0">
-                                    <Frame.Shadow>
-                                        <Shadow Brush="Black" Offset="20,20" Radius="40" Opacity="0.8" />
-                                    </Frame.Shadow>
-
-                                    <Grid ColumnDefinitions="90,*" RowDefinitions="*,40">
-                                        <Label Grid.Column="0" Grid.Row="0" Text="{Binding Prefix}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="52"/>
-                                        <Grid Grid.Column="1" Grid.Row="0" BackgroundColor="{StaticResource PanelBackgroundDark}" ColumnDefinitions="*,45">
-                                            <Image Source="subrangebackgroundicon.png" Grid.ColumnSpan="2" HorizontalOptions="End" Margin="0,15,25,0"/>
-
-                                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="10,5,0,0">
-                                                <Label Text="{Binding RangeInMeters, StringFormat='{0}m'}" FontSize="20"/>
-                                                <Label Text="{Binding Altitude, StringFormat='Altitude: {0:F1}m'}"/>
-                                                <Label Text="{Binding DirectionToNorthDegrees, StringFormat='Firing Direction: {0}°'}"/>
-                                                <Label Text="{Binding VerticalFiringOffsetDegrees, StringFormat='Vertical Direction: {0}°'}"/>
-                                            </VerticalStackLayout>
-
-                                            <Grid Grid.Column="1" Padding="0">
-                                                <ImageButton Source="settingsicon.png" VerticalOptions="Start" HeightRequest="25" Margin="0,10,0,0" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SubRangesPageViewModel}}, Path=EditSubrangeCommand}" CommandParameter="{Binding .}"/>
-                                                <ImageButton Source="deleteicon.png" VerticalOptions="End" HeightRequest="25" Margin="0,0,0,10" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SubRangesPageViewModel}}, Path=DeleteSubrangeCommand}" CommandParameter="{Binding .}"/>
-                                            </Grid>
-                                        </Grid>
-
-                                        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding NotesText}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Padding="15,0,0,0"/>
-
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+            <!-- Image -->
+            <Grid Grid.Row="0" ColumnDefinitions="50,*,60" RowDefinitions="50,*">
+                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Aspect="AspectFill" HeightRequest="200" Source="{Binding Range.BackgroundImgFullPath}"/>
+                <Button Grid.Row="0" Grid.Column="0" ImageSource="arrowback.png" BackgroundColor="Transparent" Command="{Binding ReturnToRangeCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" ImageSource="{Binding Range.FavStarImageName}" BackgroundColor="Transparent" Command="{Binding ToggleFavouriteRangeCommand}"/>
             </Grid>
-        </VerticalStackLayout>
+
+            <Grid Grid.Row="1" Padding="15,15,15,15" RowDefinitions="60,30,*">
+                <Label FontSize="36" Text="{Binding Range.Name}" Grid.Row="0"/>
+
+                <Label FontSize="18" Text="Subranges" Grid.Row="1"/>
+
+                <CollectionView ItemsSource="{Binding SubRanges}" Margin="0,10,0,0" VerticalOptions="FillAndExpand" Grid.Row="2">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:SubRange">
+                            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="140" Padding="0">
+                                <Frame.Shadow>
+                                    <Shadow Brush="Black" Offset="20,20" Radius="40" Opacity="0.8" />
+                                </Frame.Shadow>
+
+                                <Grid ColumnDefinitions="90,*" RowDefinitions="*,40">
+                                    <Label Grid.Column="0" Grid.Row="0" Text="{Binding Prefix}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="52"/>
+                                    <Grid Grid.Column="1" Grid.Row="0" BackgroundColor="{StaticResource PanelBackgroundDark}" ColumnDefinitions="*,45">
+                                        <Image Source="subrangebackgroundicon.png" Grid.ColumnSpan="2" HorizontalOptions="End" Margin="0,15,25,0"/>
+
+                                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="10,5,0,0">
+                                            <Label Text="{Binding RangeInMeters, StringFormat='{0}m'}" FontSize="20"/>
+                                            <Label Text="{Binding Altitude, StringFormat='Altitude: {0:F1}m'}"/>
+                                            <Label Text="{Binding DirectionToNorthDegrees, StringFormat='Firing Direction: {0}°'}"/>
+                                            <Label Text="{Binding VerticalFiringOffsetDegrees, StringFormat='Vertical Direction: {0}°'}"/>
+                                        </VerticalStackLayout>
+
+                                        <Grid Grid.Column="1" Padding="0">
+                                            <ImageButton Source="settingsicon.png" VerticalOptions="Start" HeightRequest="25" Margin="0,10,0,0" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SubRangesPageViewModel}}, Path=EditSubrangeCommand}" CommandParameter="{Binding .}"/>
+                                            <ImageButton Source="deleteicon.png" VerticalOptions="End" HeightRequest="25" Margin="0,0,0,10" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SubRangesPageViewModel}}, Path=DeleteSubrangeCommand}" CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                    </Grid>
+
+                                    <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding NotesText}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Padding="15,0,0,0"/>
+
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
 
         <!-- Add subrange button -->
         <Frame HeightRequest="65" WidthRequest="65" BackgroundColor="{StaticResource Primary}" Padding="0" CornerRadius="35" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,15,15">

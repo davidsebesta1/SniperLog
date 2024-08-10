@@ -2,7 +2,6 @@
 {
     public abstract partial class BaseViewModel : ObservableObject
     {
-
         #region Properties
 
         [ObservableProperty]

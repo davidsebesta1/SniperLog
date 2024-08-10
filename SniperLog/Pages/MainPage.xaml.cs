@@ -19,10 +19,12 @@ namespace SniperLog.Pages
 
             await Task.Delay(1000);
             VersionControl tracking = ApplicationConfigService.GetConfig<VersionControl>();
+            
             if (tracking.FirstLaunchEver)
             {
                 await MopupService.Instance.PushAsync(ServicesHelper.GetService<InitialSetupPopupPage>());
             }
+            
         }
     }
 }

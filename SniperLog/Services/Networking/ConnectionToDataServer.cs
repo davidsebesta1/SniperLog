@@ -7,6 +7,8 @@ namespace SniperLog.Services.ConnectionToServer
 {
     public class ConnectionToDataServer
     {
+        public const int ConnectionTimeoutErrorCode = 110;
+
         public ushort Port;
 
         public IPAddress? IpAddress;
@@ -58,12 +60,21 @@ namespace SniperLog.Services.ConnectionToServer
                 {
                     if (!await TryOpen())
                     {
-                        return new ErrorMessage("Error has occured, connection couldnt be setup");
+                        return new ErrorMessage($"Unable to open connection to server");
                     }
+                }
+                catch (SocketException e)
+                {
+                    if (e.ErrorCode == ConnectionTimeoutErrorCode)
+                    {
+                        return null;
+                    }
+
+                    return new ErrorMessage($"Error has occured: {e.Message}");
                 }
                 catch (Exception e)
                 {
-                    return new ErrorMessage($"Error has occured, connection couldnt be setup: {e.Message}");
+                    return new ErrorMessage($"General Error has occured: {e.Message}");
                 }
 
 

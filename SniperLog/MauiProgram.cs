@@ -3,12 +3,16 @@ using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using SniperLog.Config;
 using SniperLog.Pages;
+using SniperLog.Pages.Manufacturers;
+using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
+using SniperLog.ViewModels.Manufacturers;
+using SniperLog.ViewModels.Manufacturers.FirearmManufacturers;
 using SniperLog.ViewModels.Other;
 using SniperLog.ViewModels.SRanges;
 using SniperLog.ViewModels.SRanges.Subranges;
@@ -53,7 +57,6 @@ namespace SniperLog
         {
             #region Data Cacher Services
 
-
             var cacherTypes = typeof(IDataAccessObject).Assembly.GetTypes().Where(n => !n.IsAbstract && n.GetInterface("IDataAccessObject") != null);
 
             foreach (Type type in cacherTypes)
@@ -62,7 +65,6 @@ namespace SniperLog
                 var cacher = Activator.CreateInstance(dataCacherServiceTypeGenerics);
                 builder.Services.AddSingleton(dataCacherServiceTypeGenerics, cacher);
             }
-
 
             #endregion
 
@@ -78,6 +80,9 @@ namespace SniperLog
             builder.Services.AddSingleton<SubRangesPageViewModel>();
             builder.Services.AddSingleton<SubRangeAddOrEditPageViewModel>();
 
+            builder.Services.AddSingleton<ManufacturersPageViewModel>();
+            builder.Services.AddSingleton<FirearmManuPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -91,6 +96,9 @@ namespace SniperLog
 
             builder.Services.AddSingleton<SubRangesPage>();
             builder.Services.AddSingleton<SubRangeAddOrEditPage>();
+
+            builder.Services.AddSingleton<ManufacturersPage>();
+            builder.Services.AddSingleton<FirearmManuPage>();
 
             #endregion
 

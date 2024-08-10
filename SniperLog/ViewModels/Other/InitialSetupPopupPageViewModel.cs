@@ -32,6 +32,7 @@ namespace SniperLog.ViewModels.Other
             await _csvProcessor.LoadToDatabase<SightClickType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("SightClickTypes.csv")));
             await _csvProcessor.LoadToDatabase<FirearmType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmTypes.csv")));
             await _csvProcessor.LoadToDatabase<FirearmCaliber>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmCalibers.csv")));
+            await _csvProcessor.LoadToDatabase<ManufacturerType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("ManufacturerTypes.csv")));
 
             ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false, string.Empty);
             ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true, string.Empty);
@@ -39,9 +40,21 @@ namespace SniperLog.ViewModels.Other
             await s1.SaveAsync();
             await s2.SaveAsync();
 
-            SubRange testSub = new SubRange(s1.ID, false, 300, 123, 46, 0, 'A', string.Empty);
+            SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B', string.Empty);
             await testSub.SaveAsync();
             await testSub.SaveNotesAsync("test notes markiplier");
+
+            Manufacturer manufacturer = new Manufacturer(15, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "TestMan");
+            Manufacturer manufacturer2 = new Manufacturer(16, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "Ceska Zbrojovka");
+
+            await manufacturer.SaveAsync();
+            await manufacturer2.SaveAsync();
+
+            Manufacturer manufacturer3 = new Manufacturer(14, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Sight")).ID, "Vortex");
+            Manufacturer manufacturer4 = new Manufacturer(13, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Sight")).ID, "Morkite");
+
+            await manufacturer3.SaveAsync();
+            await manufacturer4.SaveAsync();
         }
 
         [RelayCommand]

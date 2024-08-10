@@ -30,26 +30,30 @@ namespace SniperLog.ViewModels.SRanges
         [RelayCommand]
         private async Task ShootingRangesSearch(string input)
         {
-            ShootingRanges = null;
+            if (string.IsNullOrEmpty(input))
+            {
+                ShootingRanges = await _sRangeDataCacher.GetAll();
+                return;
+            }
             ShootingRanges = await _sRangeDataCacher.GetAllBy(n => n.Name.Contains(input, StringComparison.CurrentCultureIgnoreCase));
         }
 
         [RelayCommand]
         private async Task GoToDetails(ShootingRange range)
         {
-            await Shell.Current.GoToAsync("RangeDetails", new Dictionary<string, object>() { { "ShootingRange", range } });
+            await Shell.Current.GoToAsync("RangeDetails", new Dictionary<string, object>(1) { { "ShootingRange", range } });
         }
 
         [RelayCommand]
         private async Task AddNewRange()
         {
-            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>() { { "ShootingRange", null } });
+            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>(1) { { "ShootingRange", null } });
         }
 
         [RelayCommand]
         private async Task EditRange(ShootingRange range)
         {
-            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>() { { "ShootingRange", range } });
+            await Shell.Current.GoToAsync("AddOrEditRange", new Dictionary<string, object>(1) { { "ShootingRange", range } });
         }
 
         [RelayCommand]
@@ -60,6 +64,7 @@ namespace SniperLog.ViewModels.SRanges
             if (res)
             {
                 await range.DeleteAsync();
+                ShootingRanges.Remove(range);
             }
         }
 

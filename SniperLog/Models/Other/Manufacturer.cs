@@ -1,12 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
-using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
 {
     public partial class Manufacturer : IDataAccessObject, ICsvProcessable, IEquatable<Manufacturer?>
     {
-
         #region Properties
 
         [PrimaryKey]
@@ -14,6 +12,9 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(Country), nameof(Country.ID))]
         public int Country_ID { get; set; }
+
+        [ForeignKey(typeof(ManufacturerType), nameof(ManufacturerType.ID))]
+        public int ManufacturerType_ID { get; set; }
 
         public string Name { get; set; }
 
@@ -23,14 +24,15 @@ namespace SniperLog.Models
 
         #region Constructors
 
-        public Manufacturer(int iD, int country_ID, string name)
+        public Manufacturer(int iD, int country_ID, int manuType_ID, string name)
         {
             ID = iD;
             Country_ID = country_ID;
+            ManufacturerType_ID = manuType_ID;
             Name = name;
         }
 
-        public Manufacturer(int country_ID, string name) : this(-1, country_ID, name)
+        public Manufacturer(int country_ID, int manuType_ID, string name) : this(-1, country_ID, manuType_ID, name)
         {
 
         }
@@ -83,13 +85,13 @@ namespace SniperLog.Models
 
         public string SerializeToCsvRow()
         {
-            return string.Join(',', Name, ReferencedCountry.Code);
+            return string.Join(',', Name, ReferencedManufacturerType.Name, ReferencedCountry.Code);
         }
 
         public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
         {
             string[] splits = row.Split(',');
-            return new Manufacturer((await ServicesHelper.GetService<DataCacherService<Country>>().GetFirstBy(n => n.Code == splits[1])).ID, splits[0]);
+            return new Manufacturer((await ServicesHelper.GetService<DataCacherService<Country>>().GetFirstBy(n => n.Code == splits[1])).ID, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == splits[2])).ID, splits[0]);
         }
 
         #endregion

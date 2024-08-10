@@ -1,4 +1,6 @@
-﻿using SniperLog.Pages.ShootingRanges;
+﻿using SniperLog.Pages.Manufacturers;
+using SniperLog.Pages.Manufacturers.FirearmManufacturers;
+using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
 
 namespace SniperLog
@@ -13,6 +15,9 @@ namespace SniperLog
             Routing.RegisterRoute("RangeDetails", typeof(SRangeDetailsPage));
             Routing.RegisterRoute("Subranges", typeof(SubRangesPage));
             Routing.RegisterRoute("AddOrEditSubrange", typeof(SubRangeAddOrEditPage));
+
+            Routing.RegisterRoute("Manufacturers", typeof(ManufacturersPage));
+            Routing.RegisterRoute("Manufacturers/FirearmManufacturers", typeof(FirearmManuPage));
         }
     }
 }

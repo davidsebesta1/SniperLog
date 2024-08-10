@@ -120,10 +120,10 @@ namespace SniperLog.Models
         public double? AverageAltitude => ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Average(n => n.Altitude);
 
         [DatabaseIgnore]
-        public string FiringDirectionsStrings => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Where(n => n.DirectionToNorthDegrees != null).Select(n => CardinalDirectionConverter.GetNameByDegree((int)n.DirectionToNorthDegrees)));
+        public string FiringDirectionsStrings => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Select(n => CardinalDirectionConverter.GetNameByDegree((int)n.DirectionToNorthDegrees)));
 
         [DatabaseIgnore]
-        public string FiringDirectionsDegrees => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Where(n => n.DirectionToNorthDegrees != null).Select(n => n.DirectionToNorthDegrees + '°'));
+        public string FiringDirectionsDegrees => string.Join(',', ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().Select(n => n.DirectionToNorthDegrees + "°"));
 
         #endregion
 
@@ -217,7 +217,7 @@ namespace SniperLog.Models
         /// <returns></returns>
         public async Task InitDefaultSubRangeForInstance()
         {
-            SubRange subRange = new SubRange(ID, true, 0, 0, 0, 0, 'A', string.Empty);
+            SubRange subRange = new SubRange(ID, 0, 0, 0, 0, 'A', string.Empty);
             await subRange.SaveAsync();
         }
 
@@ -280,7 +280,7 @@ namespace SniperLog.Models
         /// <returns></returns>
         public async Task SaveImageAsync(FileStream stream)
         {
-            string localPath = Path.Combine("Data", "ShootingRange", Name);
+            string localPath = Path.Combine("Data", "ShootingRanges", Name);
             string localFilePath = Path.Combine(localPath, BackgroundImageFileName);
 
             string fullDirPath = AppDataFileHelper.GetPathFromAppData(localPath);

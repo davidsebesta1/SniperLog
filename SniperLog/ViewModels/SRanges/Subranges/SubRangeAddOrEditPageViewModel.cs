@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions;
 using System.Globalization;
 
 namespace SniperLog.ViewModels.SRanges.Subranges
@@ -77,9 +78,10 @@ namespace SniperLog.ViewModels.SRanges.Subranges
 
             if (Subrange == null)
             {
-                Subrange = new SubRange(OwningRange.ID, false, int.Parse(RangeInMeters, CultureInfo.InvariantCulture), string.IsNullOrEmpty(Altitude) ? null : double.Parse(Altitude, CultureInfo.InvariantCulture), string.IsNullOrEmpty(DirectionToNorthDegrees) ? null : int.Parse(DirectionToNorthDegrees, CultureInfo.InvariantCulture), string.IsNullOrEmpty(VerticalFiringOffsetDegrees) ? null : int.Parse(VerticalFiringOffsetDegrees, CultureInfo.InvariantCulture), Prefix[0], string.Empty);
+                string notes = Notes;
+                Subrange = new SubRange(OwningRange.ID, int.Parse(RangeInMeters, CultureInfo.InvariantCulture), ParseExtensions.ParseOrNullDouble(Altitude), ParseExtensions.ParseOrNullInteger(DirectionToNorthDegrees), ParseExtensions.ParseOrNullInteger(VerticalFiringOffsetDegrees), Prefix[0], string.Empty);
                 await Subrange.SaveAsync();
-                await Subrange.SaveNotesAsync(Notes);
+                await Subrange.SaveNotesAsync(notes);
             }
             else
             {

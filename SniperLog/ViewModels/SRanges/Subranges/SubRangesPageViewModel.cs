@@ -52,6 +52,7 @@ namespace SniperLog.ViewModels.SRanges.Subranges
             if (res)
             {
                 await range.DeleteAsync();
+                SubRanges.Remove(range);
             }
         }
 

@@ -5,6 +5,7 @@
              xmlns:model="clr-namespace:SniperLog.Models"
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.SRanges"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
              x:DataType="viewmodel:SRangesPageViewModel"
              BackgroundColor="{StaticResource Background}"
              Title="{Binding PageTitle}">
@@ -23,13 +24,7 @@
         <VerticalStackLayout Grid.Row="0">
             <Label Text="Shooting Ranges" Style="{StaticResource Headline}" Padding="0,0,0,10"/>
 
-            <Frame HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}">
-                <Grid ColumnDefinitions="20,10,*,20" HeightRequest="50">
-                    <ImageButton Source="searchicon.png" Grid.Column="0" />
-                    <Entry Grid.Column="2" HeightRequest="70" Placeholder="Shooting range..." ClearButtonVisibility="Never"/>
-                    <ImageButton Source="cancelicon.png" Grid.Column="3" />
-                </Grid>
-            </Frame>
+            <custom:CustomSearchBar PlaceholderText="Search range..." EnterCommand="{Binding ShootingRangesSearchCommand}"/>
 
         </VerticalStackLayout>
 
@@ -45,7 +40,7 @@
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SRangesPageViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}"/>
                             </Frame.GestureRecognizers>
-                            
+
                             <Grid RowDefinitions="200,100">
                                 <Grid Grid.Row="0" ColumnDefinitions="60,*,60">
                                     <Image Source="{Binding BackgroundImgFullPath}" Aspect="AspectFill" Grid.ColumnSpan="3"/>

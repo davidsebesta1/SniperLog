@@ -16,7 +16,7 @@
 
         <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="5">
             <Grid>
-                <Editor Text="{Binding TextValue}" HeightRequest="{Binding EditorHeight}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" FontSize="18" TextColor="{StaticResource Text}" />
+                <Editor Text="{Binding TextValue}" HeightRequest="{Binding EditorHeight}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" FontSize="18" TextColor="{StaticResource Text}" Keyboard="Text" />
             </Grid>
         </Frame>
     </Grid>

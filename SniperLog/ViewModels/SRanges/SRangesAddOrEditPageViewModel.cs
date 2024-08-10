@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions;
 using System.Globalization;
 
 namespace SniperLog.ViewModels.SRanges
@@ -67,7 +68,7 @@ namespace SniperLog.ViewModels.SRanges
 
             if (Range == null)
             {
-                Range = new ShootingRange(Name, Address, double.Parse(Lat, CultureInfo.InvariantCulture), double.Parse(Lon, CultureInfo.InvariantCulture), false, string.Empty);
+                Range = new ShootingRange(Name, Address, ParseExtensions.ParseOrNullDouble(Lat), ParseExtensions.ParseOrNullDouble(Lon), false, string.Empty);
 
                 if (!string.IsNullOrEmpty(BackgroundImagePath))
                 {
@@ -81,8 +82,8 @@ namespace SniperLog.ViewModels.SRanges
             {
                 Range.Name = Name;
                 Range.Address = Address;
-                Range.Latitude = double.Parse(Lat, CultureInfo.InvariantCulture);
-                Range.Longitude = double.Parse(Lon, CultureInfo.InvariantCulture);
+                Range.Latitude = ParseExtensions.ParseOrNullDouble(Lat);
+                Range.Longitude = ParseExtensions.ParseOrNullDouble(Lon);
 
                 if (!string.IsNullOrEmpty(BackgroundImagePath) && BackgroundImagePath != Range.BackgroundImgPath)
                 {

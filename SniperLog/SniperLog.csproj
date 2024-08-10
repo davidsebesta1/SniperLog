@@ -87,14 +87,19 @@
 		<MauiImage Include="Resources\Images\ShootingRangeBackgroundIcons\*" />
 		<MauiImage Include="Resources\Images\SubrangeBackgroundIcons\*" />
 		
+		<MauiImage Include="Resources\Images\ManufacturersbackgroundIcons\*" />
+
+		
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\homeicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\deleteicon.svg" Resize="True" BaseSize="64,64" TintColor="#FF7A7A" />
 		<MauiImage Update="Resources\Images\editicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+
+		<MauiImage Update="Resources\Images\editicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<MauiImage Update="Resources\Images\FlyoutIcons\firearmsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\menufacturersicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\FlyoutIcons\manufacturersicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\recordsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\reticlesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\FlyoutIcons\shootingrangesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
@@ -136,6 +141,9 @@
 	  <None Remove="Resources\Images\galleryicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
 	  <None Remove="Resources\Images\logo.svg" />
+	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\firearmiconwhite.svg" />
+	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\firearmsighticonwhite.svg" />
+	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\manufacturerbackground.png" />
 	  <None Remove="Resources\Images\olesko.png" />
 	  <None Remove="Resources\Images\searchicon.svg" />
 	  <None Remove="Resources\Images\stariconfav.svg" />
@@ -145,6 +153,7 @@
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
+	  <None Remove="Resources\Raw\ManufacturerTypes.csv" />
 	  <None Remove="Resources\Raw\SETUPQUERY.sql" />
 	  <None Remove="Resources\Raw\SightClickTypes.csv" />
 	</ItemGroup>
@@ -191,10 +200,19 @@
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomMultilineTextEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomSearchBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomSwitchEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\FirearmManuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\ManufacturersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MainPage.xaml">
@@ -219,6 +237,12 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Images\SubrangeBackgroundIcons\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\ManufacturerTypes.csv">
+	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+	  </MauiAsset>
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionSniperLogHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionSniperLogHideInfoBar="True" /></VisualStudio></ProjectExtensions>

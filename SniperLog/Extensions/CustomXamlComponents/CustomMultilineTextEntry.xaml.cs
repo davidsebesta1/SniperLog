@@ -23,7 +23,6 @@ public partial class CustomMultilineTextEntry : CustomEntryBase
         InitializeComponent();
     }
 
-
     public int EntryHeight
     {
         get

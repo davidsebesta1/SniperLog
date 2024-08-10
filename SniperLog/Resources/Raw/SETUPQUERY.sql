@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS ShootingRange(
 -- Sub range
 CREATE TABLE IF NOT EXISTS SubRange(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IsDefault BOOLEAN NOT NULL,
     ShootingRange_ID INT NOT NULL,
     RangeInMeters INTEGER NOT NULL,
     Altitude DOUBLE,
@@ -34,18 +33,6 @@ BEGIN
           WHERE SubRange.ShootingRange_ID = OLD.ID;
 END;
 
-
-CREATE TRIGGER IF NOT EXISTS DeleteDefaultIfNew
-    AFTER INSERT
-    ON SubRange
-BEGIN
-    DELETE FROM SubRange
-    WHERE ShootingRange_ID = NEW.ShootingRange_ID 
-        AND IsDefault = 1
-        AND ID != NEW.ID
-        AND EXISTS (SELECT 1 FROM SubRange WHERE ShootingRange_ID = NEW.ShootingRange_ID AND IsDefault = 1 AND ID != NEW.ID);
-END;
-
 -- Countries
 CREATE TABLE IF NOT EXISTS Country(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -53,13 +40,21 @@ CREATE TABLE IF NOT EXISTS Country(
     Code VARCHAR(2) NOT NULL UNIQUE
 );
 
+--Manfuacturer Type
+CREATE TABLE IF NOT EXISTS ManufacturerType(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Name VARCHAR(30) NOT NULL UNIQUE
+);
+
 -- Manufacturer
 CREATE TABLE IF NOT EXISTS Manufacturer(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     Country_ID INTEGER NOT NULL,
+    ManufacturerType_ID INTEGER NOT NULL,
     Name VARCHAR(30) NOT NULL UNIQUE,
     
-    FOREIGN KEY (Country_ID) REFERENCES Country(ID)
+    FOREIGN KEY (Country_ID) REFERENCES Country(ID),
+    FOREIGN KEY (ManufacturerType_ID) REFERENCES ManufacturerType(ID)
 );
 
 -- Firearm Caliber
