@@ -70,6 +70,9 @@ namespace SniperLog.Services
                     case CustomImagePickerEntry imagePickerEntry:
                         EntryInput(imagePickerEntry, imagePickerEntry.SelectedImagePath);
                         break;
+                    case CustomPickerEntry customPickerEntry:
+                        EntryInput(customPickerEntry, customPickerEntry.SelectedItem);
+                        break;
                 }
             }
         }

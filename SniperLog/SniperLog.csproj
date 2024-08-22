@@ -88,6 +88,7 @@
 		<MauiImage Include="Resources\Images\SubrangeBackgroundIcons\*" />
 		
 		<MauiImage Include="Resources\Images\ManufacturersbackgroundIcons\*" />
+		<MauiImage Include="Resources\Images\SightsBackgroundIcons\*" />
 
 		
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -122,6 +123,7 @@
 		<MauiImage Update="Resources\Images\arrowforward.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\refreshicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\directionicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\dropdownarrow.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -136,6 +138,7 @@
 	  <None Remove="Resources\Images\cancelicon.svg" />
 	  <None Remove="Resources\Images\deleteicon.svg" />
 	  <None Remove="Resources\Images\directionicon.svg" />
+	  <None Remove="Resources\Images\dropdownarrow.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
 	  <None Remove="Resources\Images\galleryicon.svg" />
@@ -200,6 +203,12 @@
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomMultilineTextEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomPickerEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomPickerPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomSearchBar.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -212,6 +221,12 @@
 	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\FirearmManuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\SightManuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\ManufacturerAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Manufacturers\ManufacturersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -219,6 +234,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Reticles\ReticlesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRanges\SRangeDetailsPage.xaml">
@@ -231,6 +249,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRanges\Subranges\SubRangesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Sights\SightAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Sights\SightsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

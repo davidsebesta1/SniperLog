@@ -2,18 +2,25 @@
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using SniperLog.Config;
+using SniperLog.Extensions.CustomXamlComponents;
+using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
+using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
+using SniperLog.Pages.Sights;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
 using SniperLog.ViewModels.Manufacturers;
 using SniperLog.ViewModels.Manufacturers.FirearmManufacturers;
+using SniperLog.ViewModels.Manufacturers.SightManufacturers;
 using SniperLog.ViewModels.Other;
+using SniperLog.ViewModels.Reticles;
+using SniperLog.ViewModels.Sights;
 using SniperLog.ViewModels.SRanges;
 using SniperLog.ViewModels.SRanges.Subranges;
 using System.Net;
@@ -82,6 +89,15 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ManufacturersPageViewModel>();
             builder.Services.AddSingleton<FirearmManuPageViewModel>();
+            builder.Services.AddSingleton<SightManuPageViewModel>();
+            builder.Services.AddSingleton<ManufacturerAddOrEditPageViewModel>();
+
+            builder.Services.AddTransient<CustomPickerPopupViewModel>();
+
+            builder.Services.AddSingleton<SightsPageViewModel>();
+            builder.Services.AddSingleton<SightReticleViewModel>();
+
+            builder.Services.AddSingleton<ReticlesPageViewModel>();
 
             #endregion
 
@@ -99,6 +115,13 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ManufacturersPage>();
             builder.Services.AddSingleton<FirearmManuPage>();
+            builder.Services.AddSingleton<SightManuPage>();
+            builder.Services.AddSingleton<ManufacturerAddOrEditPage>();
+
+            builder.Services.AddSingleton<SightsPage>();
+            builder.Services.AddSingleton<SightAddOrEditPage>();
+
+            builder.Services.AddSingleton<ReticlesPage>();
 
             #endregion
 

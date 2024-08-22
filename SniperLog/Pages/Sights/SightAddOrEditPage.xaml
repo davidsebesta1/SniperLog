@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Sights.SightAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Sights"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:SightAddOrEditPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
+            <custom:CustomPickerEntry x:Name="ReticleEntry" EntryTitle="Reticle" EntryHeight="1" SourceCollection="{Binding SightReticles}" SelectedItem="{Binding Reticle, Mode=TwoWay}"/>
+            <custom:CustomSwitchEntry x:Name="ClickTypeEntry" EntryTitle="Click Type" LeftOptionText="MOA" RightOptionText="MRAD" SelectedOption="{Binding ClickType, Mode=TwoWay}"/>
+            <custom:CustomTextEntry x:Name="OneClickValEntry" EntryTitle="One Click Value" EntryHeight="1" TextValue="{Binding OneClickValue, Mode=TwoWay}"/>
+            <custom:CustomPickerEntry x:Name="ManuEntry" EntryTitle="Manufacturer" EntryHeight="1" SourceCollection="{Binding Manufacturers}" SelectedItem="{Binding Manufacturer, Mode=TwoWay}"/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateFirearmSightCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

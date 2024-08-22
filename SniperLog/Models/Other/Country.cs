@@ -114,6 +114,16 @@ namespace SniperLog.Models
             return !(left == right);
         }
 
+
+        #endregion
+
+        #region Other
+
+        public override string? ToString()
+        {
+            return Name;
+        }
+
         #endregion
     }
 }

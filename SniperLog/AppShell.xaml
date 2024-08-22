@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:SniperLog.Pages"
     xmlns:sRanges="clr-namespace:SniperLog.Pages.ShootingRanges"
     xmlns:manufacturers="clr-namespace:SniperLog.Pages.Manufacturers"
+    xmlns:sights="clr-namespace:SniperLog.Pages.Sights"
+    xmlns:reticles="clr-namespace:SniperLog.Pages.Reticles"
     Title="SniperLog"
     Shell.FlyoutBehavior="Flyout"
     FlyoutHeaderBehavior="CollapseOnScroll"
@@ -19,8 +21,8 @@
         <ShellContent Title="Firearms" ContentTemplate="{DataTemplate sRanges:SRangesAddOrEditPage}" Icon="firearmsicon.png"></ShellContent>
         <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate sRanges:SRangesPage}" Icon="shootingrangesicon.png"></ShellContent>
         <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate manufacturers:ManufacturersPage}" Icon="manufacturersicon.png"></ShellContent>
-        <ShellContent Title="Sights" ContentTemplate="{DataTemplate local:MainPage}" Icon="sightsicon.png"></ShellContent>
-        <ShellContent Title="Reticles" ContentTemplate="{DataTemplate local:MainPage}" Icon="reticlesicon.png"></ShellContent>
+        <ShellContent Title="Sights" ContentTemplate="{DataTemplate sights:SightsPage}" Icon="sightsicon.png"></ShellContent>
+        <ShellContent Title="Reticles" ContentTemplate="{DataTemplate reticles:ReticlesPage}" Icon="reticlesicon.png"></ShellContent>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

@@ -1,46 +1,13 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SniperLog.ViewModels.Manufacturers.FirearmManufacturers
 {
-    public partial class FirearmManuPageViewModel : BaseViewModel
+    public partial class FirearmManuPageViewModel : ManuPageViewModelBase
     {
-        [ObservableProperty]
-        private ObservableCollection<Manufacturer> _manufacturers;
+        public override string ManufacturerTypeNameInternal => "Firearm";
 
-        private readonly DataCacherService<Manufacturer> _manCacher;
-        private readonly DataCacherService<ManufacturerType> _manTypeCacher;
-
-        public FirearmManuPageViewModel(DataCacherService<Manufacturer> manufacturersCacher, DataCacherService<ManufacturerType> manTypeCacher) : base()
+        public FirearmManuPageViewModel(DataCacherService<Manufacturer> manufacturersCacher, DataCacherService<ManufacturerType> manTypeCacher) : base(manufacturersCacher, manTypeCacher)
         {
             PageTitle = "Firearm\nManufacturers";
-            _manCacher = manufacturersCacher;
-            _manTypeCacher = manTypeCacher;
-        }
-
-        [RelayCommand]
-        private async Task RefreshManufacturers()
-        {
-            int id = (await _manTypeCacher.GetFirstBy(n => n.Name == "Sight")).ID;
-            Manufacturers = await _manCacher.GetAllBy(n => n.ManufacturerType_ID == id);
-        }
-
-        [RelayCommand]
-        private async Task SearchManufacturers(string text)
-        {
-            int id = (await _manTypeCacher.GetFirstBy(n => n.Name == "Sight")).ID;
-            Manufacturers = await _manCacher.GetAllBy(n => n.ManufacturerType_ID == id && (string.IsNullOrEmpty(text) || n.Name.Contains(text)));
-        }
-
-        [RelayCommand]
-        private async Task ReturnBack()
-        {
-            await Shell.Current.GoToAsync("..");
         }
     }
 }

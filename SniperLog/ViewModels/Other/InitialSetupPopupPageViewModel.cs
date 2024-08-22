@@ -34,16 +34,19 @@ namespace SniperLog.ViewModels.Other
             await _csvProcessor.LoadToDatabase<FirearmCaliber>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmCalibers.csv")));
             await _csvProcessor.LoadToDatabase<ManufacturerType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("ManufacturerTypes.csv")));
 
+            //Shooting ranges
             ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false, string.Empty);
             ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true, string.Empty);
 
             await s1.SaveAsync();
             await s2.SaveAsync();
 
+            //Subranges
             SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B', string.Empty);
             await testSub.SaveAsync();
             await testSub.SaveNotesAsync("test notes markiplier");
 
+            //Manufacturers
             Manufacturer manufacturer = new Manufacturer(15, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "TestMan");
             Manufacturer manufacturer2 = new Manufacturer(16, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "Ceska Zbrojovka");
 
@@ -55,6 +58,20 @@ namespace SniperLog.ViewModels.Other
 
             await manufacturer3.SaveAsync();
             await manufacturer4.SaveAsync();
+
+            //Reticles
+            SightReticle reticle1 = new SightReticle("TestRet", string.Empty);
+            SightReticle reticle2 = new SightReticle("TreeReticle", string.Empty);
+
+            await reticle1.SaveAsync();
+            await reticle2.SaveAsync();
+
+            //Sights
+            FirearmSight sight1 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == "MRAD")).ID, 3, reticle1.ID, "Vortex1", 0.1d);
+            FirearmSight sight2 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == "MOA")).ID, 4, reticle2.ID, "MOAScope", 0.25d);
+
+            await sight1.SaveAsync();
+            await sight2.SaveAsync();
         }
 
         [RelayCommand]

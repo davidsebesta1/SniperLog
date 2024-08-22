@@ -1,10 +1,11 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Extensions;
 using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class FirearmSight : ObservableObject, IDataAccessObject, ICsvProcessable, IEquatable<FirearmSight?>
+    public partial class FirearmSight : ObservableObject, IDataAccessObject, IEquatable<FirearmSight?>
     {
         #region Properties
 
@@ -12,10 +13,14 @@ namespace SniperLog.Models
         public int ID { get; set; }
 
         [ForeignKey(typeof(SightClickType), nameof(SightClickType.ID))]
-        public int ClickType_ID { get; set; }
+        [ObservableProperty]
+        private int _clickType_ID;
 
         [ForeignKey(typeof(Manufacturer), nameof(Manufacturer.ID))]
         public int Manufacturer_ID { get; set; }
+
+        [ForeignKey(typeof(SightReticle), nameof(SightReticle.ID))]
+        public int SightReticle_ID { get; set; }
 
         [ObservableProperty]
         private string _name;
@@ -29,16 +34,20 @@ namespace SniperLog.Models
 
         #region Constructors
 
-        public FirearmSight(int iD, int clickType_ID, int manufacturer_ID, string name, double oneClickValue)
+        public FirearmSight(int iD, int clickType_ID, int manufacturer_ID, int sightReticle_ID, string name, double oneClickValue)
         {
             ID = iD;
             ClickType_ID = clickType_ID;
             Manufacturer_ID = manufacturer_ID;
+            SightReticle_ID = sightReticle_ID;
             Name = name;
             OneClickValue = oneClickValue;
         }
 
-        public FirearmSight(int clickType_ID, int manufacturer_ID, string name, double oneClickValue) : this(-1, clickType_ID, manufacturer_ID, name, oneClickValue) { }
+        public FirearmSight(int clickType_ID, int manufacturer_ID, int sightReticle_ID, string name, double oneClickValue) : this(-1, clickType_ID, manufacturer_ID, sightReticle_ID, name, oneClickValue)
+        {
+
+        }
 
         #endregion
 
@@ -71,30 +80,12 @@ namespace SniperLog.Models
             try
             {
                 return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(DeleteQuery, new SqliteParameter("@ID", ID)) == 1;
-
             }
             finally
             {
                 ServicesHelper.GetService<DataCacherService<FirearmSight>>().Remove(this);
             }
         }
-        #endregion
-
-        #region CSV
-
-        public static async Task<ICsvProcessable> DeserializeFromCsvRow(string row)
-        {
-            string[] split = row.Split(',');
-            SightClickType sightClickType = await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == split[1]);
-            Manufacturer manufacturer = await ServicesHelper.GetService<DataCacherService<Manufacturer>>().GetFirstBy(n => n.Name == split[2]);
-            return new FirearmSight(sightClickType.ID, manufacturer.ID, split[0], double.Parse(split[3]));
-        }
-
-        public string SerializeToCsvRow()
-        {
-            return string.Join(',', Name, ReferencedSightClickType.ClickTypeName, ReferencedManufacturer.Name, OneClickValue);
-        }
-
         #endregion
 
         #region Equals

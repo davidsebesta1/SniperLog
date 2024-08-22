@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.Extensions.CustomXamlComponents.ViewModels"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             BackgroundColor="#AA000000"
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomPickerPopup"
+             x:DataType="viewmodel:CustomPickerPopupViewModel">
+
+    <Frame HorizontalOptions="FillAndExpand" HeightRequest="550" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
+        <Grid Padding="0" RowDefinitions="*,60">
+            <ListView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" ItemSelected="ListView_ItemSelected" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" CachingStrategy="RecycleElement" >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="x:Object">
+                        <ViewCell>
+                            <Label Text="{Binding .}" TextColor="{StaticResource Text}" VerticalTextAlignment="Center"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <custom:CustomSearchBar Grid.Row="1" PlaceholderText="Search..." EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
+        </Grid>
+    </Frame>
+</mopups:PopupPage>

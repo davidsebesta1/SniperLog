@@ -92,8 +92,11 @@ public partial class CustomEntryBase : ContentView
         }
     }
 
+    /// <summary>
+    /// Base ctor does not initialize components itself
+    /// </summary>
     public CustomEntryBase()
     {
-
+        
     }
 }

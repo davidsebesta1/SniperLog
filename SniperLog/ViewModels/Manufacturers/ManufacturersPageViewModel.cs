@@ -1,9 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.Manufacturers
 {
@@ -18,6 +13,12 @@ namespace SniperLog.ViewModels.Manufacturers
         private async Task GoToFirearmManufacturers()
         {
             await Shell.Current.GoToAsync("Manufacturers/FirearmManufacturers");
+        }
+
+        [RelayCommand]
+        private async Task GoToSightManufacturers()
+        {
+            await Shell.Current.GoToAsync("Manufacturers/SightManufacturers");
         }
     }
 }

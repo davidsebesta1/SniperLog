@@ -23,7 +23,7 @@
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToFirearmManufacturersCommand}"/>
                 </Frame.GestureRecognizers>
-                
+
                 <Grid RowDefinitions="*,60" Padding="0">
                     <Image Source="manufacturerbackground.png" HorizontalOptions="End" VerticalOptions="End" Grid.RowSpan="2" Margin="3"/>
                     <Image Source="firearmiconwhite.png" Margin="20,20,20,0" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -32,6 +32,10 @@
             </Frame>
 
             <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="0" Grid.Column="1" Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToSightManufacturersCommand}"/>
+                </Frame.GestureRecognizers>
+
                 <Grid RowDefinitions="*,60" Padding="0">
                     <Image Source="manufacturerbackground.png" HorizontalOptions="End" VerticalOptions="End" Grid.RowSpan="2" Margin="3"/>
                     <Image Source="firearmsighticonwhite.png" Margin="20,20,20,0" HorizontalOptions="Center" VerticalOptions="Center"/>

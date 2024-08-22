@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SniperLog.Pages.Manufacturers.FirearmManufacturers.FirearmManuPage"
+             x:Class="SniperLog.Pages.Manufacturers.FirearmManufacturers.SightManuPage"
              xmlns:model="clr-namespace:SniperLog.Models"
-             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Manufacturers.FirearmManufacturers"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Manufacturers.SightManufacturers"
              xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
-             x:DataType="viewmodel:FirearmManuPageViewModel"
+             x:DataType="viewmodel:SightManuPageViewModel"
              Title="{Binding PageTitle}">
     
     <Shell.TitleView>
@@ -42,8 +42,8 @@
                             </VerticalStackLayout>
 
                             <Grid Grid.Column="1" Padding="0,0,15,0" HeightRequest="110">
-                                <ImageButton Source="settingsicon.png" VerticalOptions="Start" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmManuPageViewModel}}, Path=EditManufacturerCommand}" CommandParameter="{Binding .}"/>
-                                <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmManuPageViewModel}}, Path=DeleteManufacturerCommand}" CommandParameter="{Binding .}"/>
+                                <ImageButton Source="settingsicon.png" VerticalOptions="Start" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightManuPageViewModel}}, Path=EditManufacturerCommand}" CommandParameter="{Binding .}"/>
+                                <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightManuPageViewModel}}, Path=DeleteManufacturerCommand}" CommandParameter="{Binding .}"/>
                             </Grid>
                         </Grid>
                     </Frame>

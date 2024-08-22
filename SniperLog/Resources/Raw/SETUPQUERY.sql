@@ -75,6 +75,12 @@ CREATE TABLE IF NOT EXISTS SightClickType(
     ClickTypeName VARCHAR(10) NOT NULL UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS SightReticle(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Name VARCHAR(50) NOT NULL UNIQUE,
+    BackgroundImgPath VARCHAR(255)
+);
+
 -- Firearm setting
 CREATE TABLE IF NOT EXISTS FirearmSightSetting(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -91,11 +97,13 @@ CREATE TABLE IF NOT EXISTS FirearmSight(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ClickType_ID INT NOT NULL,
     Manufacturer_ID INT NOT NULL,
+    SightReticle_ID INT NOT NULL,
     Name VARCHAR(30) NOT NULL,
     OneClickValue DECIMAL(10,2) NOT NULL,
     
     FOREIGN KEY (ClickType_ID) REFERENCES SightClickType(ID),
-    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID)
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID),
+    FOREIGN KEY (SightReticle_ID) REFERENCES SightReticle(ID)
 );
 
 -- Triggers

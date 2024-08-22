@@ -3,7 +3,7 @@ using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class Manufacturer : IDataAccessObject, ICsvProcessable, IEquatable<Manufacturer?>
+    public partial class Manufacturer : ObservableObject, IDataAccessObject, ICsvProcessable, IEquatable<Manufacturer?>
     {
         #region Properties
 
@@ -16,7 +16,8 @@ namespace SniperLog.Models
         [ForeignKey(typeof(ManufacturerType), nameof(ManufacturerType.ID))]
         public int ManufacturerType_ID { get; set; }
 
-        public string Name { get; set; }
+        [ObservableProperty]
+        private string _name;
 
         public static string CsvHeader => "Name,CountryCode";
 
@@ -96,7 +97,12 @@ namespace SniperLog.Models
 
         #endregion
 
-        #region Equals
+        #region Object methods
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public override bool Equals(object? obj)
         {
