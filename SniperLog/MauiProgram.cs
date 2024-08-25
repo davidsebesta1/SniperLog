@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using SniperLog.Config;
-using SniperLog.Extensions.CustomXamlComponents;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
 using SniperLog.Pages.Manufacturers;
@@ -12,6 +11,7 @@ using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
 using SniperLog.Pages.Sights;
+using SniperLog.Pages.Sights.ClickSettings;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
@@ -21,6 +21,7 @@ using SniperLog.ViewModels.Manufacturers.SightManufacturers;
 using SniperLog.ViewModels.Other;
 using SniperLog.ViewModels.Reticles;
 using SniperLog.ViewModels.Sights;
+using SniperLog.ViewModels.Sights.ClickSettings;
 using SniperLog.ViewModels.SRanges;
 using SniperLog.ViewModels.SRanges.Subranges;
 using System.Net;
@@ -95,9 +96,13 @@ namespace SniperLog
             builder.Services.AddTransient<CustomPickerPopupViewModel>();
 
             builder.Services.AddSingleton<SightsPageViewModel>();
-            builder.Services.AddSingleton<SightReticleViewModel>();
+            builder.Services.AddSingleton<SightAddOrEditPageViewModel>();
 
             builder.Services.AddSingleton<ReticlesPageViewModel>();
+            builder.Services.AddSingleton<ReticleAddOrEditPageViewModel>();
+
+            builder.Services.AddSingleton<SightClickSettingsPage>();
+            builder.Services.AddSingleton<SightClickSettingAddOrEditPage>();
 
             #endregion
 
@@ -122,6 +127,10 @@ namespace SniperLog
             builder.Services.AddSingleton<SightAddOrEditPage>();
 
             builder.Services.AddSingleton<ReticlesPage>();
+            builder.Services.AddSingleton<ReticleAddOrEditPage>();
+
+            builder.Services.AddSingleton<SightClickSettingsPageViewModel>();
+            builder.Services.AddSingleton<SightClickSettingAddOrEditPageViewModel>();
 
             #endregion
 

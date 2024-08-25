@@ -90,6 +90,7 @@
 		<MauiImage Include="Resources\Images\ManufacturersbackgroundIcons\*" />
 		<MauiImage Include="Resources\Images\SightsBackgroundIcons\*" />
 
+		<MauiImage Include="Resources\Images\SightClickSettingsIcons\*" />
 		
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -147,7 +148,6 @@
 	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\firearmiconwhite.svg" />
 	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\firearmsighticonwhite.svg" />
 	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\manufacturerbackground.png" />
-	  <None Remove="Resources\Images\olesko.png" />
 	  <None Remove="Resources\Images\searchicon.svg" />
 	  <None Remove="Resources\Images\stariconfav.svg" />
 	  <None Remove="Resources\Images\stariconnormal.svg" />
@@ -236,6 +236,9 @@
 	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Reticles\ReticleAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Reticles\ReticlesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -249,6 +252,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ShootingRanges\Subranges\SubRangesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Sights\ClickSettings\SightClickSettingAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Sights\ClickSettings\SightClickSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Sights\SightAddOrEditPage.xaml">

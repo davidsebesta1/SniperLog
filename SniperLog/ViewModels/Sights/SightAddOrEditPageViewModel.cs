@@ -5,7 +5,7 @@ using System.Globalization;
 namespace SniperLog.ViewModels.Sights
 {
     [QueryProperty(nameof(Sight), "Sight")]
-    public partial class SightReticleViewModel : BaseViewModel
+    public partial class SightAddOrEditPageViewModel : BaseViewModel
     {
         public string HeadlineText => Sight != null ? "Edit firearm sight" : "New firearm sight";
         public string CreateOrEditButtonText => Sight != null ? "Edit" : "Create";
@@ -45,7 +45,7 @@ namespace SniperLog.ViewModels.Sights
         private readonly DataCacherService<SightReticle> _sightReticleService;
         private readonly ValidatorService _validatorService;
 
-        public SightReticleViewModel(DataCacherService<Manufacturer> manufacturerService, DataCacherService<SightClickType> sightClickService, DataCacherService<SightReticle> sightReticlesService, ValidatorService validatorService)
+        public SightAddOrEditPageViewModel(DataCacherService<Manufacturer> manufacturerService, DataCacherService<SightClickType> sightClickService, DataCacherService<SightReticle> sightReticlesService, ValidatorService validatorService)
         {
             _manufacturerService = manufacturerService;
             _sightClickService = sightClickService;

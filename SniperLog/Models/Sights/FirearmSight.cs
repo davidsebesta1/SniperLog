@@ -17,10 +17,12 @@ namespace SniperLog.Models
         private int _clickType_ID;
 
         [ForeignKey(typeof(Manufacturer), nameof(Manufacturer.ID))]
-        public int Manufacturer_ID { get; set; }
+        [ObservableProperty]
+        private int _manufacturer_ID;
 
         [ForeignKey(typeof(SightReticle), nameof(SightReticle.ID))]
-        public int SightReticle_ID { get; set; }
+        [ObservableProperty]
+        private int _sightReticle_ID;  
 
         [ObservableProperty]
         private string _name;

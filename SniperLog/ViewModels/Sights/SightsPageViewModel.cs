@@ -26,7 +26,7 @@ namespace SniperLog.ViewModels.Sights
         [RelayCommand]
         private async Task SearchSights(string text)
         {
-            FirearmSights = await _sightCacher.GetAllBy(n => string.IsNullOrEmpty(text) || n.Name.Contains(text));
+            FirearmSights = await _sightCacher.GetAllBy(n => string.IsNullOrEmpty(text) || n.Name.Contains(text, StringComparison.InvariantCultureIgnoreCase));
         }
 
         [RelayCommand]
@@ -51,6 +51,12 @@ namespace SniperLog.ViewModels.Sights
                 await sight.DeleteAsync();
                 FirearmSights.Remove(sight);
             }
+        }
+
+        [RelayCommand]
+        private async Task GoToZeroSettings(FirearmSight sight)
+        {
+            await Shell.Current.GoToAsync("SightClickSettings", new Dictionary<string, object>(1) { { "Sight", sight } });
         }
     }
 }

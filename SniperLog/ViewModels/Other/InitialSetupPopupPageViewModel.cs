@@ -72,6 +72,14 @@ namespace SniperLog.ViewModels.Other
 
             await sight1.SaveAsync();
             await sight2.SaveAsync();
+
+            FirearmSightSetting set1 = new FirearmSightSetting(sight1.ID, 100, 0, -1);
+            FirearmSightSetting set2 = new FirearmSightSetting(sight1.ID, 150, 3, -1);
+            FirearmSightSetting set3 = new FirearmSightSetting(sight1.ID, 200, 8, 0);
+
+            await set1.SaveAsync();
+            await set2.SaveAsync();
+            await set3.SaveAsync();
         }
 
         [RelayCommand]

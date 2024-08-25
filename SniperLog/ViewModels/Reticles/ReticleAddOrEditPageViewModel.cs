@@ -1,0 +1,72 @@
+﻿using CommunityToolkit.Mvvm.Input;
+
+namespace SniperLog.ViewModels.Reticles
+{
+    [QueryProperty(nameof(Reticle), "Reticle")]
+    public partial class ReticleAddOrEditPageViewModel : BaseViewModel
+    {
+        public string HeadlineText => Reticle != null ? "Edit reticle" : "New reticle";
+        public string CreateOrEditButtonText => Reticle != null ? "Edit" : "Create";
+
+        private readonly ValidatorService _validatorService;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HeadlineText))]
+        [NotifyPropertyChangedFor(nameof(CreateOrEditButtonText))]
+        private SightReticle _reticle;
+
+        [ObservableProperty]
+        private string _name;
+
+        [ObservableProperty]
+        private string _tmpImgPath;
+
+        public ReticleAddOrEditPageViewModel(ValidatorService validatorService)
+        {
+            _validatorService = validatorService;
+        }
+
+        partial void OnReticleChanged(SightReticle value)
+        {
+            Name = Reticle?.Name ?? string.Empty;
+            TmpImgPath = Reticle?.BackgroundImgFullPath ?? string.Empty;
+        }
+
+        [RelayCommand]
+        private async Task CancelCreation()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
+
+        [RelayCommand]
+        private async Task CreateReticle()
+        {
+            _validatorService.RevalidateAll();
+            if (!_validatorService.AllValid)
+            {
+                await Shell.Current.DisplayAlert("Validation", "Please fix any invalid fields and try again", "Okay");
+                return;
+            }
+
+            if (Reticle == null)
+            {
+                Reticle = new SightReticle(Name, string.Empty);
+            }
+            else
+            {
+                Reticle.Name = Name;
+            }
+
+            if (TmpImgPath != Reticle.BackgroundImgFullPath)
+            {
+                using (FileStream reader = File.OpenRead(TmpImgPath))
+                {
+                    await Reticle.SaveImageAsync(reader);
+                }
+            }
+
+            await Reticle.SaveAsync();
+            await Shell.Current.GoToAsync("..");
+        }
+    }
+}

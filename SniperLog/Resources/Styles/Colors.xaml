@@ -17,6 +17,7 @@
 
     <Color x:Key="Text">White</Color>
     <Color x:Key="TextGrey">#6D758C</Color>
+    <Color x:Key="TextLightGrey">#97A2C1</Color>
     <Color x:Key="PanelBackgroundLight">#3E4556</Color>
     <Color x:Key="PanelBackgroundNormal">#3E4556</Color>
     <Color x:Key="PanelBackgroundDark">#373C4B</Color>

@@ -1,12 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
-using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class FirearmSightSetting : IDataAccessObject, ICsvProcessable, IEquatable<FirearmSightSetting?>
+    public partial class FirearmSightSetting : ObservableObject, IDataAccessObject, ICsvProcessable, IEquatable<FirearmSightSetting?>
     {
-
         #region Properties
 
         [PrimaryKey]
@@ -15,15 +13,65 @@ namespace SniperLog.Models
         [ForeignKey(typeof(FirearmSight), nameof(FirearmSight.ID))]
         public int FirearmSight_ID { get; set; }
 
-        public int Distance { get; set; }
+        [ObservableProperty]
+        private int _distance;
 
-        public int ElevationValue { get; set; }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DeltaElevation))]
+        [NotifyPropertyChangedFor(nameof(DeltaWindage))]
+        private int _elevationValue;
 
-        public int WindageValue { get; set; }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DeltaElevation))]
+        [NotifyPropertyChangedFor(nameof(DeltaWindage))]
+        private int _windageValue;
 
-        public string DistanceAsText => Distance + "m";
-        public string ElevationAsText => ElevationValue + " up";
-        public string WindageAsText => WindageValue + " right";
+        [ObservableProperty]
+        [DatabaseIgnore]
+        [NotifyPropertyChangedFor(nameof(DeltaElevation))]
+        [NotifyPropertyChangedFor(nameof(DeltaWindage))]
+        private FirearmSightSetting? _previousSetting = null;
+
+        [DatabaseIgnore]
+        public string? DeltaElevation
+        {
+            get
+            {
+                if (PreviousSetting == null)
+                {
+                    return null;
+                }
+
+                int delta = ElevationValue - PreviousSetting.ElevationValue;
+                if (delta == 0)
+                {
+                    return null;
+                }
+
+                return delta.ToString("+0;-#");
+            }
+        }
+
+        [DatabaseIgnore]
+        public string? DeltaWindage
+        {
+            get
+            {
+                if (PreviousSetting == null)
+                {
+                    return null;
+                }
+
+                int delta = WindageValue - PreviousSetting.WindageValue;
+                if (delta == 0)
+                {
+                    return null;
+                }
+
+                return delta.ToString("+0;-#");
+
+            }
+        }
 
         public static string CsvHeader => "FirearmSightName,Distance,Elevation,Windage";
 

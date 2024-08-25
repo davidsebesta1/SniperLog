@@ -8,25 +8,27 @@ namespace SniperLog.ViewModels.Reticles
         [ObservableProperty]
         private ObservableCollection<SightReticle> _sightReticles;
 
-        private readonly DataCacherService<SightReticle> _sightCacher;
+        private readonly DataCacherService<SightReticle> _reticleCacher;
+        private readonly DataCacherService<FirearmSight> _sightsCacher;
 
-        public ReticlesPageViewModel(DataCacherService<SightReticle> sightCacher)
+        public ReticlesPageViewModel(DataCacherService<SightReticle> sightCacher, DataCacherService<FirearmSight> sights)
         {
             PageTitle = "Reticles";
 
-            _sightCacher = sightCacher;
+            _reticleCacher = sightCacher;
+            _sightsCacher = sights;
         }
 
         [RelayCommand]
         private async Task RefreshReticles()
         {
-            SightReticles = await _sightCacher.GetAll();
+            SightReticles = await _reticleCacher.GetAll();
         }
 
         [RelayCommand]
         private async Task SearchReticles(string text)
         {
-            SightReticles = await _sightCacher.GetAllBy(n => string.IsNullOrEmpty(text) || n.Name.Contains(text));
+            SightReticles = await _reticleCacher.GetAllBy(n => string.IsNullOrEmpty(text) || n.Name.Contains(text, StringComparison.InvariantCultureIgnoreCase));
         }
 
         [RelayCommand]
@@ -44,10 +46,18 @@ namespace SniperLog.ViewModels.Reticles
         [RelayCommand]
         private async Task DeleteReticle(SightReticle reticle)
         {
-            bool res = await Shell.Current.DisplayAlert("Confirmation", $"Are you sure you want to delete {reticle.Name}? This action cannot be undone", "Yes", "No");
+            ObservableCollection<FirearmSight> referencedSights = await _sightsCacher.GetAllBy(n => n.SightReticle_ID == reticle.ID);
+            int referencesAmount = referencedSights.Count;
+
+            bool res = await Shell.Current.DisplayAlert("Confirmation", $"Are you sure you want to delete {reticle.Name}?{(referencesAmount > 0 ? $"This reticle is referenced on {referencesAmount} sights. " : string.Empty)}This action cannot be undone", "Yes", "No");
 
             if (res)
             {
+                foreach (FirearmSight sight in referencedSights)
+                {
+                    sight.SightReticle_ID = -1;
+                }
+
                 await reticle.DeleteAsync();
                 SightReticles.Remove(reticle);
             }

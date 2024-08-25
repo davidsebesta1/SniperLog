@@ -3,7 +3,7 @@ using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class SightClickType : IDataAccessObject, ICsvProcessable, IEquatable<SightClickType?>
+    public partial class SightClickType : ObservableObject, IDataAccessObject, ICsvProcessable, IEquatable<SightClickType?>
     {
         #region Properties
 

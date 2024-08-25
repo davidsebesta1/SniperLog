@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Sights.ClickSettings.SightClickSettingsPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Sights.ClickSettings"
+             x:DataType="viewmodel:SightClickSettingsPageViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+
+    <Grid RowDefinitions="60,55,*" Padding="15">
+        <HorizontalStackLayout Grid.Row="0">
+            <ImageButton Source="arrowback.png" HeightRequest="30" Command="{Binding ReturnBackCommand}"/>
+            <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0" VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="1">
+            <Label Text="Sight Click Settings" FontSize="24" VerticalOptions="End"/>
+        </Grid>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding SightClickSettings}" Margin="0,10,0,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:FirearmSightSetting">
+                    <Frame HeightRequest="120" CornerRadius="5" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                        <Grid ColumnDefinitions="*,40">
+                            <Image Source="sightclicksettingbackground.png" HorizontalOptions="End" Grid.ColumnSpan="2" Margin="0,15,15,0"/>
+                            <VerticalStackLayout Grid.Column="0" Padding="15">
+                                <Label FontSize="28" Text="{Binding Distance, StringFormat='{0}m'}"/>
+
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label FontSize="18" Text="{Binding ElevationValue, StringFormat='Up: {0}'}"/>
+                                    <Label FontSize="18" Text="{Binding DeltaElevation, StringFormat='({0} rel)', TargetNullValue=''}" TextColor="{StaticResource TextLightGrey}"/>
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label FontSize="18" Text="{Binding WindageValue, StringFormat='Right: {0}'}"/>
+                                    <Label FontSize="18" Text="{Binding DeltaWindage, StringFormat='({0} rel)', TargetNullValue=''}" TextColor="{StaticResource TextLightGrey}"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <Grid Grid.Column="1" Padding="0,0,15,0" HeightRequest="110">
+                                <ImageButton Source="settingsicon.png" VerticalOptions="Start" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightClickSettingsPageViewModel}}, Path=EditClickSettingsCommand}" CommandParameter="{Binding .}"/>
+                                <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightClickSettingsPageViewModel}}, Path=DeleteClickSettingsCommand}" CommandParameter="{Binding .}"/>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="2" HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" HorizontalOptions="End" VerticalOptions="End" Command="{Binding CreateNewClickSettingsCommand}"/>
+    </Grid>
+</ContentPage>

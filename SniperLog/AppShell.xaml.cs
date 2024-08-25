@@ -4,6 +4,7 @@ using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
 using SniperLog.Pages.Sights;
+using SniperLog.Pages.Sights.ClickSettings;
 
 namespace SniperLog
 {
@@ -27,6 +28,10 @@ namespace SniperLog
             Routing.RegisterRoute("Sights/AddOrEdit", typeof(SightAddOrEditPage));
 
             Routing.RegisterRoute("Reticles", typeof(ReticlesPage));
+            Routing.RegisterRoute("Reticles/AddOrEdit", typeof(ReticleAddOrEditPage));
+
+            Routing.RegisterRoute("SightClickSettings", typeof(SightClickSettingsPage));
+            Routing.RegisterRoute("SightClickSettings/AddOrEdit", typeof(SightClickSettingAddOrEditPage));
         }
     }
 }

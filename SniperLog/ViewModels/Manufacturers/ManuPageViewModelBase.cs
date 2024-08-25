@@ -33,7 +33,7 @@ namespace SniperLog.ViewModels.Manufacturers
         protected async Task SearchManufacturers(string text)
         {
             int id = (await _manTypeCacher.GetFirstBy(n => n.Name == ManufacturerTypeNameInternal)).ID;
-            Manufacturers = await _manCacher.GetAllBy(n => n.ManufacturerType_ID == id && (string.IsNullOrEmpty(text) || n.Name.Contains(text)));
+            Manufacturers = await _manCacher.GetAllBy(n => n.ManufacturerType_ID == id && (string.IsNullOrEmpty(text) || n.Name.Contains(text, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         [RelayCommand]

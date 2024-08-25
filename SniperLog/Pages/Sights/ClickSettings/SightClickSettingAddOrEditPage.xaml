@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Sights.ClickSettings.SightClickSettingAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Sights.ClickSettings"
+             x:DataType="viewmodel:SightClickSettingAddOrEditPageViewModel"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomTextEntry x:Name="DistanceEntry" EntryTitle="Distance" EntryHeight="1" KeyboardType="Text" ErrorText="Distance must be number greater than 0" TextValue="{Binding DistanceString, Mode=TwoWay}" PlaceholderText="Distance..."/>
+            <custom:CustomTextEntry x:Name="ElevationEntry" EntryTitle="Elevation Clicks" EntryHeight="1" KeyboardType="Text" ErrorText="Elevation must be a whole number" TextValue="{Binding UpClickString, Mode=TwoWay}" PlaceholderText="Elevation..."/>
+            <custom:CustomTextEntry x:Name="WindageEntry" EntryTitle="Windage Clicks" EntryHeight="1" KeyboardType="Text" ErrorText="Windage must be a whole number" TextValue="{Binding WindClicksString, Mode=TwoWay}" PlaceholderText="Windage..."/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateSightSettingCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

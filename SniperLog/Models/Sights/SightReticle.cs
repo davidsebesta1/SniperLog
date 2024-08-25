@@ -8,7 +8,7 @@ namespace SniperLog.Models
     {
         #region Constants
 
-        public const string BackgroundImageFileName = "backgroundimage.png";
+        public const string BackgroundImageFileName = "backgroundimage";
 
         #endregion
 
@@ -22,6 +22,7 @@ namespace SniperLog.Models
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
+        [NotifyPropertyChangedFor(nameof(ImgStream))]
         private string _backgroundImgPath;
 
         [DatabaseIgnore]
@@ -36,6 +37,15 @@ namespace SniperLog.Models
                 }
 
                 return path;
+            }
+        }
+
+        [DatabaseIgnore]
+        public ImageSource ImgStream
+        {
+            get
+            {
+                return ImageSource.FromStream(() => File.OpenRead(BackgroundImgFullPath));
             }
         }
 
@@ -68,7 +78,7 @@ namespace SniperLog.Models
         {
             try
             {
-                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRange", Name));
+                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "Reticles", Name));
                 if (Directory.Exists(dataPath))
                 {
                     Directory.Delete(dataPath, true);
@@ -113,13 +123,20 @@ namespace SniperLog.Models
         /// <returns></returns>
         public async Task SaveImageAsync(FileStream stream)
         {
-            string localPath = Path.Combine("Data", "FirearmSights", Name);
-            string localFilePath = Path.Combine(localPath, BackgroundImageFileName);
+            if (File.Exists(BackgroundImgFullPath))
+            {
+                File.Delete(BackgroundImgFullPath);
+                BackgroundImgPath = string.Empty;
+            }
+
+            string fileNameFull = BackgroundImageFileName + Path.GetExtension(stream.Name);
+            string localPath = Path.Combine("Data", "Reticles", Name);
+            string localFilePath = Path.Combine(localPath, fileNameFull);
 
             string fullDirPath = AppDataFileHelper.GetPathFromAppData(localPath);
             Directory.CreateDirectory(fullDirPath);
 
-            string fullFilepath = Path.Combine(fullDirPath, BackgroundImageFileName);
+            string fullFilepath = Path.Combine(fullDirPath, fileNameFull);
 
             using (FileStream localFileStream = File.OpenWrite(fullFilepath))
             {
@@ -127,6 +144,8 @@ namespace SniperLog.Models
             }
 
             BackgroundImgPath = localFilePath;
+
+            await SaveAsync();
         }
 
         #endregion

@@ -35,10 +35,10 @@
                     <Frame HeightRequest="140" CornerRadius="5" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
                         <Grid ColumnDefinitions="*,40" RowDefinitions="*,40">
                             <Image Source="sightbackgroundicon.png" HorizontalOptions="End" Grid.ColumnSpan="2" Margin="0,15,0,0"/>
-                            <Grid Grid.Column="0" Padding="15" ColumnDefinitions="50,*">
-                                <Image Grid.Column="0" Source="{Binding ReferencedSightReticle.BackgroundImgFullPath}"/>
+                            <Grid Grid.Column="0" Padding="15" ColumnDefinitions="80,*">
+                                <Image Grid.Column="0" Source="{Binding ReferencedSightReticle.ImgStream}"/>
 
-                                <VerticalStackLayout Grid.Column="1">
+                                <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0">
                                     <Label Text="{Binding Name}" FontSize="28"/>
                                     <Label Text="{Binding ReferencedSightClickType.ClickTypeName}" FontSize="18"/>
                                 </VerticalStackLayout>
@@ -50,10 +50,16 @@
                                 <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightsPageViewModel}}, Path=DeleteSightCommand}" CommandParameter="{Binding .}"/>
                             </Grid>
 
-                            <Grid BackgroundColor="{StaticResource PanelBackgroundLight}" Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="*,50">
-                                <Label Text="Zero sight click settings" VerticalTextAlignment="Center" Margin="15,0,0,0"/>
-                                <Image Grid.Column="1" Source="arrowforward" Margin="10"/>
-                            </Grid>
+                            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" Grid.Row="1" Grid.ColumnSpan="2" Padding="0">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:SightsPageViewModel}}, Path=GoToZeroSettingsCommand}" CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                
+                                <Grid ColumnDefinitions="*,50">
+                                    <Label Text="Zero sight click settings" VerticalTextAlignment="Center" Margin="15,0,0,0"/>
+                                    <Image Grid.Column="1" Source="arrowforward" Margin="10"/>
+                                </Grid>
+                            </Frame>
                         </Grid>
                     </Frame>
                 </DataTemplate>

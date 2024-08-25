@@ -7,7 +7,7 @@ namespace SniperLog.Pages.Sights
     {
         private readonly ValidatorService _validatorService;
 
-        public SightAddOrEditPage(SightReticleViewModel vm, ValidatorService validatorService)
+        public SightAddOrEditPage(SightAddOrEditPageViewModel vm, ValidatorService validatorService)
         {
             InitializeComponent();
             BindingContext = vm;
@@ -24,9 +24,9 @@ namespace SniperLog.Pages.Sights
             _validatorService.TryAddValidation(OneClickValEntry, n => !string.IsNullOrEmpty((string)n) && double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d);
             _validatorService.TryAddValidation(ManuEntry, n => n != null);
 
-            await (BindingContext as SightReticleViewModel).RefreshManufacturersCommand.ExecuteAsync(null);
-            await (BindingContext as SightReticleViewModel).RefreshClickTypesCommand.ExecuteAsync(null);
-            await (BindingContext as SightReticleViewModel).RefreshSightReticlesCommand.ExecuteAsync(null);
+            await (BindingContext as SightAddOrEditPageViewModel).RefreshManufacturersCommand.ExecuteAsync(null);
+            await (BindingContext as SightAddOrEditPageViewModel).RefreshClickTypesCommand.ExecuteAsync(null);
+            await (BindingContext as SightAddOrEditPageViewModel).RefreshSightReticlesCommand.ExecuteAsync(null);
         }
 
         protected override void OnDisappearing()
