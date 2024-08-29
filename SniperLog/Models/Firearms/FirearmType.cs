@@ -87,7 +87,12 @@ namespace SniperLog.Models
 
         #endregion
 
-        #region Equals
+        #region Object
+
+        public override string ToString()
+        {
+            return TypeName;
+        }
 
         public override bool Equals(object? obj)
         {

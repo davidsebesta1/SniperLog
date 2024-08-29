@@ -4,6 +4,7 @@ using Mopups.Hosting;
 using SniperLog.Config;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
+using SniperLog.Pages.Firearms;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
@@ -15,6 +16,7 @@ using SniperLog.Pages.Sights.ClickSettings;
 using SniperLog.Services.ConnectionToServer;
 using SniperLog.Services.Serialization;
 using SniperLog.ViewModels;
+using SniperLog.ViewModels.Firearms;
 using SniperLog.ViewModels.Manufacturers;
 using SniperLog.ViewModels.Manufacturers.FirearmManufacturers;
 using SniperLog.ViewModels.Manufacturers.SightManufacturers;
@@ -104,6 +106,9 @@ namespace SniperLog
             builder.Services.AddSingleton<SightClickSettingsPage>();
             builder.Services.AddSingleton<SightClickSettingAddOrEditPage>();
 
+            builder.Services.AddSingleton<FirearmsPage>();
+            builder.Services.AddSingleton<FirearmAddOrEditPage>();
+
             #endregion
 
             #region Pages
@@ -131,6 +136,9 @@ namespace SniperLog
 
             builder.Services.AddSingleton<SightClickSettingsPageViewModel>();
             builder.Services.AddSingleton<SightClickSettingAddOrEditPageViewModel>();
+
+            builder.Services.AddSingleton<FirearmsPageViewModel>();
+            builder.Services.AddSingleton<FirearmAddOrEditPageViewModel>();
 
             #endregion
 

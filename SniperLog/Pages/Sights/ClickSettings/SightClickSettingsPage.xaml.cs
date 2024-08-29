@@ -10,9 +10,9 @@ namespace SniperLog.Pages.Sights.ClickSettings
             BindingContext = vm;
         }
 
-        protected override async void OnDisappearing()
+        protected override async void OnAppearing()
         {
-            base.OnDisappearing();
+            base.OnAppearing();
 
             await (BindingContext as SightClickSettingsPageViewModel).RefreshClickSettingsCommand.ExecuteAsync(null);
         }

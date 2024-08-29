@@ -39,13 +39,27 @@ namespace SniperLog.Models
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(NotesPathFull))]
+        [NotifyPropertyChangedFor(nameof(NotesText))]
         private string _notesPath;
 
         [DatabaseIgnore]
-        public string NotesPathFull => AppDataFileHelper.GetPathFromAppData(NotesPath);
+        public string NotesPathFull
+        {
+            get
+            {
+                return AppDataFileHelper.GetPathFromAppData(NotesPath);
+            }
+        }
 
         [DatabaseIgnore]
-        public string NotesText => string.IsNullOrEmpty(NotesPath) ? string.Empty : File.ReadAllText(NotesPathFull);
+        public string NotesText
+        {
+            get
+            {
+                return string.IsNullOrEmpty(NotesPath) ? string.Empty : File.ReadAllText(NotesPathFull);
+            }
+
+        }
 
         #endregion
 

@@ -114,6 +114,15 @@ namespace SniperLog.Models
         }
 
         [DatabaseIgnore]
+        public ImageSource ImgStream
+        {
+            get
+            {
+                return ImageSource.FromStream(() => File.OpenRead(BackgroundImgFullPath));
+            }
+        }
+
+        [DatabaseIgnore]
         public int? MaxRange => ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().MaxBy(n => n.RangeInMeters).RangeInMeters;
 
         [DatabaseIgnore]

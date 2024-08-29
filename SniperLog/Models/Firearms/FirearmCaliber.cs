@@ -83,7 +83,12 @@ namespace SniperLog.Models
 
         #endregion
 
-        #region Equals
+        #region Object
+
+        public override string ToString()
+        {
+            return Caliber;
+        }
 
         public override bool Equals(object? obj)
         {

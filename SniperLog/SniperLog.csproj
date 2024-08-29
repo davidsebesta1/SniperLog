@@ -91,6 +91,8 @@
 		<MauiImage Include="Resources\Images\SightsBackgroundIcons\*" />
 
 		<MauiImage Include="Resources\Images\SightClickSettingsIcons\*" />
+
+		<MauiImage Include="Resources\Images\FirearmIcons\*" />
 		
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -216,6 +218,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\FirearmAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\FirearmsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\FirearmManuPage.xaml">

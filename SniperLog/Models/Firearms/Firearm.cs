@@ -16,7 +16,8 @@ namespace SniperLog.Models
         private int _firearmType_ID;
 
         [ForeignKey(typeof(Manufacturer), nameof(Manufacturer.ID))]
-        public int? Manufacturer_ID { get; set; }
+        [ObservableProperty]
+        public int? _manufacturer_ID;
 
         [ForeignKey(typeof(FirearmCaliber), nameof(FirearmCaliber.ID))]
         [ObservableProperty]
@@ -39,7 +40,29 @@ namespace SniperLog.Models
 
         public bool? HandednessForLeft { get; set; }
 
-        public string? NotesRelativePathFromAppData { get; set; }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(NotesPathFull))]
+        [NotifyPropertyChangedFor(nameof(NotesText))]
+        public string? _notesRelativePathFromAppData;
+
+        [DatabaseIgnore]
+        public string NotesPathFull
+        {
+
+            get
+            {
+                return AppDataFileHelper.GetPathFromAppData(NotesRelativePathFromAppData);
+            }
+        }
+
+        [DatabaseIgnore]
+        public string NotesText
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(NotesRelativePathFromAppData) || !File.Exists(NotesPathFull)) ? string.Empty : File.ReadAllText(NotesPathFull);
+            }
+        }
 
         #endregion
 
@@ -100,6 +123,7 @@ namespace SniperLog.Models
             finally
             {
                 ServicesHelper.GetService<DataCacherService<Firearm>>().Remove(this);
+                DeleteNotes();
             }
         }
 
@@ -107,17 +131,30 @@ namespace SniperLog.Models
 
         #region Other
 
-        public async Task SaveNotes(string newNotes)
+        public async Task SaveNotesAsync(string newNotes)
         {
-            string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "Firearms", $"Firearm{ID}", $"notes.txt"));
-
-            if (!Directory.Exists(Path.GetDirectoryName(dataPath)))
+            if (File.Exists(NotesPathFull))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(dataPath));
+                File.Delete(NotesPathFull);
+                NotesRelativePathFromAppData = string.Empty;
             }
-            NotesRelativePathFromAppData = dataPath;
-            await File.WriteAllTextAsync(dataPath, newNotes);
+
+            NotesRelativePathFromAppData = Path.Combine("Data", "Firearms", Name, "notes.txt");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
+
+            await File.WriteAllTextAsync(NotesPathFull, newNotes);
             await SaveAsync();
+        }
+
+        public void DeleteNotes()
+        {
+            if (string.IsNullOrEmpty(NotesRelativePathFromAppData) || !File.Exists(NotesPathFull))
+            {
+                return;
+            }
+
+            File.Delete(NotesPathFull);
         }
 
 

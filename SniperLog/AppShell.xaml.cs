@@ -1,4 +1,5 @@
-﻿using SniperLog.Pages.Manufacturers;
+﻿using SniperLog.Pages.Firearms;
+using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
@@ -32,6 +33,9 @@ namespace SniperLog
 
             Routing.RegisterRoute("SightClickSettings", typeof(SightClickSettingsPage));
             Routing.RegisterRoute("SightClickSettings/AddOrEdit", typeof(SightClickSettingAddOrEditPage));
+
+            Routing.RegisterRoute("Firearms", typeof(FirearmsPage));
+            Routing.RegisterRoute("Firearms/AddOrEdit", typeof(FirearmAddOrEditPage));
         }
     }
 }

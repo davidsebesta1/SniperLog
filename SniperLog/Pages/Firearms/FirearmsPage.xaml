@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Firearms.FirearmsPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Firearms"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:FirearmsPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+
+    <Grid RowDefinitions="65,55,*" Padding="15">
+        <HorizontalStackLayout Grid.Row="0">
+            <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" VerticalTextAlignment="Center"/>
+        </HorizontalStackLayout>
+
+        <custom:CustomSearchBar Grid.Row="1" PlaceholderText="Firearm..." EnterCommand="{Binding SearchCommand}"/>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Firearms}" Margin="0,10,0,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Firearm">
+                    <Frame HeightRequest="140" CornerRadius="10" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                        <Grid ColumnDefinitions="*,40" RowDefinitions="*,40" Padding="0" Margin="0">
+                            <Image Source="firearmbackgroundicon.png" HorizontalOptions="End" Grid.ColumnSpan="2" Margin="0,10,0,0"/>
+
+                            <VerticalStackLayout Grid.Column="0" Margin="15,0,0,0" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" FontSize="28"/>
+                                <Label Text="{Binding ReferencedFirearmType.TypeName}" FontSize="14"/>
+                                <Label Text="{Binding ReferencedFirearmCaliber.Caliber}" FontSize="14"/>
+                            </VerticalStackLayout>
+
+                            <Grid Grid.Column="1" Padding="0,0,15,0" HeightRequest="110">
+                                <ImageButton Source="settingsicon.png" VerticalOptions="Start" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmsPageViewModel}}, Path=EditCommand}" CommandParameter="{Binding .}"/>
+                                <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmsPageViewModel}}, Path=DeleteCommand}" CommandParameter="{Binding .}"/>
+                            </Grid>
+
+                            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" Grid.Row="1" Grid.ColumnSpan="2" Padding="0" CornerRadius="0">
+                                <Label Text="{Binding NotesText}" VerticalTextAlignment="Center" Margin="15,0,0,0"/> 
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="2" HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" HorizontalOptions="End" VerticalOptions="End" Command="{Binding CreateNewCommand}"/>
+    </Grid>
+</ContentPage>
