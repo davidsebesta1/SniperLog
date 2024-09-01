@@ -21,9 +21,9 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="DistanceEntry" EntryTitle="Distance" EntryHeight="1" KeyboardType="Text" ErrorText="Distance must be number greater than 0" TextValue="{Binding DistanceString, Mode=TwoWay}" PlaceholderText="Distance..."/>
-            <custom:CustomTextEntry x:Name="ElevationEntry" EntryTitle="Elevation Clicks" EntryHeight="1" KeyboardType="Text" ErrorText="Elevation must be a whole number" TextValue="{Binding UpClickString, Mode=TwoWay}" PlaceholderText="Elevation..."/>
-            <custom:CustomTextEntry x:Name="WindageEntry" EntryTitle="Windage Clicks" EntryHeight="1" KeyboardType="Text" ErrorText="Windage must be a whole number" TextValue="{Binding WindClicksString, Mode=TwoWay}" PlaceholderText="Windage..."/>
+            <custom:CustomTextEntry x:Name="DistanceEntry" EntryTitle="Distance" EntryHeight="1" ErrorText="Distance must be number greater than 0" TextValue="{Binding DistanceString, Mode=TwoWay}" PlaceholderText="Distance..."/>
+            <custom:CustomTextEntry x:Name="ElevationEntry" EntryTitle="Elevation Clicks" EntryHeight="1" ErrorText="Elevation must be a whole number" TextValue="{Binding UpClickString, Mode=TwoWay}" PlaceholderText="Elevation..."/>
+            <custom:CustomTextEntry x:Name="WindageEntry" EntryTitle="Windage Clicks" EntryHeight="1" ErrorText="Windage must be a whole number" TextValue="{Binding WindClicksString, Mode=TwoWay}" PlaceholderText="Windage..."/>
 
             <Grid ColumnDefinitions="150,*,150">
                 <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>

@@ -22,7 +22,7 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(SightReticle), nameof(SightReticle.ID))]
         [ObservableProperty]
-        private int _sightReticle_ID;  
+        private int _sightReticle_ID;
 
         [ObservableProperty]
         private string _name;
@@ -90,7 +90,12 @@ namespace SniperLog.Models
         }
         #endregion
 
-        #region Equals
+        #region Object
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public override bool Equals(object? obj)
         {
@@ -99,8 +104,7 @@ namespace SniperLog.Models
 
         public bool Equals(FirearmSight? other)
         {
-            return other is not null &&
-                   ID == other.ID;
+            return other is not null && ID == other.ID;
         }
 
         public override int GetHashCode()

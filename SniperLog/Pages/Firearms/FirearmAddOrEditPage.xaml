@@ -21,18 +21,19 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
-            <custom:CustomTextEntry x:Name="ModelEntry" EntryTitle="Model" IsMandatory="False" EntryHeight="1" KeyboardType="Text" ErrorText="Model must not be empty" TextValue="{Binding Model, Mode=TwoWay}" PlaceholderText="Model..."/>
-            <custom:CustomTextEntry x:Name="SerialEntry" EntryTitle="Serial Number" IsMandatory="False" EntryHeight="1" KeyboardType="Text" ErrorText="Serial number must not be empty" TextValue="{Binding SerialNumber, Mode=TwoWay}" PlaceholderText="Serial number..."/>
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
+            <custom:CustomTextEntry x:Name="ModelEntry" EntryTitle="Model" IsMandatory="False" EntryHeight="1" ErrorText="Model must not be empty" TextValue="{Binding Model, Mode=TwoWay}" PlaceholderText="Model..."/>
+            <custom:CustomTextEntry x:Name="SerialEntry" EntryTitle="Serial Number" IsMandatory="False" EntryHeight="1" ErrorText="Serial number must not be empty" TextValue="{Binding SerialNumber, Mode=TwoWay}" PlaceholderText="Serial number..."/>
 
             <custom:CustomPickerEntry x:Name="FirearmTypeEntry" EntryTitle="Firearm Type" EntryHeight="1" SourceCollection="{Binding FirearmTypes}" SelectedItem="{Binding FirearmType, Mode=TwoWay}" ErrorText="Type must be selected"/>
             <custom:CustomPickerEntry x:Name="ManufacturerEntry" EntryTitle="Manufacturer" EntryHeight="1" SourceCollection="{Binding Manufacturers}" SelectedItem="{Binding Manufacturer, Mode=TwoWay}" ErrorText="Manufacturer must be selected"/>
             <custom:CustomPickerEntry x:Name="CaliberEntry" EntryTitle="Caliber" EntryHeight="1" SourceCollection="{Binding Calibers}" SelectedItem="{Binding FirearmCaliber, Mode=TwoWay}" ErrorText="Caliber must be selected"/>
-
-            <custom:CustomTextEntry x:Name="TotalLenEntry" EntryTitle="Total Length" IsMandatory="False" EntryTitleSubtext="cm" EntryHeight="1" KeyboardType="Text" ErrorText="Length must not be empty" TextValue="{Binding TotalLengthMm, Mode=TwoWay}" PlaceholderText="Total length.."/>
-            <custom:CustomTextEntry x:Name="BarrelLenEntry" EntryTitle="Barrel Length" IsMandatory="False" EntryTitleSubtext="inch" EntryHeight="1" KeyboardType="Text" ErrorText="Length must not be empty" TextValue="{Binding BarrelLengthInch, Mode=TwoWay}" PlaceholderText="Barrel length..."/>
-            <custom:CustomTextEntry x:Name="WeightEntry" EntryTitle="Weight" IsMandatory="False" EntryTitleSubtext="kg" EntryHeight="1" KeyboardType="Text" ErrorText="Weight must not be empty" TextValue="{Binding Weight, Mode=TwoWay}" PlaceholderText="Weight..."/>
-            <custom:CustomTextEntry x:Name="RoTEntry" EntryTitle="Rate of Twist" IsMandatory="False" EntryHeight="1" KeyboardType="Text" ErrorText="Rate must not be empty" TextValue="{Binding RateOfTwist, Mode=TwoWay}" PlaceholderText="Rate of twist..."/>
+            <custom:CustomPickerEntry x:Name="SightEntry" EntryTitle="Sight" EntryHeight="1" SourceCollection="{Binding Sights}" SelectedItem="{Binding FirearmSight, Mode=TwoWay}" ErrorText="Sight must be selected"/>
+            
+            <custom:CustomTextEntry x:Name="TotalLenEntry" EntryTitle="Total Length" IsMandatory="False" EntryTitleSubtext="cm" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding TotalLengthMm, Mode=TwoWay}" PlaceholderText="Total length.."/>
+            <custom:CustomTextEntry x:Name="BarrelLenEntry" EntryTitle="Barrel Length" IsMandatory="False" EntryTitleSubtext="inch" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding BarrelLengthInch, Mode=TwoWay}" PlaceholderText="Barrel length..."/>
+            <custom:CustomTextEntry x:Name="WeightEntry" EntryTitle="Weight" IsMandatory="False" EntryTitleSubtext="kg" EntryHeight="1" ErrorText="Weight must not be empty" TextValue="{Binding Weight, Mode=TwoWay}" PlaceholderText="Weight..."/>
+            <custom:CustomTextEntry x:Name="RoTEntry" EntryTitle="Rate of Twist" IsMandatory="False" EntryHeight="1" ErrorText="Rate must not be empty" TextValue="{Binding RateOfTwist, Mode=TwoWay}" PlaceholderText="Rate of twist..."/>
 
             <custom:CustomSwitchEntry x:Name="HandEntry" EntryTitle="Hand" IsMandatory="False" LeftOptionText="Left-handed" RightOptionText="Right-handed" SelectedOption="{Binding HandednessRight, Mode=TwoWay}"/>
             <custom:CustomMultilineTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" EntryHeight="15" TextValue="{Binding Notes, Mode=TwoWay}" PlaceholderText="Notes"/>

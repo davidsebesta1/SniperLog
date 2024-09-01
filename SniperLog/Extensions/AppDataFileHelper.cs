@@ -2,12 +2,32 @@
 {
     public static class AppDataFileHelper
     {
+        public static string AppDataPath
+        {
+            get
+            {
+#if WINDOWS
+                return Environment.ExpandEnvironmentVariables("%APPDATA%");
+#else
+                return FileSystem.Current.AppDataDirectory;
+#endif
+            }
+        }
         public static string GetPathFromAppData(string relativePath)
         {
 #if WINDOWS
+            if(string.IsNullOrEmpty(relativePath))
+            {
+                return Environment.ExpandEnvironmentVariables("%APPDATA%");
+            }
             string pathRel = Path.Combine("%APPDATA%", "SniperLog", relativePath);
             return Environment.ExpandEnvironmentVariables(pathRel);
 #else
+            if (string.IsNullOrEmpty(relativePath))
+            {
+                return FileSystem.Current.AppDataDirectory;
+            }
+
             return Path.Combine(FileSystem.Current.AppDataDirectory, relativePath);
 #endif
         }

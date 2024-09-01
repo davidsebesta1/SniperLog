@@ -8,6 +8,7 @@ using SniperLog.Pages.Firearms;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
+using SniperLog.Pages.Records;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
@@ -21,6 +22,7 @@ using SniperLog.ViewModels.Manufacturers;
 using SniperLog.ViewModels.Manufacturers.FirearmManufacturers;
 using SniperLog.ViewModels.Manufacturers.SightManufacturers;
 using SniperLog.ViewModels.Other;
+using SniperLog.ViewModels.Records;
 using SniperLog.ViewModels.Reticles;
 using SniperLog.ViewModels.Sights;
 using SniperLog.ViewModels.Sights.ClickSettings;
@@ -103,11 +105,13 @@ namespace SniperLog
             builder.Services.AddSingleton<ReticlesPageViewModel>();
             builder.Services.AddSingleton<ReticleAddOrEditPageViewModel>();
 
-            builder.Services.AddSingleton<SightClickSettingsPage>();
-            builder.Services.AddSingleton<SightClickSettingAddOrEditPage>();
+            builder.Services.AddSingleton<SightClickSettingsPageViewModel>();
+            builder.Services.AddSingleton<SightClickSettingAddOrEditPageViewModel>();
 
-            builder.Services.AddSingleton<FirearmsPage>();
-            builder.Services.AddSingleton<FirearmAddOrEditPage>();
+            builder.Services.AddSingleton<FirearmsPageViewModel>();
+            builder.Services.AddSingleton<FirearmAddOrEditPageViewModel>();
+
+            builder.Services.AddSingleton<RecordsPageViewModel>();
 
             #endregion
 
@@ -134,11 +138,13 @@ namespace SniperLog
             builder.Services.AddSingleton<ReticlesPage>();
             builder.Services.AddSingleton<ReticleAddOrEditPage>();
 
-            builder.Services.AddSingleton<SightClickSettingsPageViewModel>();
-            builder.Services.AddSingleton<SightClickSettingAddOrEditPageViewModel>();
+            builder.Services.AddSingleton<SightClickSettingsPage>();
+            builder.Services.AddSingleton<SightClickSettingAddOrEditPage>();
 
-            builder.Services.AddSingleton<FirearmsPageViewModel>();
-            builder.Services.AddSingleton<FirearmAddOrEditPageViewModel>();
+            builder.Services.AddSingleton<FirearmsPage>();
+            builder.Services.AddSingleton<FirearmAddOrEditPage>();
+
+            builder.Services.AddSingleton<RecordsPage>();
 
             #endregion
 

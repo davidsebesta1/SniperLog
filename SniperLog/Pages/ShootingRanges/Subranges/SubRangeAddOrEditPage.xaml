@@ -21,11 +21,11 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="PrefixEntry" EntryTitle="Prefix" EntryHeight="1" KeyboardType="Text" ErrorText="Prefix must be a single character" TextValue="{Binding Prefix, Mode=TwoWay}" PlaceholderText="Just a single character..."/>
-            <custom:CustomTextEntry x:Name="RangeEntry" EntryTitle="Range" EntryTitleSubtext="m" EntryHeight="1" KeyboardType="Number" ErrorText="Range is a numeric value" TextValue="{Binding RangeInMeters, Mode=TwoWay}" PlaceholderText="Range from the target..."/>
-            <custom:CustomTextEntry x:Name="AltEntry" EntryTitle="Altitude" EntryTitleSubtext="m" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Altitude is a numeric value" TextValue="{Binding Altitude, Mode=TwoWay}" PlaceholderText="Altitude above the sea..."/>
-            <custom:CustomTextEntry x:Name="FiringDirEntry" EntryTitle="Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding DirectionToNorthDegrees, Mode=TwoWay}" PlaceholderText="Degrees to the north"/>
-            <custom:CustomTextEntry x:Name="VerticalDirEntry" EntryTitle="Vertical Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" KeyboardType="Number" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding VerticalFiringOffsetDegrees, Mode=TwoWay}" PlaceholderText="Firing from higher/lower ground..."/>
+            <custom:CustomTextEntry x:Name="PrefixEntry" EntryTitle="Prefix" EntryHeight="1" ErrorText="Prefix must be a single character" TextValue="{Binding Prefix, Mode=TwoWay}" PlaceholderText="Just a single character..."/>
+            <custom:CustomTextEntry x:Name="RangeEntry" EntryTitle="Range" EntryTitleSubtext="m" EntryHeight="1" ErrorText="Range is a numeric value" TextValue="{Binding RangeInMeters, Mode=TwoWay}" PlaceholderText="Range from the target..."/>
+            <custom:CustomTextEntry x:Name="AltEntry" EntryTitle="Altitude" EntryTitleSubtext="m" IsMandatory="False" EntryHeight="1" ErrorText="Altitude is a numeric value" TextValue="{Binding Altitude, Mode=TwoWay}" PlaceholderText="Altitude above the sea..."/>
+            <custom:CustomTextEntry x:Name="FiringDirEntry" EntryTitle="Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding DirectionToNorthDegrees, Mode=TwoWay}" PlaceholderText="Degrees to the north"/>
+            <custom:CustomTextEntry x:Name="VerticalDirEntry" EntryTitle="Vertical Firing Direction" EntryTitleSubtext="Degree" IsMandatory="False" EntryHeight="1" ErrorText="Direction is a numeric value in degrees" TextValue="{Binding VerticalFiringOffsetDegrees, Mode=TwoWay}" PlaceholderText="Firing from higher/lower ground..."/>
 
             <custom:CustomMultilineTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" EntryHeight="15" TextValue="{Binding Notes, Mode=TwoWay}" PlaceholderText="Notes text..."/>
 

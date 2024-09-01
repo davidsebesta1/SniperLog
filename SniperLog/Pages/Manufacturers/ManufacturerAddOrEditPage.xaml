@@ -21,7 +21,7 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
             <custom:CustomPickerEntry x:Name="CountryEntry" EntryTitle="Country" EntryHeight="1" SourceCollection="{Binding Countries}" SelectedItem="{Binding Country, Mode=TwoWay}"/>
 
             <Grid ColumnDefinitions="150,*,150">

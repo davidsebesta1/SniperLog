@@ -33,15 +33,23 @@ namespace DataAccessObjectAnalyzer
 
             if (node.BaseList != null && node.BaseList.Types.Any(n => n != null && n.Type.ToString() == "IDataAccessObject"))
             {
-                GenerateCodeForClass(node);
+                MainStringBuilder.Append(File.ReadAllText(Path.Combine(GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
+
+                GenerateNoteSaveableCode(node);
+                GenerateDAOCodeForClass(node);
+
+                SourceText sourceText = CSharpSyntaxTree.ParseText(MainStringBuilder.ToString().Trim()).GetRoot().NormalizeWhitespace().SyntaxTree.GetText();
+                SourceText sourceResultEncoded = SourceText.From(sourceText.ToString(), Encoding.UTF8);
+
+                string className = node.Identifier.Text;
+                _context.AddSource($"{className}.g.cs", sourceResultEncoded);
+                MainStringBuilder.Clear();
             }
         }
 
-        private void GenerateCodeForClass(ClassDeclarationSyntax classNode)
+        private void GenerateDAOCodeForClass(ClassDeclarationSyntax classNode)
         {
             string className = classNode.Identifier.Text;
-
-            MainStringBuilder.Append(File.ReadAllText(Path.Combine(GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
 
             BaseQueriesGenerator baseQueriesGenerator = new BaseQueriesGenerator(classNode);
             baseQueriesGenerator.Visit(classNode);
@@ -62,12 +70,20 @@ namespace DataAccessObjectAnalyzer
             MainStringBuilder.Replace("%CurYear%", DateTime.Now.Year.ToString());
             MainStringBuilder.Replace("%Namespace%", "SniperLog.Models");
             MainStringBuilder.Replace("%ClassName%", className);
+        }
 
-            SourceText sourceText = CSharpSyntaxTree.ParseText(MainStringBuilder.ToString().Trim()).GetRoot().NormalizeWhitespace().SyntaxTree.GetText();
-            SourceText sourceResultEncoded = SourceText.From(sourceText.ToString(), Encoding.UTF8);
-
-            _context.AddSource($"{className}.g.cs", sourceResultEncoded);
-            MainStringBuilder.Clear();
+        private void GenerateNoteSaveableCode(ClassDeclarationSyntax classNode)
+        {
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n != null && n.Type.ToString() == "INoteSaveable"))
+            {
+                NoteSaveableGenerator noteSaveableGenerator = new NoteSaveableGenerator(classNode);
+                noteSaveableGenerator.Visit(classNode);
+                MainStringBuilder.Replace("%NoteSaveable%", noteSaveableGenerator.ResultString);
+            }
+            else
+            {
+                MainStringBuilder.Replace("%NoteSaveable%", string.Empty);
+            }
         }
     }
 }

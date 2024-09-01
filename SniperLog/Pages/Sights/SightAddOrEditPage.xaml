@@ -21,7 +21,7 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}" PlaceholderText="Name..."/>
             <custom:CustomPickerEntry x:Name="ReticleEntry" EntryTitle="Reticle" EntryHeight="1" SourceCollection="{Binding SightReticles}" SelectedItem="{Binding Reticle, Mode=TwoWay}"/>
             <custom:CustomSwitchEntry x:Name="ClickTypeEntry" EntryTitle="Click Type" LeftOptionText="MOA" RightOptionText="MRAD" SelectedOption="{Binding ClickType, Mode=TwoWay}"/>
             <custom:CustomTextEntry x:Name="OneClickValEntry" EntryTitle="One Click Value" EntryHeight="1" TextValue="{Binding OneClickValue, Mode=TwoWay}"/>

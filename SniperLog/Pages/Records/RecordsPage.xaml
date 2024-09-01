@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Records.RecordsPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:RecordsPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" VerticalTextAlignment="Center"/>
+
+            <custom:CustomPickerEntry SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange}" EntryHeight="1" EntryTitle="Shooting Range" Margin="0,15,0,0"/>
+            <custom:CustomPickerEntry SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange}" EntryHeight="1" EntryTitle="Sub Range"/>
+            <custom:CustomPickerEntry SourceCollection="{Binding Firearms}" SelectedItem="{Binding SelectedFirearm}" EntryHeight="1" EntryTitle="Firearm"/>
+
+            <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+
+            <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+
+            <Label Text="Shooting Record" Style="{StaticResource Headline}" VerticalTextAlignment="Center" Margin="0,15,0,0"/>
+            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks}" EntryHeight="1"/>
+            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks}" EntryHeight="1"/>
+            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters}" EntryHeight="1"/>
+            <custom:CustomImagePickerEntry EntryTitle="Image" IsMandatory="False" SelectedImagePath="{Binding ImgPath}" EntryHeight="25"/>
+            <custom:CustomTextEntry EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes}" EntryHeight="1"/>
+
+            <Button Text="Log"/>
+
+            <Label Text="Search by date" FontSize="24" Margin="0,25,0,0"/>
+            <custom:CustomDateSearchBar DateValue="{Binding DateSearchVal}" EnterCommand="{Binding SearchRecordsCommand}"/>
+
+            <Grid ColumnDefinitions="50,25,25,*" RowDefinitions="25,150">
+                <Label Grid.Column="0" Text="Date"/>
+                <Label Grid.Column="1" Text="Up"/>
+                <Label Grid.Column="2" Text="Right"/>
+                <Label Grid.Column="3" Text="Notes"/>
+
+                <CollectionView Grid.ColumnSpan="4" Grid.Row="1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:ShootingRecord">
+                            <Frame CornerRadius="15" BackgroundColor="Transparent">
+                                <Grid ColumnDefinitions="50,25,25,*">
+                                    <Label Grid.Column="0" Text="{Binding }"/>
+                                    <Label Grid.Column="1" Text="Up"/>
+                                    <Label Grid.Column="2" Text="Right"/>
+                                    <Label Grid.Column="3" Text="Notes"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

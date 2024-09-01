@@ -2,8 +2,9 @@
 <local:CustomEntryBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SniperLog.Extensions.CustomXamlComponents.Abstract"
+             xmlns:ndtp="clr-namespace:Maui.NullableDateTimePicker;assembly=Maui.NullableDateTimePicker"
              x:Name="this"
-             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomTextEntry">
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomDatePicker">
 
     <Grid x:Name="MainGrid" BindingContext="{x:Reference this}" HeightRequest="{Binding EntryHeightFinal}" RowDefinitions="{Binding EntryRowDefs}">
         <Grid Grid.Row="0">
@@ -18,7 +19,7 @@
 
         <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="5">
             <Grid Padding="5,0,5,0">
-                <Entry x:Name="InternalEntry" Keyboard="{Binding Keyboard}" Text="{Binding TextValue}" PlaceholderColor="{StaticResource TextGrey}" Placeholder="{Binding PlaceholderText}" HeightRequest="{Binding EntryHeightFinal}" FontSize="18" TextColor="{StaticResource Text}"/>
+                <DatePicker Date="{Binding DateValue}"/>
             </Grid>
         </Frame>
     </Grid>

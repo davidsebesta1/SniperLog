@@ -1,6 +1,6 @@
-﻿// <summary>
-// Auto generated reference for %refClass% as Foreign Key property 
-//</summary>
+﻿/// <summary>
+/// Auto generated reference for <see cref="%refClass%"/> as Foreign Key property 
+/// </summary>
 public %refClass% Referenced%refClass%
 {
     get 

@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.Firearms
 {
@@ -29,6 +24,9 @@ namespace SniperLog.ViewModels.Firearms
 
         [ObservableProperty]
         private FirearmCaliber _firearmCaliber;
+
+        [ObservableProperty]
+        private FirearmSight _firearmSight;
 
         [ObservableProperty]
         public string _name;
@@ -66,6 +64,9 @@ namespace SniperLog.ViewModels.Firearms
         [ObservableProperty]
         private ObservableCollection<FirearmCaliber> _calibers;
 
+        [ObservableProperty]
+        private ObservableCollection<FirearmSight> _sights;
+
         #endregion
 
         private readonly ValidatorService _validatorService;
@@ -73,13 +74,15 @@ namespace SniperLog.ViewModels.Firearms
         private readonly DataCacherService<FirearmType> _firearmTypeCacher;
         private readonly DataCacherService<Manufacturer> _manufacturerCacher;
         private readonly DataCacherService<FirearmCaliber> _caliberCacher;
+        private readonly DataCacherService<FirearmSight> _firearmSightCacher;
 
-        public FirearmAddOrEditPageViewModel(ValidatorService validatorService, DataCacherService<FirearmType> firearmTypeCacher, DataCacherService<Manufacturer> manufacturerCacher, DataCacherService<FirearmCaliber> caliberCacher)
+        public FirearmAddOrEditPageViewModel(ValidatorService validatorService, DataCacherService<FirearmType> firearmTypeCacher, DataCacherService<Manufacturer> manufacturerCacher, DataCacherService<FirearmCaliber> caliberCacher, DataCacherService<FirearmSight> firearmSightCacher)
         {
             _validatorService = validatorService;
             _firearmTypeCacher = firearmTypeCacher;
             _manufacturerCacher = manufacturerCacher;
             _caliberCacher = caliberCacher;
+            _firearmSightCacher = firearmSightCacher;
         }
 
         partial void OnFirearmChanged(Firearm value)
@@ -87,6 +90,7 @@ namespace SniperLog.ViewModels.Firearms
             FirearmType = value.ReferencedFirearmType;
             Manufacturer = value.ReferencedManufacturer;
             FirearmCaliber = value.ReferencedFirearmCaliber;
+            FirearmSight = value.ReferencedFirearmSight;
 
             Name = value.Name;
             Model = value.Model;
@@ -105,6 +109,7 @@ namespace SniperLog.ViewModels.Firearms
             FirearmTypes = await _firearmTypeCacher.GetAll();
             Manufacturers = await _manufacturerCacher.GetAll();
             Calibers = await _caliberCacher.GetAll();
+            Sights = await _firearmSightCacher.GetAll();
         }
 
         [RelayCommand]
@@ -126,7 +131,7 @@ namespace SniperLog.ViewModels.Firearms
             if (Firearm == null)
             {
                 string notes = Notes;
-                Firearm = new Firearm(FirearmType.ID, Manufacturer.ID, FirearmCaliber.ID, Name, Model, SerialNumber, TotalLengthMm, BarrelLengthInch, RateOfTwist, Weight, !HandednessRight, string.Empty);
+                Firearm = new Firearm(FirearmType.ID, Manufacturer.ID, FirearmCaliber.ID, FirearmSight.ID, Name, Model, SerialNumber, TotalLengthMm, BarrelLengthInch, RateOfTwist, Weight, !HandednessRight);
 
                 if (!string.IsNullOrEmpty(notes))
                 {
@@ -138,6 +143,7 @@ namespace SniperLog.ViewModels.Firearms
                 Firearm.FirearmType_ID = FirearmType.ID;
                 Firearm.Manufacturer_ID = Manufacturer.ID;
                 Firearm.Caliber_ID = FirearmCaliber.ID;
+                Firearm.FirearmSight_ID = FirearmSight.ID;
                 Firearm.Name = Name;
                 Firearm.Model = Model;
                 Firearm.SerialNumber = SerialNumber;

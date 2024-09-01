@@ -190,6 +190,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Extensions\CustomXamlComponents\CustomDatePicker.xaml.cs">
+	    <DependentUpon>CustomDatePicker.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml.cs">
 	    <DependentUpon>CustomTextEntry.xaml</DependentUpon>
 	  </Compile>
@@ -197,6 +200,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDataViewCell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDatePicker.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDateSearchBar.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomImagePickerEntry.xaml">
@@ -242,6 +251,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Records\RecordsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Reticles\ReticleAddOrEditPage.xaml">

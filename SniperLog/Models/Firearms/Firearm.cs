@@ -4,9 +4,17 @@ using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class Firearm : ObservableObject, IDataAccessObject, IEquatable<Firearm?>
+    public partial class Firearm : ObservableObject, IDataAccessObject, INoteSaveable, IEquatable<Firearm?>
     {
         #region Properties
+
+        public string NotesSavePath
+        {
+            get
+            {
+                return Path.Combine("Data", "Firearms", Name, "notes.txt");
+            }
+        }
 
         [PrimaryKey]
         public int ID { get; set; }
@@ -17,11 +25,15 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(Manufacturer), nameof(Manufacturer.ID))]
         [ObservableProperty]
-        public int? _manufacturer_ID;
+        private int? _manufacturer_ID;
 
         [ForeignKey(typeof(FirearmCaliber), nameof(FirearmCaliber.ID))]
         [ObservableProperty]
         private int _caliber_ID;
+
+        [ForeignKey(typeof(FirearmSight), nameof(FirearmSight.ID))]
+        [ObservableProperty]
+        private int _firearmSight_ID;
 
         [ObservableProperty]
         public string _name;
@@ -40,40 +52,17 @@ namespace SniperLog.Models
 
         public bool? HandednessForLeft { get; set; }
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(NotesPathFull))]
-        [NotifyPropertyChangedFor(nameof(NotesText))]
-        public string? _notesRelativePathFromAppData;
-
-        [DatabaseIgnore]
-        public string NotesPathFull
-        {
-
-            get
-            {
-                return AppDataFileHelper.GetPathFromAppData(NotesRelativePathFromAppData);
-            }
-        }
-
-        [DatabaseIgnore]
-        public string NotesText
-        {
-            get
-            {
-                return (string.IsNullOrEmpty(NotesRelativePathFromAppData) || !File.Exists(NotesPathFull)) ? string.Empty : File.ReadAllText(NotesPathFull);
-            }
-        }
-
         #endregion
 
         #region Constructors
 
-        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, string? notesRelativePathFromAppData)
+        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft)
         {
             ID = iD;
             FirearmType_ID = firearmType_ID;
             Manufacturer_ID = manufacturer_ID;
             Caliber_ID = caliber_ID;
+            FirearmSight_ID = sight_ID;
             Name = name;
             Model = model;
             SerialNumber = serialNumber;
@@ -82,10 +71,9 @@ namespace SniperLog.Models
             RateOfTwist = rateOfTwist;
             Weight = weight;
             HandednessForLeft = handednessForLeft;
-            NotesRelativePathFromAppData = notesRelativePathFromAppData;
         }
 
-        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, string? notesRelativePathFromAppData) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft, notesRelativePathFromAppData) { }
+        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, sight_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft) { }
 
         #endregion
 
@@ -129,37 +117,6 @@ namespace SniperLog.Models
 
         #endregion
 
-        #region Other
-
-        public async Task SaveNotesAsync(string newNotes)
-        {
-            if (File.Exists(NotesPathFull))
-            {
-                File.Delete(NotesPathFull);
-                NotesRelativePathFromAppData = string.Empty;
-            }
-
-            NotesRelativePathFromAppData = Path.Combine("Data", "Firearms", Name, "notes.txt");
-
-            Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
-
-            await File.WriteAllTextAsync(NotesPathFull, newNotes);
-            await SaveAsync();
-        }
-
-        public void DeleteNotes()
-        {
-            if (string.IsNullOrEmpty(NotesRelativePathFromAppData) || !File.Exists(NotesPathFull))
-            {
-                return;
-            }
-
-            File.Delete(NotesPathFull);
-        }
-
-
-        #endregion
-
         #region Equals
 
         public override bool Equals(object? obj)
@@ -187,8 +144,6 @@ namespace SniperLog.Models
         {
             return !(left == right);
         }
-
-
 
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Data;
+using System.Net.Sockets;
 using System.Text;
 using SniperLogNetworkLibrary.CommonLib;
 using SniperLogNetworkLibrary.Networking.Messages;

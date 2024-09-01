@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS Firearm(
     FirearmType_ID INTEGER NOT NULL,
     Manufacturer_ID INTEGER NOT NULL,
     Caliber_ID INTEGER NOT NULL,
+    FirearmSight_ID INTEGER NOT NULL,
     Name VARCHAR(30) NOT NULL,
     Model VARCHAR(30),
     SerialNumber VARCHAR(100),
@@ -130,37 +131,56 @@ CREATE TABLE IF NOT EXISTS Firearm(
     RateOfTwist VARCHAR(10),
     Weight DECIMAL(10,2),
     HandednessForLeft BOOLEAN,
-    NotesRelativePathFromAppData VARCHAR(100),
      
     FOREIGN KEY (FirearmType_ID) REFERENCES FirearmType(ID),
     FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID),
-    FOREIGN KEY (Caliber_ID) REFERENCES FirearmCaliber(ID)
+    FOREIGN KEY (Caliber_ID) REFERENCES FirearmCaliber(ID),
+    FOREIGN KEY (FirearmSight_ID) REFERENCES FirearmSight(ID)
+);
+
+CREATE TABLE IF NOT EXISTS Weather(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Clouds VARCHAR(50),
+    Temperature DOUBLE,
+    Pressure INTEGER,
+    Humidity INTEGER,
+    WindSpeed INTEGER,
+    DirectionDegrees INTEGER
 );
 
 -- Shooting session
-CREATE TABLE IF NOT EXISTS ShootingSession(
+CREATE TABLE IF NOT EXISTS ShootingRecord(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ShootingRange_ID INTEGER NOT NULL,
+    SubRange_ID INTEGER NOT NULL,
     Firearm_ID INTEGER NOT NULL,
-    TimeTakenUnixTimestamp INTEGER NOT NULL,
+    Weather_ID INTEGER,
+    ElevationClicksOffset INTEGER NOT NULL,
+    WindageClicksOffset INTEGER NOT NULL,
+    TimeTaken INTEGER NOT NULL,
+
     
+    FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID),
+    FOREIGN KEY (SubRange_ID) REFERENCES SubRange(ID),
     FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID)
+    FOREIGN KEY (Weather_ID) REFERENCES Weather(ID),
 );
 
--- Shooting session image path
-CREATE TABLE IF NOT EXISTS ShootingSessionImagePath(
+-- Shooting session image
+CREATE TABLE IF NOT EXISTS ShootingRecordImage(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ShootingSession_ID INT NOT NULL,
-    RelativePathFromAppData VARCHAR(30) NOT NULL,
+    ShootingRecord_ID INT NOT NULL,
+    RelativePathFromAppData VARCHAR(100) NOT NULL,
     
-    FOREIGN KEY (ShootingSession_ID) REFERENCES ShootingSession(ID)
+    FOREIGN KEY (ShootingRecord_ID) REFERENCES ShootingRecord(ID)
 );
 
 -- Triggers
-CREATE TRIGGER IF NOT EXISTS DeleteShootingSessionImages
+CREATE TRIGGER IF NOT EXISTS DeleteShootingRecordImages
         BEFORE DELETE
-            ON ShootingSession
+            ON ShootingRecord
       FOR EACH ROW
 BEGIN
-    DELETE FROM ShootingSessionImagePath
-          WHERE ShootingSessionImagePath.ShootingSession_ID = OLD.ID;
+    DELETE FROM ShootingRecordImagePath
+          WHERE ShootingRecordImagePath.ShootingRecord_ID = OLD.ID;
 END;

@@ -1,6 +1,6 @@
-﻿// <summary>
-// Auto generated on property changed method of %propertyName% for auto generated reference Referenced%refClass%
-//</summary>
+﻿/// <summary>
+/// Auto generated on property changed method of <see cref="%propertyName%"/> for auto generated reference <see cref="Referenced%refClass%"/>
+/// </summary>
 partial void On%propertyName%Changed (%propertyType% value)
 {
     OnPropertyChanged(nameof(Referenced%refClass%));

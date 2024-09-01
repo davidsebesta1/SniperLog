@@ -22,6 +22,7 @@ namespace SniperLog.Pages.Firearms
             _validatorService.TryAddValidation(FirearmTypeEntry, n => n != null);
             _validatorService.TryAddValidation(ManufacturerEntry, n => n != null);
             _validatorService.TryAddValidation(CaliberEntry, n => n != null);
+            _validatorService.TryAddValidation(SightEntry, n => n != null);
 
             _validatorService.TryAddValidation(TotalLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
             _validatorService.TryAddValidation(BarrelLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));

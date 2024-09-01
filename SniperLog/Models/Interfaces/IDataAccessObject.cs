@@ -1,5 +1,4 @@
-﻿using SniperLog.Services.Database.Attributes;
-using System.Data;
+﻿using System.Data;
 
 namespace SniperLog.Models.Interfaces
 {

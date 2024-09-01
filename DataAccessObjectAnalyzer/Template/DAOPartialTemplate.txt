@@ -20,7 +20,7 @@ namespace %Namespace%
     /// </item>
     ///
     /// <item>
-    /// A constructor from DataRow data type
+    /// A constructor from <see cref="DataRow"/> data type
     /// </item>
     /// 
     ///  <item>
@@ -29,6 +29,9 @@ namespace %Namespace%
     /// 
     ///  <item>
     /// SqliteParams Array for insert queries
+    /// </item>
+    /// <item>
+    /// Note saving methods and properties if <see cref="INoteSaveable"/> is implemented
     /// </item>
     /// </list>
     /// </summary>
@@ -41,5 +44,7 @@ namespace %Namespace%
         %ReferencedProperties%
 
         %SqliteParamsMethods%
+
+        %NoteSaveable%
     }
 }

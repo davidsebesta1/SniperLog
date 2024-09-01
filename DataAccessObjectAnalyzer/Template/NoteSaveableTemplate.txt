@@ -1,0 +1,41 @@
+﻿/// <inheritdoc />
+public string NotesPathFull
+{
+    get
+    {
+        return AppDataFileHelper.GetPathFromAppData(NotesSavePath);
+    }
+}
+
+/// <inheritdoc />
+public string NotesText
+{
+    get
+    {
+        return File.Exists(NotesPathFull) ? File.ReadAllText(NotesPathFull) : string.Empty;
+    }
+}
+
+/// <inheritdoc />
+public async Task SaveNotesAsync(string notesText)
+{
+    if (AppDataFileHelper.GetPathFromAppData(notesText) == AppDataFileHelper.AppDataPath)
+    {
+        return;
+    }
+
+    Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
+
+    await File.WriteAllTextAsync(NotesPathFull, notesText);
+}
+
+/// <inheritdoc />
+public void DeleteNotes()
+{
+    if (!File.Exists(NotesPathFull))
+    {
+        return;
+    }
+
+    File.Delete(NotesPathFull);
+}

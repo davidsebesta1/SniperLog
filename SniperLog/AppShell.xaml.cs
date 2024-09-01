@@ -1,6 +1,7 @@
 ﻿using SniperLog.Pages.Firearms;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
+using SniperLog.Pages.Records;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
@@ -36,6 +37,8 @@ namespace SniperLog
 
             Routing.RegisterRoute("Firearms", typeof(FirearmsPage));
             Routing.RegisterRoute("Firearms/AddOrEdit", typeof(FirearmAddOrEditPage));
+
+            Routing.RegisterRoute("Records", typeof(RecordsPage));
         }
     }
 }

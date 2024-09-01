@@ -21,12 +21,12 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
 
-            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" KeyboardType="Text" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}"/>
+            <custom:CustomTextEntry x:Name="NameEntry" EntryTitle="Name" EntryHeight="1" ErrorText="Name must not be empty" TextValue="{Binding Name, Mode=TwoWay}"/>
 
             <custom:CustomMultilineTextEntry x:Name="AddressEntry" IsMandatory="False" EntryTitle="Address" EntryHeight="10" TextValue="{Binding Address, Mode=TwoWay}"/>
 
-            <custom:CustomTextEntry x:Name="LatEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Latitude" EntryHeight="1" KeyboardType="Numeric" ErrorText="Latitude must be a value between -90 and 90" TextValue="{Binding Lat, Mode=TwoWay}"/>
-            <custom:CustomTextEntry x:Name="LongEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Longitude" EntryHeight="1" KeyboardType="Numeric" ErrorText="Longitude must be a value between -180 and 180" TextValue="{Binding Lon, Mode=TwoWay}"/>
+            <custom:CustomTextEntry x:Name="LatEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Latitude" EntryHeight="1" ErrorText="Latitude must be a value between -90 and 90" TextValue="{Binding Lat, Mode=TwoWay}"/>
+            <custom:CustomTextEntry x:Name="LongEntry" IsEnabled="False" IsMandatory="False" EntryTitle="Longitude" EntryHeight="1" ErrorText="Longitude must be a value between -180 and 180" TextValue="{Binding Lon, Mode=TwoWay}"/>
 
             <custom:CustomSwitchEntry x:Name="LocationTypeEntry" EntryTitle="Type of Location" LeftOptionText="GPS Coordinates" RightOptionText="Address" IsMandatory="False" SelectedOption="{Binding LocType, Mode=TwoWay}"/>
 

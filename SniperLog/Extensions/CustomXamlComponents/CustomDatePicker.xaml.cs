@@ -2,12 +2,9 @@ using SniperLog.Extensions.CustomXamlComponents.Abstract;
 
 namespace SniperLog.Extensions.CustomXamlComponents;
 
-public partial class CustomTextEntry : CustomEntryBase
+public partial class CustomDatePicker : CustomEntryBase
 {
-    public static readonly BindableProperty TextValueProperty = BindableProperty.Create(nameof(TextValue), typeof(string), typeof(Entry), string.Empty);
-    public static readonly BindableProperty PlaceholderTextValueProperty = BindableProperty.Create(nameof(PlaceholderText), typeof(string), typeof(Entry), string.Empty);
-
-    public static readonly BindableProperty KeyboardValueProperty = BindableProperty.CreateAttached(nameof(Keyboard), typeof(Keyboard), typeof(CustomEntryBase), Keyboard.Default);
+    public static readonly BindableProperty DateValueProperty = BindableProperty.Create(nameof(DateValue), typeof(DateTime), typeof(Entry), DateTime.Now);
 
     public static readonly BindableProperty EntryHeightProperty = BindableProperty.Create(nameof(EntryHeight), typeof(int), typeof(Grid), 0, propertyChanged: OnEntryHeightChanged);
 
@@ -18,15 +15,9 @@ public partial class CustomTextEntry : CustomEntryBase
     public const int FirstRowBaseHeight = 30;
     public const int EntryRowBaseHeight = 55;
 
-    public CustomTextEntry()
+    public CustomDatePicker()
     {
         InitializeComponent();
-    }
-
-    public Keyboard Keyboard
-    {
-        get => (Keyboard)GetValue(KeyboardValueProperty);
-        set => SetValue(KeyboardValueProperty, value);
     }
 
     public int EntryHeight
@@ -43,7 +34,7 @@ public partial class CustomTextEntry : CustomEntryBase
 
     private static void OnEntryHeightChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is CustomTextEntry customTextEntry)
+        if (bindable is CustomDatePicker customTextEntry)
         {
             customTextEntry.EntryHeightFinal = (int)newValue + BaseHeight;
             customTextEntry.EntryRowDefs = new RowDefinitionCollection() { new RowDefinition() { Height = FirstRowBaseHeight }, new RowDefinition() { Height = EntryRowBaseHeight + (int)newValue } };
@@ -76,29 +67,17 @@ public partial class CustomTextEntry : CustomEntryBase
         }
     }
 
-    public string TextValue
+    public DateTime DateValue
     {
         get
         {
-            return (string)GetValue(TextValueProperty);
+            return (DateTime)GetValue(DateValueProperty);
         }
         set
         {
-            SetValue(TextValueProperty, value);
+            SetValue(DateValueProperty, value);
             OnEntryInputChanged?.Invoke(this, value);
             EntryInputChangedCommand?.Execute(value);
-        }
-    }
-
-    public string PlaceholderText
-    {
-        get
-        {
-            return (string)GetValue(PlaceholderTextValueProperty);
-        }
-        set
-        {
-            SetValue(PlaceholderTextValueProperty, value);
         }
     }
 }
