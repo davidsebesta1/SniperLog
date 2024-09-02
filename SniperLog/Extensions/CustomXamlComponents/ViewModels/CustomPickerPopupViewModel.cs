@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using SniperLog.ViewModels;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -16,9 +17,22 @@ namespace SniperLog.Extensions.CustomXamlComponents.ViewModels
         [ObservableProperty]
         private object _selectedItem;
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(Visibility))]
+        private bool _canSelectNone;
+
+        public Visibility Visibility => !CanSelectNone ? Visibility.Visible : Visibility.Hidden;
+
         public CustomPickerPopupViewModel() : base()
         {
 
+        }
+
+        [RelayCommand]
+        private async Task SelectNone()
+        {
+            SelectedItem = null;
+            await MopupService.Instance.PopAsync();
         }
 
         [RelayCommand]

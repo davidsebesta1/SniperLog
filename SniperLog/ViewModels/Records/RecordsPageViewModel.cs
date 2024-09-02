@@ -1,19 +1,24 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
+using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace SniperLog.ViewModels.Records
 {
     public partial class RecordsPageViewModel : BaseViewModel
     {
+        #region Services
+
         private readonly DataCacherService<ShootingRange> _shootingRangesCacher;
         private readonly DataCacherService<SubRange> _subrangeCacher;
         private readonly DataCacherService<Firearm> _firearmsCacher;
         private readonly DataCacherService<ShootingRecord> _shootingRecordsCacher;
 
         private readonly ValidatorService _validatorService;
+
+        #endregion
+
+        #region Properties
 
         [ObservableProperty]
         private ObservableCollection<ShootingRange> _shootingRanges;
@@ -28,13 +33,13 @@ namespace SniperLog.ViewModels.Records
         private ObservableCollection<ShootingRecord> _records;
 
         [ObservableProperty]
-        private ShootingRange _selectedRange;
+        private ShootingRange? _selectedRange;
 
         [ObservableProperty]
-        private SubRange _selectedSubRange;
+        private SubRange? _selectedSubRange;
 
         [ObservableProperty]
-        private Firearm _selectedFirearm;
+        private Firearm? _selectedFirearm;
 
         [ObservableProperty]
         private int _elevationClicks;
@@ -54,6 +59,10 @@ namespace SniperLog.ViewModels.Records
         [ObservableProperty]
         private DateTime? _dateSearchVal;
 
+        #endregion
+
+        #region Ctor
+
         public RecordsPageViewModel(DataCacherService<ShootingRange> shootingRangesCacher, DataCacherService<SubRange> subrangeCacher, DataCacherService<Firearm> firearmsCacher, DataCacherService<ShootingRecord> shootingRecordsCacher, ValidatorService validatorService)
         {
             PageTitle = "Records";
@@ -65,12 +74,30 @@ namespace SniperLog.ViewModels.Records
             _validatorService = validatorService;
         }
 
+        #endregion
+
+        #region Commands & Methods
+
+        [RelayCommand]
+        private async Task RefreshEntries(bool resetSubRange = false)
+        {
+            ShootingRanges = await _shootingRangesCacher.GetAll();
+            SubRanges = await _subrangeCacher.GetAllBy(n => SelectedRange != null && n.ShootingRange_ID == SelectedRange.ID);
+
+            if (resetSubRange)
+            {
+                SelectedSubRange = null;
+            }
+            Firearms = await _firearmsCacher.GetAll();
+        }
+
         private async Task<IEnumerable<ShootingRecord>> GetAllRecords()
         {
             if (SelectedFirearm == null)
             {
                 return null;
             }
+
             ObservableCollection<ShootingRecord> collection = await _shootingRecordsCacher.GetAll(); // all records for selected firearm
 
             if (SelectedRange != null) // filter for selected range
@@ -98,9 +125,24 @@ namespace SniperLog.ViewModels.Records
                 return;
             }
 
-            
+            Weather? weather = null;
 
-            await Firearm.SaveAsync();
+            await SelectedRange.TrySendWeatherRequestMessage();
+            if (!SelectedRange.CurrentWeather.Equals(default(WeatherResponseMessage)))
+            {
+                weather = new Weather(SelectedRange.CurrentWeather);
+                await weather.SaveAsync();
+            }
+
+            ShootingRecord record = new ShootingRecord(SelectedRange.ID, SelectedSubRange.ID, SelectedFirearm.ID, weather?.ID, ElevationClicks, WindageClicks, DistanceMeters, DateTime.Now.ToBinary());
+            await record.SaveAsync();
+
+            if (!string.IsNullOrEmpty(Notes))
+            {
+                await record.SaveNotesAsync(Notes);
+            }
+
+            await SearchRecords(DateSearchVal);
             await Shell.Current.GoToAsync("..");
         }
 
@@ -108,6 +150,11 @@ namespace SniperLog.ViewModels.Records
         private async Task SearchRecords(DateTime? date)
         {
             IEnumerable<ShootingRecord> records = await GetAllRecords();
+
+            if (records == null)
+            {
+                return;
+            }
 
             if (date == null)
             {
@@ -117,5 +164,29 @@ namespace SniperLog.ViewModels.Records
 
             Records = records.Where(n => n.Date.Date == date.Value.Date).ToObservableCollection();
         }
+
+        [RelayCommand]
+        private async Task GoToDetails(ShootingRecord record)
+        {
+            await Shell.Current.GoToAsync("Records/Details", new Dictionary<string, object>(1) { { "Record", record } });
+        }
+
+        async partial void OnSelectedFirearmChanged(Firearm? value)
+        {
+            await SearchRecords(null);
+        }
+
+        async partial void OnSelectedRangeChanged(ShootingRange? value)
+        {
+            await RefreshEntries(true);
+            await SearchRecords(null);
+        }
+
+        async partial void OnSelectedSubRangeChanged(SubRange? value)
+        {
+            await SearchRecords(null);
+        }
+
+        #endregion
     }
 }

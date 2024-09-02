@@ -157,13 +157,14 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
     Weather_ID INTEGER,
     ElevationClicksOffset INTEGER NOT NULL,
     WindageClicksOffset INTEGER NOT NULL,
+    Distance INTEGER NOT NULL,
     TimeTaken INTEGER NOT NULL,
 
     
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID),
     FOREIGN KEY (SubRange_ID) REFERENCES SubRange(ID),
-    FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID)
-    FOREIGN KEY (Weather_ID) REFERENCES Weather(ID),
+    FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID),
+    FOREIGN KEY (Weather_ID) REFERENCES Weather(ID)
 );
 
 -- Shooting session image

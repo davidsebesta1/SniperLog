@@ -14,6 +14,8 @@ public partial class CustomPickerEntry : CustomEntryBase
 
     public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(Entry), null);
 
+    public static readonly BindableProperty CanSelectNoneProperty = BindableProperty.Create(nameof(CanSelectNone), typeof(bool), typeof(Entry), false);
+
     public static readonly BindableProperty SourceCollectionProperty = BindableProperty.Create(nameof(SelectedItem), typeof(IList), typeof(Entry), null);
 
     public static readonly BindableProperty EntryHeightProperty = BindableProperty.Create(nameof(EntryHeight), typeof(int), typeof(Grid), 0, propertyChanged: OnEntryHeightChanged);
@@ -47,14 +49,8 @@ public partial class CustomPickerEntry : CustomEntryBase
 
     public int EntryHeight
     {
-        get
-        {
-            return (int)GetValue(EntryHeightProperty);
-        }
-        set
-        {
-            SetValue(EntryHeightProperty, value);
-        }
+        get => (int)GetValue(EntryHeightProperty);
+        set => SetValue(EntryHeightProperty, value);
     }
 
     private static void OnEntryHeightChanged(BindableObject bindable, object oldValue, object newValue)
@@ -70,26 +66,20 @@ public partial class CustomPickerEntry : CustomEntryBase
 
     public int EntryHeightFinal
     {
-        get
-        {
-            return (int)GetValue(EntryHeightFinalProperty);
-        }
-        set
-        {
-            SetValue(EntryHeightFinalProperty, value);
-        }
+        get => (int)GetValue(EntryHeightFinalProperty);
+        set => SetValue(EntryHeightFinalProperty, value);
     }
 
     public RowDefinitionCollection EntryRowDefs
     {
-        get
-        {
-            return (RowDefinitionCollection)GetValue(EntryRowDefsProperty);
-        }
-        set
-        {
-            SetValue(EntryRowDefsProperty, value);
-        }
+        get => (RowDefinitionCollection)GetValue(EntryRowDefsProperty);
+        set => SetValue(EntryRowDefsProperty, value);
+    }
+
+    public bool CanSelectNone
+    {
+        get => (bool)GetValue(CanSelectNoneProperty);
+        set => SetValue(CanSelectNoneProperty, value);
     }
 
     private CustomPickerPopup _popup;
@@ -118,7 +108,10 @@ public partial class CustomPickerEntry : CustomEntryBase
 
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        (_popup.BindingContext as CustomPickerPopupViewModel).AllCollection = SourceCollection;
+        CustomPickerPopupViewModel vm = (CustomPickerPopupViewModel)_popup.BindingContext;
+        vm.AllCollection = SourceCollection;
+        vm.CanSelectNone = CanSelectNone;
+
         await MopupService.Instance.PushAsync(_popup);
     }
 }

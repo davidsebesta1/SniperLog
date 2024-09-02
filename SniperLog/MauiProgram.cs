@@ -112,6 +112,7 @@ namespace SniperLog
             builder.Services.AddSingleton<FirearmAddOrEditPageViewModel>();
 
             builder.Services.AddSingleton<RecordsPageViewModel>();
+            builder.Services.AddSingleton<RecordDetailsPageViewModel>();
 
             #endregion
 
@@ -145,6 +146,7 @@ namespace SniperLog
             builder.Services.AddSingleton<FirearmAddOrEditPage>();
 
             builder.Services.AddSingleton<RecordsPage>();
+            builder.Services.AddSingleton<RecordDetailsPage>();
 
             #endregion
 

@@ -29,10 +29,17 @@ namespace SniperLog.Models
         private int _firearm_ID;
 
         [ObservableProperty]
+        [ForeignKey(typeof(Weather), nameof(Weather.ID))]
+        private int? _weather_ID;
+
+        [ObservableProperty]
         private int _elevationClicksOffset;
 
         [ObservableProperty]
         private int _windageClicksOffset;
+
+        [ObservableProperty]
+        private int _distance;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(Date))]
@@ -40,18 +47,20 @@ namespace SniperLog.Models
 
         public DateTime Date => DateTime.FromBinary(TimeTaken);
 
-        public ShootingRecord(int iD, int srange_ID, int subrange_ID, int firearm_ID, int elevationClicksOffset, int windageClicksOffset, long timeTaken)
+        public ShootingRecord(int iD, int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken)
         {
             ID = iD;
             ShootingRange_ID = srange_ID;
             SubRange_ID = subrange_ID;
             Firearm_ID = firearm_ID;
+            Weather_ID = weather_ID;
             ElevationClicksOffset = elevationClicksOffset;
             WindageClicksOffset = windageClicksOffset;
+            Distance = distance;
             TimeTaken = timeTaken;
         }
 
-        public ShootingRecord(int srange_ID, int subrange_ID, int firearm_ID, int elevationClicksOffset, int windageClicksOffset, long timeTaken) : this(-1, srange_ID, subrange_ID, firearm_ID, elevationClicksOffset, windageClicksOffset, timeTaken) { }
+        public ShootingRecord(int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken) : this(-1, srange_ID, subrange_ID, firearm_ID, weather_ID, elevationClicksOffset, windageClicksOffset, distance, timeTaken) { }
 
         public static IDataAccessObject LoadFromRow(DataRow row)
         {

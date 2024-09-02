@@ -9,9 +9,9 @@
              x:Class="SniperLog.Extensions.CustomXamlComponents.CustomPickerPopup"
              x:DataType="viewmodel:CustomPickerPopupViewModel">
 
-    <Frame HorizontalOptions="FillAndExpand" HeightRequest="550" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
-        <Grid Padding="0" RowDefinitions="*,60">
-            <ListView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" ItemSelected="ListView_ItemSelected" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" CachingStrategy="RecycleElement" >
+    <Frame HorizontalOptions="FillAndExpand" HeightRequest="600" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
+        <Grid Padding="0">
+            <ListView ItemsSource="{Binding FilteredCollection}" ItemSelected="ListView_ItemSelected" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" CachingStrategy="RecycleElement" >
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="x:Object">
                         <ViewCell>
@@ -20,7 +20,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <custom:CustomSearchBar Grid.Row="1" PlaceholderText="Search..." EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
+
+            <VerticalStackLayout MaximumHeightRequest="120" MinimumHeightRequest="90" VerticalOptions="End">
+                <Button x:Name="SelectNoneButton" Command="{Binding SelectNoneCommand}" IsVisible="{Binding Visibility}" Text="Select None" TextColor="{StaticResource Text}" HeightRequest="40"/>
+                <custom:CustomSearchBar PlaceholderText="Search..." EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
+            </VerticalStackLayout>
         </Grid>
     </Frame>
 </mopups:PopupPage>

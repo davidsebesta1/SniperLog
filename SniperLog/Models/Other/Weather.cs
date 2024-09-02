@@ -1,15 +1,13 @@
 ﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
+using SniperLogNetworkLibrary;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.Models
 {
     public partial class Weather : ObservableObject, IDataAccessObject
     {
+        #region Properties
+
         [PrimaryKey]
         public int ID { get; set; }
 
@@ -31,6 +29,10 @@ namespace SniperLog.Models
         [ObservableProperty]
         private ushort? _directionDegrees;
 
+        #endregion
+
+        #region Ctors
+
         public Weather(int iD, string? clouds, double? temperature, ushort? pressure, byte? humidity, byte? windSpeed, ushort? directionDegrees)
         {
             ID = iD;
@@ -43,6 +45,16 @@ namespace SniperLog.Models
         }
 
         public Weather(string? clouds, double? temperature, ushort? pressure, byte? humidity, byte? windSpeed, ushort? directionDegrees) : this(-1, clouds, temperature, pressure, humidity, windSpeed, directionDegrees) { }
+
+        /// <summary>
+        /// Constructor for Weather Response Message struct
+        /// </summary>
+        /// <param name="msg"></param>
+        public Weather(WeatherResponseMessage msg) : this(-1, msg.Clouds, msg.Temperature, msg.Pressure, msg.Humidity, msg.WindSpeed, msg.DirectionDegrees) { }
+
+        #endregion
+
+        #region DAO
 
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
@@ -77,5 +89,7 @@ namespace SniperLog.Models
                 ServicesHelper.GetService<DataCacherService<Weather>>().Remove(this);
             }
         }
+
+        #endregion
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Records.RecordDetailsPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
+             x:DataType="viewmodel:RecordDetailsPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <Grid RowDefinitions="90,*,50" Padding="15">
+            <HorizontalStackLayout Grid.Row="0">
+                <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
+                <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1">
+                <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" IsMandatory="False" EntryHeight="250"/>
+                <custom:CustomMultilineTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes, Mode=TwoWay}" EntryHeight="100"/>
+                <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
+                <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
+                <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="2" ColumnDefinitions="115,*,115,*,115">
+                <Button Grid.Column="0" FontSize="16" Text="Cancel" Command="{Binding ReturnBackCommand}" BackgroundColor="{StaticResource PanelBackgroundDark}"/>
+                <Button Grid.Column="2" FontSize="16" Text="Delete" Command="{Binding DeleteCommand}" BackgroundColor="{StaticResource Red}"/>
+                <Button Grid.Column="4" FontSize="16" Text="Edit" Command="{Binding EditCommand}" BackgroundColor="{StaticResource Primary}"/>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>

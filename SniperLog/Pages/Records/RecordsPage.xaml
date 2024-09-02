@@ -22,9 +22,9 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" VerticalTextAlignment="Center"/>
 
-            <custom:CustomPickerEntry SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange}" EntryHeight="1" EntryTitle="Shooting Range" Margin="0,15,0,0"/>
-            <custom:CustomPickerEntry SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange}" EntryHeight="1" EntryTitle="Sub Range"/>
-            <custom:CustomPickerEntry SourceCollection="{Binding Firearms}" SelectedItem="{Binding SelectedFirearm}" EntryHeight="1" EntryTitle="Firearm"/>
+            <custom:CustomPickerEntry x:Name="FirearmEntry" SourceCollection="{Binding Firearms}" SelectedItem="{Binding SelectedFirearm, Mode=TwoWay}" CanSelectNone="False" EntryHeight="1" EntryTitle="Firearm" Margin="0,15,0,0"/>
+            <custom:CustomPickerEntry x:Name="SRangeEntry" SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Shooting Range" ErrorText="Must be selected for new log"/>
+            <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
@@ -33,39 +33,66 @@
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
 
             <Label Text="Shooting Record" Style="{StaticResource Headline}" VerticalTextAlignment="Center" Margin="0,15,0,0"/>
-            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks}" EntryHeight="1"/>
-            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks}" EntryHeight="1"/>
-            <custom:CustomTextEntry Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters}" EntryHeight="1"/>
-            <custom:CustomImagePickerEntry EntryTitle="Image" IsMandatory="False" SelectedImagePath="{Binding ImgPath}" EntryHeight="25"/>
-            <custom:CustomTextEntry EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" IsMandatory="False" SelectedImagePath="{Binding ImgPath, Mode=TwoWay}" EntryHeight="25"/>
+            <custom:CustomTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes, Mode=TwoWay}" EntryHeight="1"/>
 
-            <Button Text="Log"/>
+            <Button Text="Log" Command="{Binding CreateNewCommand}"/>
 
             <Label Text="Search by date" FontSize="24" Margin="0,25,0,0"/>
             <custom:CustomDateSearchBar DateValue="{Binding DateSearchVal}" EnterCommand="{Binding SearchRecordsCommand}"/>
 
-            <Grid ColumnDefinitions="50,25,25,*" RowDefinitions="25,150">
-                <Label Grid.Column="0" Text="Date"/>
-                <Label Grid.Column="1" Text="Up"/>
-                <Label Grid.Column="2" Text="Right"/>
-                <Label Grid.Column="3" Text="Notes"/>
+            <Grid ColumnDefinitions="100,60,60,100,*" RowDefinitions="25,475" Margin="0,10,0,0" HeightRequest="500">
+                <Label Grid.Column="0" Text="Date" HorizontalOptions="Center"/>
+                <Label Grid.Column="1" Text="Up" HorizontalOptions="Center"/>
+                <Label Grid.Column="2" Text="Right" HorizontalOptions="Center"/>
+                <Label Grid.Column="3" Text="Distance" HorizontalOptions="Center"/>
 
-                <CollectionView Grid.ColumnSpan="4" Grid.Row="1">
+                <CollectionView Grid.ColumnSpan="5" Grid.Row="1" ItemsSource="{Binding Records}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:ShootingRecord">
-                            <Frame CornerRadius="15" BackgroundColor="Transparent">
-                                <Grid ColumnDefinitions="50,25,25,*">
-                                    <Label Grid.Column="0" Text="{Binding }"/>
-                                    <Label Grid.Column="1" Text="Up"/>
-                                    <Label Grid.Column="2" Text="Right"/>
-                                    <Label Grid.Column="3" Text="Notes"/>
+                            <Frame CornerRadius="10" BackgroundColor="Transparent" HeightRequest="100" BorderColor="Transparent" Padding="0">
+                                <Grid ColumnDefinitions="100,55,55,100,*" RowDefinitions="50,50" Padding="0" ColumnSpacing="3" RowSpacing="3">
+                                    <Frame Grid.Column="0" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                                        <Label Text="{Binding Date}" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+
+                                    <Frame Grid.Column="1" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                                        <Label Text="{Binding ElevationClicksOffset}" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+
+                                    <Frame Grid.Column="2" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                                        <Label Text="{Binding WindageClicksOffset}" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+
+                                    <Frame Grid.Column="3" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                                        <Label Text="{Binding Distance, StringFormat='{0}m'}" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </Frame>
+
+                                    <Frame Grid.Column="4" Grid.RowSpan="2" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:RecordsPageViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+
+                                        <Image Source="arrowforward.png" HeightRequest="25"/>
+                                    </Frame>
+
+                                    <Frame Grid.ColumnSpan="4" Grid.Row="1" CornerRadius="0" BackgroundColor="{StaticResource PanelBackgroundNormal}" Padding="0">
+                                        <Label Text="{Binding NotesText}" HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0"/>
+                                    </Frame>
+
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Grid>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
