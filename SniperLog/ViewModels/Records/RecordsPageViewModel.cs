@@ -125,10 +125,29 @@ namespace SniperLog.ViewModels.Records
                 return;
             }
 
-            Weather? weather = null;
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await FinalizeCreatingNewRecord(false);
+                return;
+            }
 
-            await SelectedRange.TrySendWeatherRequestMessage();
-            if (!SelectedRange.CurrentWeather.Equals(default(WeatherResponseMessage)))
+            try
+            {
+                await SelectedRange.TrySendWeatherRequestMessage();
+            }
+            catch (Exception e)
+            {
+                await FinalizeCreatingNewRecord(false);
+                return;
+            }
+
+            await FinalizeCreatingNewRecord(true);
+        }
+
+        private async Task FinalizeCreatingNewRecord(bool weatherSuccess)
+        {
+            Weather? weather = null;
+            if (weatherSuccess && !SelectedRange.CurrentWeather.Equals(default(WeatherResponseMessage)))
             {
                 weather = new Weather(SelectedRange.CurrentWeather);
                 await weather.SaveAsync();

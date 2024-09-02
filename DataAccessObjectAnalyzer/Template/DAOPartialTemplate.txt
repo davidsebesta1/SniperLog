@@ -30,9 +30,15 @@ namespace %Namespace%
     ///  <item>
     /// SqliteParams Array for insert queries
     /// </item>
+    ///
     /// <item>
     /// Note saving methods and properties if <see cref="INoteSaveable"/> is implemented
     /// </item>
+    ///
+    /// <item>
+    /// Image saving methods and properties if <see cref="IImageSaveable"/> is implemented
+    /// </item>
+    ///
     /// </list>
     /// </summary>
     public partial class %ClassName%
@@ -46,5 +52,7 @@ namespace %Namespace%
         %SqliteParamsMethods%
 
         %NoteSaveable%
+
+        %ImageSaveable%
     }
 }

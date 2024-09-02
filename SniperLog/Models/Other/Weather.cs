@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLogNetworkLibrary;
+using SniperLogNetworkLibrary.CommonLib;
 using System.Data;
 
 namespace SniperLog.Models
@@ -24,10 +25,14 @@ namespace SniperLog.Models
         private byte? _humidity;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(WindInfo))]
         private byte? _windSpeed;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(WindInfo))]
         private ushort? _directionDegrees;
+
+        public string? WindInfo => (DirectionDegrees == null || WindSpeed == null) ? null : $"{WindSpeed}m/s, {CardinalDirectionConverter.GetNameByDegree((int)DirectionDegrees)}";
 
         #endregion
 

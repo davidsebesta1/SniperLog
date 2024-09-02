@@ -1,6 +1,4 @@
 ﻿
-using SniperLog.Extensions;
-
 namespace SniperLog.Models.Interfaces
 {
     /// <summary>

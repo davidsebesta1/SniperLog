@@ -47,7 +47,7 @@ namespace SniperLog.ViewModels.SRanges
             Lat = value?.Latitude.ToString() ?? string.Empty;
             Lon = value?.Longitude.ToString() ?? string.Empty;
             LocType = 1;
-            BackgroundImagePath = value?.BackgroundImgPath ?? string.Empty;
+            BackgroundImagePath = value?.BackgroundImgPathFull;
         }
 
         [RelayCommand]
@@ -68,7 +68,7 @@ namespace SniperLog.ViewModels.SRanges
 
             if (Range == null)
             {
-                Range = new ShootingRange(Name, Address, ParseExtensions.ParseOrNullDouble(Lat), ParseExtensions.ParseOrNullDouble(Lon), false, string.Empty);
+                Range = new ShootingRange(Name, Address, ParseExtensions.ParseOrNullDouble(Lat), ParseExtensions.ParseOrNullDouble(Lon), false);
 
                 if (!string.IsNullOrEmpty(BackgroundImagePath))
                 {
@@ -85,7 +85,7 @@ namespace SniperLog.ViewModels.SRanges
                 Range.Latitude = ParseExtensions.ParseOrNullDouble(Lat);
                 Range.Longitude = ParseExtensions.ParseOrNullDouble(Lon);
 
-                if (!string.IsNullOrEmpty(BackgroundImagePath) && BackgroundImagePath != Range.BackgroundImgPath)
+                if (!string.IsNullOrEmpty(BackgroundImagePath) && BackgroundImagePath != Range.BackgroundImgPathFull)
                 {
                     using (FileStream reader = File.OpenRead(BackgroundImagePath))
                     {

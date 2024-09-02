@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Auto generated constructor for conversion from DataRow
+/// Auto generated constructor for conversion from <see cref="DataRow"/>
 /// </summary>
 /// <param name=""row""></param>
 public %ClassName%(DataRow row) : this(%rowCtorParams%) 

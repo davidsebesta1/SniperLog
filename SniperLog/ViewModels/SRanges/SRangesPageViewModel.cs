@@ -23,7 +23,18 @@ namespace SniperLog.ViewModels.SRanges
 
             foreach (ShootingRange range in ShootingRanges)
             {
-                await range.TrySendWeatherRequestMessage();
+                try
+                {
+                    await range.TrySendWeatherRequestMessage();
+                }
+                catch (TimeoutException e)
+                {
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    await Shell.Current.DisplayAlert("Error", e.Message, "Okay");
+                }
             }
         }
 

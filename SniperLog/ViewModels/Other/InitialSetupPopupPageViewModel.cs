@@ -35,8 +35,8 @@ namespace SniperLog.ViewModels.Other
             await _csvProcessor.LoadToDatabase<ManufacturerType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("ManufacturerTypes.csv")));
 
             //Shooting ranges
-            ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false, string.Empty);
-            ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true, string.Empty);
+            ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false);
+            ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true);
 
             await s1.SaveAsync();
             await s2.SaveAsync();

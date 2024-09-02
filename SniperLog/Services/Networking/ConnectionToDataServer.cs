@@ -56,28 +56,23 @@ namespace SniperLog.Services.ConnectionToServer
         {
             try
             {
-                try
+                if (!await TryOpen())
                 {
-                    if (!await TryOpen())
-                    {
-                        return new ErrorMessage($"Unable to open connection to server");
-                    }
+                    throw new TimeoutException();
                 }
-                catch (SocketException e)
+            }
+            catch (SocketException e)
+            {
+                if (e.ErrorCode == ConnectionTimeoutErrorCode)
                 {
-                    if (e.ErrorCode == ConnectionTimeoutErrorCode)
-                    {
-                        return null;
-                    }
-
-                    return new ErrorMessage($"Error has occured: {e.Message}");
-                }
-                catch (Exception e)
-                {
-                    return new ErrorMessage($"General Error has occured: {e.Message}");
+                    return null;
                 }
 
+                return new ErrorMessage($"Error has occured: {e.Message}");
+            }
 
+            try
+            {
                 byte[] data = request.Serialize();
                 NetworkStream stream = _tcpClient.GetStream();
 
@@ -135,10 +130,21 @@ namespace SniperLog.Services.ConnectionToServer
 
         public async Task<bool> TryOpen()
         {
-            if (IpAddress == null || (_tcpClient != null && _tcpClient.Connected)) return false;
+            if (IpAddress == null)
+            {
+                throw new ArgumentNullException("IP Address is null");
+            }
+
+            if (_tcpClient != null && _tcpClient.Connected)
+            {
+                throw new Exception("TCP Client is already connected, but system is trying to connect again");
+            }
 
             _tcpClient = new TcpClient();
-            await _tcpClient.ConnectAsync(IpAddress, Port);
+            if (!_tcpClient.ConnectAsync(IpAddress, Port).Wait(5))
+            {
+                throw new TimeoutException("Connection timeout");
+            }
 
             return true;
         }

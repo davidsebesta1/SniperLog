@@ -55,6 +55,12 @@
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                     </CollectionView.ItemsLayout>
 
+                    <CollectionView.EmptyView>
+                        <Frame VerticalOptions="Start" CornerRadius="10" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}" Margin="0,15,0,0" Padding="0">
+                            <Label Text="No records found..." HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Italic" FontSize="18"/>
+                        </Frame>
+                    </CollectionView.EmptyView>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:ShootingRecord">
                             <Frame CornerRadius="10" BackgroundColor="Transparent" HeightRequest="100" BorderColor="Transparent" Padding="0">

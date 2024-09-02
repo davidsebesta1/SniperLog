@@ -36,6 +36,7 @@ namespace DataAccessObjectAnalyzer
                 MainStringBuilder.Append(File.ReadAllText(Path.Combine(GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
 
                 GenerateNoteSaveableCode(node);
+                GenerateImageSaveableCode(node);
                 GenerateDAOCodeForClass(node);
 
                 SourceText sourceText = CSharpSyntaxTree.ParseText(MainStringBuilder.ToString().Trim()).GetRoot().NormalizeWhitespace().SyntaxTree.GetText();
@@ -70,6 +71,20 @@ namespace DataAccessObjectAnalyzer
             MainStringBuilder.Replace("%CurYear%", DateTime.Now.Year.ToString());
             MainStringBuilder.Replace("%Namespace%", "SniperLog.Models");
             MainStringBuilder.Replace("%ClassName%", className);
+        }
+
+        private void GenerateImageSaveableCode(ClassDeclarationSyntax classNode)
+        {
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n != null && n.Type.ToString() == "IImageSaveable"))
+            {
+                ImageSaveableGenerator imageSaveableGenerator = new ImageSaveableGenerator(classNode);
+                imageSaveableGenerator.Visit(classNode);
+                MainStringBuilder.Replace("%ImageSaveable%", imageSaveableGenerator.ResultString);
+            }
+            else
+            {
+                MainStringBuilder.Replace("%ImageSaveable%", string.Empty);
+            }
         }
 
         private void GenerateNoteSaveableCode(ClassDeclarationSyntax classNode)

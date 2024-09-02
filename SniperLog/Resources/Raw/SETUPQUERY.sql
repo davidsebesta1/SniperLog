@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS ShootingRange(
     Address VARCHAR(100),
     Latitude DOUBLE,
     Longitude DOUBLE,
-    IsMarkedAsFavourite BOOLEAN NOT NULL,
-    BackgroundImgPath VARCHAR(255)
+    IsMarkedAsFavourite BOOLEAN NOT NULL
 );
 
 -- Sub range
@@ -171,7 +170,6 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
 CREATE TABLE IF NOT EXISTS ShootingRecordImage(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ShootingRecord_ID INT NOT NULL,
-    RelativePathFromAppData VARCHAR(100) NOT NULL,
     
     FOREIGN KEY (ShootingRecord_ID) REFERENCES ShootingRecord(ID)
 );

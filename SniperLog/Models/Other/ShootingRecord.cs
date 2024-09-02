@@ -1,9 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class ShootingRecord : ObservableObject, IDataAccessObject, INoteSaveable
+    public partial class ShootingRecord : ObservableObject, IDataAccessObject, INoteSaveable, IEquatable<ShootingRecord?>
     {
         public string NotesSavePath
         {
@@ -12,6 +13,8 @@ namespace SniperLog.Models
                 return Path.Combine("Data", "ShootingRecords", ReferencedFirearm.Name, $"{ID}.txt");
             }
         }
+
+        #region Properties
 
         [PrimaryKey]
         public int ID { get; set; }
@@ -47,6 +50,10 @@ namespace SniperLog.Models
 
         public DateTime Date => DateTime.FromBinary(TimeTaken);
 
+        #endregion
+
+        #region Ctor
+
         public ShootingRecord(int iD, int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken)
         {
             ID = iD;
@@ -61,6 +68,10 @@ namespace SniperLog.Models
         }
 
         public ShootingRecord(int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken) : this(-1, srange_ID, subrange_ID, firearm_ID, weather_ID, elevationClicksOffset, windageClicksOffset, distance, timeTaken) { }
+
+        #endregion
+
+        #region DAO
 
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
@@ -95,5 +106,57 @@ namespace SniperLog.Models
                 ServicesHelper.GetService<DataCacherService<ShootingRecord>>().Remove(this);
             }
         }
+
+        #endregion
+
+        #region Model specific
+
+        /// <summary>
+        /// Saves an image object with reference to this record
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public async Task SaveImageAsync(FileStream stream)
+        {
+            ShootingRecordImage recordImage = new ShootingRecordImage(ID);
+            await recordImage.SaveAsync();
+            await recordImage.SaveImageAsync(stream);
+        }
+
+        public async Task<ObservableCollection<ShootingRecordImage>> GetImagesAsync()
+        {
+            return await ServicesHelper.GetService<DataCacherService<ShootingRecordImage>>().GetAllBy(n => n.ShootingRecord_ID == ID);
+        }
+
+        #endregion
+
+        #region Object
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as ShootingRecord);
+        }
+
+        public bool Equals(ShootingRecord? other)
+        {
+            return other is not null && ID == other.ID;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID);
+        }
+
+        public static bool operator ==(ShootingRecord? left, ShootingRecord? right)
+        {
+            return EqualityComparer<ShootingRecord>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(ShootingRecord? left, ShootingRecord? right)
+        {
+            return !(left == right);
+        }
+
+        #endregion
     }
 }

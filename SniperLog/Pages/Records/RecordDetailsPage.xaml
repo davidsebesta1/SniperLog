@@ -18,7 +18,7 @@
     </Shell.TitleView>
 
     <ScrollView>
-        <Grid RowDefinitions="90,*,50" Padding="15">
+        <Grid RowDefinitions="90,*,50" Padding="15" RowSpacing="15">
             <HorizontalStackLayout Grid.Row="0">
                 <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
                 <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
@@ -30,6 +30,22 @@
                 <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
                 <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
                 <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
+
+                <Label Text="Data" FontSize="24"/>
+                <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="235" Padding="12">
+                    <VerticalStackLayout Padding="0">
+                        <Label Text="{Binding Record.ReferencedFirearm.Name, StringFormat='Firearm: {0}', TargetNullValue='Firearm: None'}"/>
+                        <Label Text="{Binding Record.ReferencedFirearm.ReferencedFirearmSight.Name, StringFormat='Sight: {0}', TargetNullValue='Sight: None'}"/>
+                        <Label Text="{Binding Record.ReferencedShootingRange.Name, StringFormat='Shooting range: {0}', TargetNullValue='Shooting range: None'}"/>
+                        <Label Text="{Binding Record.ReferencedSubRange.Prefix, StringFormat='Sub Range: {0}', TargetNullValue='Sub Range: None'}"/>
+                        <Label Text="Weather Stats" FontSize="18"/>
+                        <Label Text="{Binding Record.ReferencedWeather.Clouds, StringFormat='Overall Status: {0}', FallbackValue='Overall Status: Unknown'}"/>
+                        <Label Text="{Binding Record.ReferencedWeather.Temperature, StringFormat='Temperature: {0}°', FallbackValue='Temperature: Unknown'}"/>
+                        <Label Text="{Binding Record.ReferencedWeather.Pressure, StringFormat='Pressure: {0}hPa', FallbackValue='Pressure: Unknown'}"/>
+                        <Label Text="{Binding Record.ReferencedWeather.Humidity, StringFormat='Humidity: {0}%', FallbackValue='Humidity: Unknown'}"/>
+                        <Label Text="{Binding Record.ReferencedWeather.WindInfo, StringFormat='Wind Info: {0}', FallbackValue='Wind Info: Unknown'}"/>
+                    </VerticalStackLayout>
+                </Frame>
             </VerticalStackLayout>
 
             <Grid Grid.Row="2" ColumnDefinitions="115,*,115,*,115">

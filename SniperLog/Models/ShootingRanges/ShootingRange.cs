@@ -14,11 +14,17 @@ namespace SniperLog.Models
     /// Background image is not automatically saved with the object itself and the method must be called seperately.
     /// All saved data are in Data/ShootingRanges/RangeName/
     /// </summary>
-    public partial class ShootingRange : ObservableObject, IDataAccessObject, IEquatable<ShootingRange?>
+    public partial class ShootingRange : ObservableObject, IDataAccessObject, IImageSaveable, IEquatable<ShootingRange?>
     {
-        #region Constants
+        public string ImageSavePath
+        {
+            get
+            {
+                return Path.Combine("Data", "ShootingRanges", Name, "backgroundimage.png");
+            }
+        }
 
-        public const string BackgroundImageFileName = "backgroundimage.png";
+        #region Constants
 
         #endregion
 
@@ -94,34 +100,6 @@ namespace SniperLog.Models
         [DatabaseIgnore]
         private readonly string _favImage = "stariconfav.png";
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
-        private string _backgroundImgPath;
-
-        [DatabaseIgnore]
-        public string BackgroundImgFullPath
-        {
-            get
-            {
-                string path = AppDataFileHelper.GetPathFromAppData(BackgroundImgPath);
-                if (!Path.Exists(path))
-                {
-                    return "defaultbackground.png";
-                }
-
-                return path;
-            }
-        }
-
-        [DatabaseIgnore]
-        public ImageSource ImgStream
-        {
-            get
-            {
-                return ImageSource.FromStream(() => File.OpenRead(BackgroundImgFullPath));
-            }
-        }
-
         [DatabaseIgnore]
         public int? MaxRange => ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID).GetAwaiter().GetResult().MaxBy(n => n.RangeInMeters).RangeInMeters;
 
@@ -146,7 +124,7 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite, string imageRelPath)
+        public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite)
         {
             ID = iD;
             Name = name;
@@ -154,7 +132,6 @@ namespace SniperLog.Models
             Latitude = latitude;
             Longitude = longitude;
             IsMarkedAsFavourite = isMarkedAsFavourite;
-            BackgroundImgPath = imageRelPath;
         }
 
         /// <summary>
@@ -165,7 +142,7 @@ namespace SniperLog.Models
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="relativeImagePathFromAppdata"></param>
-        public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite, string imageRelPath) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite, imageRelPath)
+        public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite)
         {
 
         }
@@ -197,16 +174,11 @@ namespace SniperLog.Models
         {
             try
             {
-                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "ShootingRange", Name));
-                if (Directory.Exists(dataPath))
-                {
-                    Directory.Delete(dataPath, true);
-                }
-
                 return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(DeleteQuery, new SqliteParameter("@ID", ID)) == 1;
             }
             finally
             {
+                DeleteImage();
                 ServicesHelper.GetService<DataCacherService<ShootingRange>>().Remove(this);
             }
         }
@@ -267,12 +239,6 @@ namespace SniperLog.Models
                 return;
             }
 
-            if (message is ErrorMessage errorMessage)
-            {
-                await Shell.Current.DisplayAlert("Error", errorMessage.Message, "Okay");
-                return;
-            }
-
             CurrentWeather = default(WeatherResponseMessage);
             CurrentWeather = (WeatherResponseMessage)message;
         }
@@ -280,29 +246,6 @@ namespace SniperLog.Models
         partial void OnCurrentWeatherChanged(WeatherResponseMessage value)
         {
             OnPropertyChanged(nameof(CurrentWeather));
-        }
-
-        /// <summary>
-        /// Saves the image to the predefined path
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public async Task SaveImageAsync(FileStream stream)
-        {
-            string localPath = Path.Combine("Data", "ShootingRanges", Name);
-            string localFilePath = Path.Combine(localPath, BackgroundImageFileName);
-
-            string fullDirPath = AppDataFileHelper.GetPathFromAppData(localPath);
-            Directory.CreateDirectory(fullDirPath);
-
-            string fullFilepath = Path.Combine(fullDirPath, BackgroundImageFileName);
-
-            using (FileStream localFileStream = File.OpenWrite(fullFilepath))
-            {
-                await stream.CopyToAsync(localFileStream);
-            }
-
-            BackgroundImgPath = localFilePath;
         }
 
         /// <summary>

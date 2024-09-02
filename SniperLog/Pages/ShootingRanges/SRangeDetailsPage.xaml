@@ -24,7 +24,7 @@
 
                     <!-- Image -->
                     <Grid Grid.Row="0" ColumnDefinitions="50,*,60" RowDefinitions="50,*">
-                        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Aspect="AspectFill" HeightRequest="200" Source="{Binding Range.BackgroundImgFullPath}"/>
+                        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Aspect="AspectFill" HeightRequest="200" Source="{Binding Range.ImgStream}"/>
                         <Button Grid.Row="0" Grid.Column="0" ImageSource="arrowback.png" BackgroundColor="Transparent" Command="{Binding ReturnToRangesCommand}"/>
                         <Button Grid.Row="0" Grid.Column="2" ImageSource="{Binding Range.FavStarImageName}" BackgroundColor="Transparent" Command="{Binding ToggleFavouriteRangeCommand}"/>
                     </Grid>
