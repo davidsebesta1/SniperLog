@@ -1,5 +1,6 @@
-
+using Mopups.Services;
 using SniperLog.Extensions.CustomXamlComponents.Abstract;
+using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 
 namespace SniperLog.Extensions.CustomXamlComponents;
 
@@ -12,6 +13,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     public static readonly BindableProperty SelectedImagePathProperty = BindableProperty.Create(nameof(SelectedImagePath), typeof(string), typeof(Frame), null, propertyChanged: OnSelectedImagePathChanged);
     public static readonly BindableProperty IsImageSelectedProperty = BindableProperty.Create(nameof(IsImageSelected), typeof(bool), typeof(Frame), false);
+    public static readonly BindableProperty AllowImageEditingProperty = BindableProperty.Create(nameof(AllowImageEditing), typeof(bool), typeof(Frame), false);
     private static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(nameof(StrokeThickness), typeof(int), typeof(Border), 3);
 
     public const int BaseHeight = 205;
@@ -20,14 +22,8 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     public int EntryHeight
     {
-        get
-        {
-            return (int)GetValue(EntryHeightProperty);
-        }
-        set
-        {
-            SetValue(EntryHeightProperty, value);
-        }
+        get => (int)GetValue(EntryHeightProperty);
+        set => SetValue(EntryHeightProperty, value);
     }
 
     private static void OnEntryHeightChanged(BindableObject bindable, object oldValue, object newValue)
@@ -44,34 +40,19 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     public int EntryHeightFinal
     {
-        get
-        {
-            return (int)GetValue(EntryHeightFinalProperty);
-        }
-        set
-        {
-            SetValue(EntryHeightFinalProperty, value);
-        }
+        get => (int)GetValue(EntryHeightFinalProperty);
+        set => SetValue(EntryHeightFinalProperty, value);
     }
 
     public RowDefinitionCollection EntryRowDefs
     {
-        get
-        {
-            return (RowDefinitionCollection)GetValue(EntryRowDefsProperty);
-        }
-        set
-        {
-            SetValue(EntryRowDefsProperty, value);
-        }
+        get => (RowDefinitionCollection)GetValue(EntryRowDefsProperty);
+        set => SetValue(EntryRowDefsProperty, value);
     }
 
     public string SelectedImagePath
     {
-        get
-        {
-            return (string)GetValue(SelectedImagePathProperty);
-        }
+        get => (string)GetValue(SelectedImagePathProperty);
         set
         {
             SetValue(SelectedImagePathProperty, value);
@@ -94,27 +75,23 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     public bool IsImageSelected
     {
-        get
-        {
-            return (bool)GetValue(IsImageSelectedProperty);
-        }
-        private set
-        {
-            SetValue(IsImageSelectedProperty, value);
-        }
+        get => (bool)GetValue(IsImageSelectedProperty);
+        private set => SetValue(IsImageSelectedProperty, value);
+    }
+
+    public bool AllowImageEditing
+    {
+        get => (bool)GetValue(IsImageSelectedProperty);
+        set => SetValue(IsImageSelectedProperty, value);
     }
 
     private int StrokeThickness
     {
-        get
-        {
-            return (int)GetValue(StrokeThicknessProperty);
-        }
-        set
-        {
-            SetValue(StrokeThicknessProperty, value);
-        }
+        get => (int)GetValue(StrokeThicknessProperty);
+        set => SetValue(StrokeThicknessProperty, value);
     }
+
+    private CustomImageEditorPopup _editorPopup;
 
     public CustomImagePickerEntry()
     {
@@ -122,6 +99,11 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
         OnPropertyChanged(nameof(EntryHeightFinal));
         OnPropertyChanged(nameof(EntryRowDefs));
+
+        CustomImageEditorPopupViewModel vm = ServicesHelper.GetService<CustomImageEditorPopupViewModel>();
+        vm.Entry = this;
+
+        _editorPopup = new CustomImageEditorPopup(vm);
     }
 
     private async void GalleryOption_Tapped(object sender, TappedEventArgs e)
@@ -155,7 +137,6 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     {
         try
         {
-
             if (!MediaPicker.Default.IsCaptureSupported)
             {
                 await Shell.Current.DisplayAlert("Unsupported", "Taking photos on this device is not supported", "Okay");
@@ -183,5 +164,18 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         {
             await Shell.Current.DisplayAlert("Error at manipulating with files", ioException.Message, "Okay");
         }
+    }
+
+    private async void EditImage_Tapped(object sender, TappedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(SelectedImagePath))
+        {
+            return;
+        }
+
+        CustomImageEditorPopupViewModel vm = (_editorPopup.BindingContext as CustomImageEditorPopupViewModel);
+        vm.BackgroundImage = SelectedImagePath;
+
+        await MopupService.Instance.PushAsync(_editorPopup);
     }
 }

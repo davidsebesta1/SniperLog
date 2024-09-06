@@ -161,6 +161,11 @@ namespace SniperLog.ViewModels.Records
                 await record.SaveNotesAsync(Notes);
             }
 
+            if(!string.IsNullOrEmpty(ImgPath) && File.Exists(ImgPath))
+            {
+                await record.SaveImageAsync(File.OpenRead(ImgPath));
+            }
+
             await SearchRecords(DateSearchVal);
             await Shell.Current.GoToAsync("..");
         }

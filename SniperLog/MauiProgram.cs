@@ -114,6 +114,8 @@ namespace SniperLog
             builder.Services.AddSingleton<RecordsPageViewModel>();
             builder.Services.AddSingleton<RecordDetailsPageViewModel>();
 
+            builder.Services.AddSingleton<CustomImageEditorPopupViewModel>();
+
             #endregion
 
             #region Pages

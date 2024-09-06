@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.Extensions.CustomXamlComponents.ViewModels"
+             BackgroundColor="#AA000000"
+             x:Class="SniperLog.Extensions.CustomXamlComponents.CustomImageEditorPopup"
+             BindingContext="viewmodel:CustomImageEditorPopupViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodel:CustomImageEditorPopupViewModel"
+             Title="{Binding PageTitle}">
+
+    <Frame WidthRequest="300" HeightRequest="400" BackgroundColor="Transparent">
+        <Grid Padding="0">
+            <Image Source="{Binding BackgroundImage}" Aspect="AspectFill"/>
+            <toolkit:DrawingView BackgroundColor="Transparent"/>
+        </Grid>
+    </Frame>
+</mopups:PopupPage>

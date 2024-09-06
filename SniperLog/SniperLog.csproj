@@ -127,6 +127,7 @@
 		<MauiImage Update="Resources\Images\refreshicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\directionicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\dropdownarrow.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\editimageicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -143,6 +144,7 @@
 	  <None Remove="Resources\Images\directionicon.svg" />
 	  <None Remove="Resources\Images\dropdownarrow.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
+	  <None Remove="Resources\Images\editimageicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
 	  <None Remove="Resources\Images\galleryicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
@@ -207,6 +209,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDateSearchBar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomImageEditorPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomImagePickerEntry.xaml">

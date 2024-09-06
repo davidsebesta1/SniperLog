@@ -19,7 +19,7 @@
                 <RoundRectangle CornerRadius="15"/>
             </Border.StrokeShape>
 
-            <Grid ColumnDefinitions="*,45,*" RowDefinitions="*,35,25,5,20,*,45,15">
+            <Grid ColumnDefinitions="*,45,*" RowDefinitions="*,35,50,5,20,*,45,15">
                 <Image Source="uploadicon.png" Grid.Column="1" Grid.Row="2"/>
                 <Label Text="Upload your image" HorizontalTextAlignment="Center" Grid.ColumnSpan="3" Grid.Row="4" TextColor="{StaticResource TextGrey}"/>
 
@@ -27,12 +27,21 @@
                     <Image Source="{Binding SelectedImagePath}" Aspect="AspectFill"/>
                 </Frame>
 
-                <Frame IsVisible="{Binding IsImageSelected}" BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" HeightRequest="45" WidthRequest="45" HorizontalOptions="End" VerticalOptions="Center" Margin="0,10,10,0" Padding="10">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="DeleteImage_Tapped"/>
-                    </Frame.GestureRecognizers>
-                    <Image Source="deleteicon.png"/>
-                </Frame>
+                <VerticalStackLayout Padding="0" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+                    <Frame IsVisible="{Binding AllowImageEditing}" BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="45" WidthRequest="45" HorizontalOptions="End" VerticalOptions="Start" Margin="0,10,10,0" Padding="10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EditImage_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <Image Source="editimageicon.png"/>
+                    </Frame>
+
+                    <Frame IsVisible="{Binding IsImageSelected}" BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="45" WidthRequest="45" HorizontalOptions="End" VerticalOptions="Start" Margin="0,10,10,0" Padding="10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="DeleteImage_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <Image Source="deleteicon.png"/>
+                    </Frame>
+                </VerticalStackLayout>
 
                 <Grid Grid.Row="6" Grid.ColumnSpan="3" ColumnDefinitions="*,125,15,125,*">
                     <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Column="1" Padding="0">
@@ -48,7 +57,7 @@
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="CameraOption_Tapped"/>
                         </Frame.GestureRecognizers>
-                        
+
                         <HorizontalStackLayout Padding="15,11,15,11">
                             <Image Source="cameraicon.png" VerticalOptions="Center"/>
                             <Label Text="Camera roll" FontSize="12" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Padding="7,0,0,0"/>
