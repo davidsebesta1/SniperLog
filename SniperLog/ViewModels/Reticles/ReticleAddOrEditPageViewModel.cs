@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions.WrapperClasses;
 
 namespace SniperLog.ViewModels.Reticles
 {
@@ -19,7 +20,7 @@ namespace SniperLog.ViewModels.Reticles
         private string _name;
 
         [ObservableProperty]
-        private string _tmpImgPath;
+        private DrawableImagePaths _tmpImgPath;
 
         public ReticleAddOrEditPageViewModel(ValidatorService validatorService)
         {
@@ -29,7 +30,7 @@ namespace SniperLog.ViewModels.Reticles
         partial void OnReticleChanged(SightReticle value)
         {
             Name = Reticle?.Name ?? string.Empty;
-            TmpImgPath = Reticle?.BackgroundImgFullPath ?? string.Empty;
+            TmpImgPath = Reticle?.BackgroundImgPathFull ?? string.Empty;
         }
 
         [RelayCommand]
@@ -57,7 +58,7 @@ namespace SniperLog.ViewModels.Reticles
                 Reticle.Name = Name;
             }
 
-            if (TmpImgPath != Reticle.BackgroundImgFullPath)
+            if (TmpImgPath != Reticle.BackgroundImgPathFull)
             {
                 using (FileStream reader = File.OpenRead(TmpImgPath))
                 {

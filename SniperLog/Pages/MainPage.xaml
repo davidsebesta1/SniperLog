@@ -19,7 +19,7 @@
 
     <VerticalStackLayout>
         <Label 
-            Text="Markiplier"
+            Text="Text"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>

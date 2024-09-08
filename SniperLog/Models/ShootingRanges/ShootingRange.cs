@@ -198,7 +198,7 @@ namespace SniperLog.Models
         /// <returns></returns>
         public async Task InitDefaultSubRangeForInstance()
         {
-            SubRange subRange = new SubRange(ID, 0, 0, 0, 0, 'A', string.Empty);
+            SubRange subRange = new SubRange(ID, 0, 0, 0, 0, 'A');
             await subRange.SaveAsync();
         }
 

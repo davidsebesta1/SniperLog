@@ -73,10 +73,10 @@ namespace SniperLogNetworkLibrary.CommonLib
             {
                 int shift = (360 - StartingDegree);
 
-                return (degree + shift) < (StartingDegree + shift);
+                degree = (degree + shift) % 360;
             }
 
-            return degree < (EndingDegree - StartingDegree);
+            return degree >= StartingDegree && degree <= EndingDegree;
         }
     }
 }

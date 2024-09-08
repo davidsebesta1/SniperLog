@@ -25,11 +25,11 @@
             </HorizontalStackLayout>
 
             <VerticalStackLayout Grid.Row="1">
-                <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" IsMandatory="False" EntryHeight="250" SelectedImagePath="{Binding ImgPath, Mode=TwoWay}" AllowImageEditing="False"/> <!-- Fix editing var-->
+                <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" AllowImageEditing="True" IsMandatory="False" EntryHeight="250" SelectedImagePath="{Binding Img, Mode=TwoWay}"/>
                 <custom:CustomMultilineTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes, Mode=TwoWay}" EntryHeight="100"/>
                 <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
                 <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
-                <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
+                <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters" TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
 
                 <Label Text="Data" FontSize="24"/>
                 <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="235" Padding="12">

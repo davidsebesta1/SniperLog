@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS SubRange(
     DirectionToNorthDegrees INT,
     VerticalFiringOffsetDegrees INT,
     Prefix VARCHAR(1),
-    NotesPath VARCHAR(255),
     
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID)
 );
@@ -76,8 +75,7 @@ CREATE TABLE IF NOT EXISTS SightClickType(
 
 CREATE TABLE IF NOT EXISTS SightReticle(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    Name VARCHAR(50) NOT NULL UNIQUE,
-    BackgroundImgPath VARCHAR(255)
+    Name VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- Firearm setting

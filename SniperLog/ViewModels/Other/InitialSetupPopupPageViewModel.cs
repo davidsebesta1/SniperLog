@@ -42,7 +42,7 @@ namespace SniperLog.ViewModels.Other
             await s2.SaveAsync();
 
             //Subranges
-            SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B', string.Empty);
+            SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B');
             await testSub.SaveAsync();
             await testSub.SaveNotesAsync("test notes markiplier");
 

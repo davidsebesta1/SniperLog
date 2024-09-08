@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions.WrapperClasses;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Records
@@ -24,7 +25,7 @@ namespace SniperLog.ViewModels.Records
         private string _notes;
 
         [ObservableProperty]
-        private string _imgPath;
+        private DrawableImagePaths _img;
 
         public RecordDetailsPageViewModel(ValidatorService validatorService)
         {
@@ -33,14 +34,21 @@ namespace SniperLog.ViewModels.Records
 
         async partial void OnRecordChanged(ShootingRecord value)
         {
+            try
+            {
+
             PageTitle = $"{Record.Date.ToString("d")}\n{Record.Date.ToString("t")}";
 
             ElevationClicks = value.ElevationClicksOffset;
             WindageClicks = value.WindageClicksOffset;
             DistanceMeters = value.Distance;
 
-            ImgPath = (await value.GetImagesAsync()).ElementAtOrDefault(0)?.BackgroundImgPathFull;
+            Img = new DrawableImagePaths((await value.GetImagesAsync()).ElementAtOrDefault(0)?.BackgroundImgPathFull);
             Notes = value.NotesText;
+            }catch(Exception e)
+            {
+                await Shell.Current.DisplayAlert("Err", e.ToString(), "okay");
+            }
         }
 
         [RelayCommand]

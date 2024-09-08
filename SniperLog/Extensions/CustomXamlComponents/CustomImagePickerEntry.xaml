@@ -24,7 +24,7 @@
                 <Label Text="Upload your image" HorizontalTextAlignment="Center" Grid.ColumnSpan="3" Grid.Row="4" TextColor="{StaticResource TextGrey}"/>
 
                 <Frame BorderColor="Transparent" BackgroundColor="Transparent" Grid.ColumnSpan="3" Grid.RowSpan="8" Padding="0" CornerRadius="15">
-                    <Image Source="{Binding SelectedImagePath}" Aspect="AspectFill"/>
+                    <Image Source="{Binding SelectedImagePath.CombinedImageSrc}" Aspect="AspectFill"/>
                 </Frame>
 
                 <VerticalStackLayout Padding="0" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">

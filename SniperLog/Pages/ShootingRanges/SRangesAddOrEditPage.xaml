@@ -30,7 +30,7 @@
 
             <custom:CustomSwitchEntry x:Name="LocationTypeEntry" EntryTitle="Type of Location" LeftOptionText="GPS Coordinates" RightOptionText="Address" IsMandatory="False" SelectedOption="{Binding LocType, Mode=TwoWay}"/>
 
-            <custom:CustomImagePickerEntry x:Name="BackgroundImageEntry" EntryTitle="Image" IsMandatory="False" EntryHeight="1" SelectedImagePath="{Binding BackgroundImagePath, Mode=TwoWay}"/>
+            <custom:CustomImagePickerEntry x:Name="BackgroundImageEntry" EntryTitle="Image" IsMandatory="False" EntryHeight="75" SelectedImagePath="{Binding BackgroundImagePath, Mode=TwoWay}"/>
 
             <Grid ColumnDefinitions="150,*,150">
                 <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>

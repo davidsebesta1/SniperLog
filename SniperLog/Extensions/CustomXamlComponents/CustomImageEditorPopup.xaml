@@ -9,12 +9,22 @@
              BindingContext="viewmodel:CustomImageEditorPopupViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodel:CustomImageEditorPopupViewModel"
+             CloseWhenBackgroundIsClicked="False"
              Title="{Binding PageTitle}">
 
-    <Frame WidthRequest="300" HeightRequest="400" BackgroundColor="Transparent">
-        <Grid Padding="0">
-            <Image Source="{Binding BackgroundImage}" Aspect="AspectFill"/>
-            <toolkit:DrawingView BackgroundColor="Transparent"/>
+    <Frame WidthRequest="350" HeightRequest="550" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
+        <Grid Padding="0" RowDefinitions="35,*,65">
+            <Label Grid.Row="0" Text="{Binding PageTitle}" FontSize="18"/>
+
+            <Grid Grid.Row="1" Padding="0">
+                <Image Source="{Binding BackgroundImage}" Aspect="AspectFill"/>
+                <toolkit:DrawingView x:Name="DrawingView" BackgroundColor="Transparent" IsMultiLineModeEnabled="True" Lines="{Binding Lines, Mode=TwoWay}" LineColor="Red"/>
+            </Grid>
+
+            <Grid Grid.Row="2" ColumnDefinitions="125,*,125">
+                <Button Grid.Column="0" BackgroundColor="{StaticResource PanelBackgroundLight}" Text="Cancel" HeightRequest="45" VerticalOptions="End"/>
+                <Button Grid.Column="2" BackgroundColor="{StaticResource Primary}" Text="Edit Image" HeightRequest="45" VerticalOptions="End"/>
+            </Grid>
         </Grid>
     </Frame>
 </mopups:PopupPage>

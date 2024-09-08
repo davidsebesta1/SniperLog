@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using SniperLog.Extensions;
+using SniperLog.Extensions.WrapperClasses;
 using System.Globalization;
 
 namespace SniperLog.ViewModels.SRanges
@@ -33,7 +34,7 @@ namespace SniperLog.ViewModels.SRanges
         private int _locType = 1;
 
         [ObservableProperty]
-        private string _backgroundImagePath;
+        private DrawableImagePaths _backgroundImagePath;
 
         public SRangesAddOrEditPageViewModel(ValidatorService validator) : base()
         {

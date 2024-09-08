@@ -1,8 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Extensions;
-using SniperLog.Models.Interfaces;
-using SniperLog.Services.Database;
-using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
@@ -11,7 +8,7 @@ namespace SniperLog.Models
     /// A class representing subrange of a shooting range.<br></br>
     /// Notes are saved in a txt file saved in Data/ShootingRanges/RangeName/SubRanges/Notes%ID%.txt
     /// </summary>
-    public partial class SubRange : ObservableObject, IDataAccessObject, IEquatable<SubRange?>
+    public partial class SubRange : ObservableObject, IDataAccessObject, INoteSaveable, IEquatable<SubRange?>
     {
         #region Properties
 
@@ -37,28 +34,12 @@ namespace SniperLog.Models
         [ObservableProperty]
         private char _prefix;
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(NotesPathFull))]
-        [NotifyPropertyChangedFor(nameof(NotesText))]
-        private string _notesPath;
-
-        [DatabaseIgnore]
-        public string NotesPathFull
+        public string NotesSavePath
         {
             get
             {
-                return AppDataFileHelper.GetPathFromAppData(NotesPath);
+                return Path.Combine("Data", "ShootingRanges", ReferencedShootingRange.Name, "SubRanges", $"Notes{ID}.txt");
             }
-        }
-
-        [DatabaseIgnore]
-        public string NotesText
-        {
-            get
-            {
-                return string.IsNullOrEmpty(NotesPath) ? string.Empty : File.ReadAllText(NotesPathFull);
-            }
-
         }
 
         #endregion
@@ -74,7 +55,7 @@ namespace SniperLog.Models
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        public SubRange(int iD, int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter, string notesPath)
+        public SubRange(int iD, int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter)
         {
             ID = iD;
             ShootingRange_ID = shootingRange_ID;
@@ -83,7 +64,6 @@ namespace SniperLog.Models
             DirectionToNorthDegrees = directionToNorth;
             VerticalFiringOffsetDegrees = verticalFiringOffsetDegrees;
             Prefix = displayLetter;
-            NotesPath = notesPath;
         }
 
         /// <summary>
@@ -94,7 +74,7 @@ namespace SniperLog.Models
         /// <param name="altitude"></param>
         /// <param name="directionToNorth"></param>
         /// <param name="verticalFiringOffsetDegrees"></param>
-        public SubRange(int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter, string notesPath) : this(-1, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees, displayLetter, notesPath)
+        public SubRange(int shootingRange_ID, int rangeInMeters, double? altitude, int? directionToNorth, int? verticalFiringOffsetDegrees, char displayLetter) : this(-1, shootingRange_ID, rangeInMeters, altitude, directionToNorth, verticalFiringOffsetDegrees, displayLetter)
         {
 
         }
@@ -136,34 +116,6 @@ namespace SniperLog.Models
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
             return new SubRange(row);
-        }
-
-        #endregion
-
-        #region Object specific methods
-
-        public async Task SaveNotesAsync(string notesText)
-        {
-            if (string.IsNullOrEmpty(NotesPath))
-            {
-                NotesPath = Path.Combine("Data", "ShootingRanges", ReferencedShootingRange.Name, "SubRanges", $"Notes{ID}.txt");
-
-                Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
-
-                await SaveAsync();
-            }
-
-            await File.WriteAllTextAsync(NotesPathFull, notesText);
-        }
-
-        public void DeleteNotes()
-        {
-            if (string.IsNullOrEmpty(NotesPath))
-            {
-                return;
-            }
-
-            File.Delete(NotesPathFull);
         }
 
         #endregion

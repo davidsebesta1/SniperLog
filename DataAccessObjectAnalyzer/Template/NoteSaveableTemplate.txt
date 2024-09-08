@@ -16,18 +16,18 @@ public string NotesText
     }
 }
 
-/// <inheritdoc />
-public async Task SaveNotesAsync(string notesText)
-{
-    if (AppDataFileHelper.GetPathFromAppData(notesText) == AppDataFileHelper.AppDataPath)
-    {
-        return;
-    }
+ /// <inheritdoc />
+ public async Task SaveNotesAsync(string notesText)
+ {
+     if (AppDataFileHelper.GetPathFromAppData(NotesSavePath) == AppDataFileHelper.AppDataPath)
+     {
+         return;
+     }
 
-    Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
+     Directory.CreateDirectory(Path.GetDirectoryName(NotesPathFull));
 
-    await File.WriteAllTextAsync(NotesPathFull, notesText);
-}
+     await File.WriteAllTextAsync(NotesPathFull, notesText);
+ }
 
 /// <inheritdoc />
 public void DeleteNotes()

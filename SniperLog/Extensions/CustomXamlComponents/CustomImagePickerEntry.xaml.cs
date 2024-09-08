@@ -1,6 +1,9 @@
+using CommunityToolkit.Maui.Core;
 using Mopups.Services;
 using SniperLog.Extensions.CustomXamlComponents.Abstract;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
+using SniperLog.Extensions.WrapperClasses;
+using System.Collections.ObjectModel;
 
 namespace SniperLog.Extensions.CustomXamlComponents;
 
@@ -11,7 +14,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     private static readonly BindableProperty EntryHeightFinalProperty = BindableProperty.Create(nameof(EntryHeightFinal), typeof(int), typeof(Grid), BaseHeight);
     private static readonly BindableProperty EntryRowDefsProperty = BindableProperty.Create(nameof(EntryRowDefs), typeof(RowDefinitionCollection), typeof(Grid), null);
 
-    public static readonly BindableProperty SelectedImagePathProperty = BindableProperty.Create(nameof(SelectedImagePath), typeof(string), typeof(Frame), null, propertyChanged: OnSelectedImagePathChanged);
+    public static readonly BindableProperty SelectedImagePathProperty = BindableProperty.Create(nameof(SelectedImagePath), typeof(DrawableImagePaths), typeof(Frame), new DrawableImagePaths(string.Empty, string.Empty), propertyChanged: OnSelectedImagePathChanged);
     public static readonly BindableProperty IsImageSelectedProperty = BindableProperty.Create(nameof(IsImageSelected), typeof(bool), typeof(Frame), false);
     public static readonly BindableProperty AllowImageEditingProperty = BindableProperty.Create(nameof(AllowImageEditing), typeof(bool), typeof(Frame), false);
     private static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(nameof(StrokeThickness), typeof(int), typeof(Border), 3);
@@ -50,9 +53,9 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         set => SetValue(EntryRowDefsProperty, value);
     }
 
-    public string SelectedImagePath
+    public DrawableImagePaths SelectedImagePath
     {
-        get => (string)GetValue(SelectedImagePathProperty);
+        get => (DrawableImagePaths)GetValue(SelectedImagePathProperty);
         set
         {
             SetValue(SelectedImagePathProperty, value);
@@ -63,9 +66,9 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     private static void OnSelectedImagePathChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is CustomImagePickerEntry customTextEntry)
+        if (bindable is CustomImagePickerEntry customTextEntry && newValue is DrawableImagePaths imgPaths)
         {
-            customTextEntry.IsImageSelected = !string.IsNullOrEmpty((string)newValue);
+            customTextEntry.IsImageSelected = !string.IsNullOrEmpty(imgPaths.ImagePath);
             customTextEntry.OnPropertyChanged(nameof(IsImageSelected));
 
             customTextEntry.StrokeThickness = customTextEntry.IsImageSelected ? 0 : 3;
@@ -81,8 +84,8 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     public bool AllowImageEditing
     {
-        get => (bool)GetValue(IsImageSelectedProperty);
-        set => SetValue(IsImageSelectedProperty, value);
+        get => (bool)GetValue(AllowImageEditingProperty);
+        set => SetValue(AllowImageEditingProperty, value);
     }
 
     private int StrokeThickness
@@ -114,23 +117,23 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         });
         if (result != null)
         {
-            SelectedImagePath = result.FullPath;
+            SelectedImagePath.ImagePath = result.FullPath;
         }
     }
 
     private void DeleteImage_Tapped(object sender, TappedEventArgs e)
     {
-        if (string.IsNullOrEmpty(SelectedImagePath))
+        if (string.IsNullOrEmpty(SelectedImagePath.ImagePath))
         {
             return;
         }
 
-        if (Path.GetDirectoryName(SelectedImagePath) == Path.GetDirectoryName(FileSystem.CacheDirectory))
+        if (Path.GetDirectoryName(SelectedImagePath.ImagePath) == Path.GetDirectoryName(FileSystem.CacheDirectory))
         {
-            File.Delete(SelectedImagePath);
+            File.Delete(SelectedImagePath.ImagePath);
         }
 
-        SelectedImagePath = string.Empty;
+        SelectedImagePath.ImagePath = string.Empty;
     }
 
     private async void CameraOption_Tapped(object sender, TappedEventArgs e)
@@ -157,7 +160,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
                     }
                 }
 
-                SelectedImagePath = localFilePath;
+                SelectedImagePath.ImagePath = localFilePath;
             }
         }
         catch (IOException ioException)
@@ -168,13 +171,22 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     private async void EditImage_Tapped(object sender, TappedEventArgs e)
     {
-        if (string.IsNullOrEmpty(SelectedImagePath))
+        if (string.IsNullOrEmpty(SelectedImagePath.ImagePath))
         {
             return;
         }
 
         CustomImageEditorPopupViewModel vm = (_editorPopup.BindingContext as CustomImageEditorPopupViewModel);
-        vm.BackgroundImage = SelectedImagePath;
+        vm.BackgroundImage.ImagePath = SelectedImagePath.ImagePath;
+
+        if (vm.Lines == null)
+        {
+            vm.Lines = new ObservableCollection<IDrawingLine>();
+        }
+        else
+        {
+            vm.Lines.Clear();
+        }
 
         await MopupService.Instance.PushAsync(_editorPopup);
     }

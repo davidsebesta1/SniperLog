@@ -79,7 +79,7 @@ namespace SniperLog.ViewModels.SRanges.Subranges
             if (Subrange == null)
             {
                 string notes = Notes;
-                Subrange = new SubRange(OwningRange.ID, int.Parse(RangeInMeters, CultureInfo.InvariantCulture), ParseExtensions.ParseOrNullDouble(Altitude), ParseExtensions.ParseOrNullInteger(DirectionToNorthDegrees), ParseExtensions.ParseOrNullInteger(VerticalFiringOffsetDegrees), Prefix[0], string.Empty);
+                Subrange = new SubRange(OwningRange.ID, int.Parse(RangeInMeters, CultureInfo.InvariantCulture), ParseExtensions.ParseOrNullDouble(Altitude), ParseExtensions.ParseOrNullInteger(DirectionToNorthDegrees), ParseExtensions.ParseOrNullInteger(VerticalFiringOffsetDegrees), Prefix[0]);
                 await Subrange.SaveAsync();
                 await Subrange.SaveNotesAsync(notes);
             }

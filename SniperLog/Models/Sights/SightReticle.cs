@@ -1,17 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
-using SniperLog.Extensions;
 using System.Data;
 
 namespace SniperLog.Models
 {
-    public partial class SightReticle : ObservableObject, IDataAccessObject, IEquatable<SightReticle?>
+    public partial class SightReticle : ObservableObject, IDataAccessObject, IImageSaveable, IEquatable<SightReticle?>
     {
-        #region Constants
-
-        public const string BackgroundImageFileName = "backgroundimage";
-
-        #endregion
-
         #region Properties
 
         [PrimaryKey]
@@ -20,32 +13,11 @@ namespace SniperLog.Models
         [ObservableProperty]
         private string _name;
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(BackgroundImgFullPath))]
-        [NotifyPropertyChangedFor(nameof(ImgStream))]
-        private string _backgroundImgPath;
-
-        [DatabaseIgnore]
-        public string BackgroundImgFullPath
+        public string ImageSavePath
         {
             get
             {
-                string path = AppDataFileHelper.GetPathFromAppData(BackgroundImgPath);
-                if (!Path.Exists(path))
-                {
-                    return "defaultbackground.png";
-                }
-
-                return path;
-            }
-        }
-
-        [DatabaseIgnore]
-        public ImageSource ImgStream
-        {
-            get
-            {
-                return ImageSource.FromStream(() => File.OpenRead(BackgroundImgFullPath));
+                return Path.Combine("Data", "Reticles", Name, "backgroundimage.png");
             }
         }
 
@@ -53,14 +25,13 @@ namespace SniperLog.Models
 
         #region Ctor
 
-        public SightReticle(int iD, string name, string backgroundImgPath)
+        public SightReticle(int iD, string name)
         {
             ID = iD;
             Name = name;
-            BackgroundImgPath = backgroundImgPath;
         }
 
-        public SightReticle(string name, string backgroundImgPath) : this(-1, name, backgroundImgPath)
+        public SightReticle(string name, string backgroundImgPath) : this(-1, name)
         {
 
         }
@@ -78,17 +49,12 @@ namespace SniperLog.Models
         {
             try
             {
-                string dataPath = AppDataFileHelper.GetPathFromAppData(Path.Combine("Data", "Reticles", Name));
-                if (Directory.Exists(dataPath))
-                {
-                    Directory.Delete(dataPath, true);
-                }
-
                 return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(DeleteQuery, new SqliteParameter("@ID", ID)) == 1;
             }
             finally
             {
                 ServicesHelper.GetService<DataCacherService<SightReticle>>().Remove(this);
+                DeleteImage();
             }
         }
 
@@ -110,42 +76,6 @@ namespace SniperLog.Models
             {
                 ServicesHelper.GetService<DataCacherService<SightReticle>>().AddOrUpdate(this);
             }
-        }
-
-        #endregion
-
-        #region Model Specific Methods
-
-        /// <summary>
-        /// Saves the image to the predefined path
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public async Task SaveImageAsync(FileStream stream)
-        {
-            if (File.Exists(BackgroundImgFullPath))
-            {
-                File.Delete(BackgroundImgFullPath);
-                BackgroundImgPath = string.Empty;
-            }
-
-            string fileNameFull = BackgroundImageFileName + Path.GetExtension(stream.Name);
-            string localPath = Path.Combine("Data", "Reticles", Name);
-            string localFilePath = Path.Combine(localPath, fileNameFull);
-
-            string fullDirPath = AppDataFileHelper.GetPathFromAppData(localPath);
-            Directory.CreateDirectory(fullDirPath);
-
-            string fullFilepath = Path.Combine(fullDirPath, fileNameFull);
-
-            using (FileStream localFileStream = File.OpenWrite(fullFilepath))
-            {
-                await stream.CopyToAsync(localFileStream);
-            }
-
-            BackgroundImgPath = localFilePath;
-
-            await SaveAsync();
         }
 
         #endregion
