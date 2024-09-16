@@ -118,6 +118,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         if (result != null)
         {
             SelectedImagePath.ImagePath = result.FullPath;
+            OnPropertyChanged(nameof(SelectedImagePath));
         }
     }
 
@@ -134,6 +135,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         }
 
         SelectedImagePath.ImagePath = string.Empty;
+        OnPropertyChanged(nameof(SelectedImagePath));
     }
 
     private async void CameraOption_Tapped(object sender, TappedEventArgs e)
@@ -161,6 +163,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
                 }
 
                 SelectedImagePath.ImagePath = localFilePath;
+                OnPropertyChanged(nameof(SelectedImagePath));
             }
         }
         catch (IOException ioException)
@@ -177,7 +180,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         }
 
         CustomImageEditorPopupViewModel vm = (_editorPopup.BindingContext as CustomImageEditorPopupViewModel);
-        vm.BackgroundImage.ImagePath = SelectedImagePath.ImagePath;
+        vm.BackgroundImage = SelectedImagePath;
 
         if (vm.Lines == null)
         {

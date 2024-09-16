@@ -14,43 +14,75 @@ namespace SniperLog.Extensions.WrapperClasses
         [NotifyPropertyChangedFor(nameof(CombinedImageSrc))]
         private string _overDrawPath;
 
+        private byte[] _combinedImageData;
+
         public ImageSource CombinedImageSrc
         {
             get
             {
-                //Img doesnt exists, return nothing
                 if (!File.Exists(ImagePath))
                 {
                     return null;
                 }
 
-                //Overdraw doesnt exists, return base image
                 if (!File.Exists(OverDrawPath))
                 {
                     return ImageSource.FromStream(() => File.OpenRead(ImagePath));
                 }
 
+                try
+                {
+                    // If the combined image data has already been generated, return it as a new stream
+                    if (_combinedImageData != null)
+                    {
+                        return ImageSource.FromStream(() => new MemoryStream(_combinedImageData));
+                    }
 
-                using SKBitmap baseBitmap = SKBitmap.Decode(ImagePath);
-                using SKBitmap overlayBitmap = SKBitmap.Decode(OverDrawPath);
+                    using SKBitmap bitmap1 = SKBitmap.Decode(ImagePath);
+                    using SKBitmap bitmap2 = SKBitmap.Decode(OverDrawPath);
 
-                SKImageInfo imageInfo = new SKImageInfo(baseBitmap.Width, baseBitmap.Height);
+                    if (bitmap1 == null || bitmap2 == null)
+                    {
+                        return ImageSource.FromStream(() => File.OpenRead(ImagePath));
+                    }
 
-                using SKBitmap finalBitmap = new SKBitmap(imageInfo);
-                using SKCanvas canvas = new SKCanvas(finalBitmap);
+                    int width = Math.Max(bitmap1.Width, bitmap2.Width);
+                    int height = Math.Max(bitmap1.Height, bitmap2.Height);
 
-                canvas.DrawBitmap(baseBitmap, 0, 0);
-                canvas.DrawBitmap(overlayBitmap, 0, 0);
+                    using SKBitmap resultBitmap = new SKBitmap(width, height);
+                    using SKCanvas canvas = new SKCanvas(resultBitmap);
 
-                using SKImage skImage = SKImage.FromBitmap(finalBitmap);
+                    canvas.Clear(SKColors.Transparent);
 
-                MemoryStream outputStream = new MemoryStream();
-                using SKData skData = skImage.Encode(SKEncodedImageFormat.Png, 100);
+                    // Draw the first image
+                    canvas.DrawBitmap(bitmap1, SKPoint.Empty);
 
-                skData.SaveTo(outputStream);
-                outputStream.Position = 0;
+                    // Scaling the second image
+                    SKPaint paint = new SKPaint { FilterQuality = SKFilterQuality.High };
+                    float scaleX = (float)bitmap1.Width / bitmap2.Width;
+                    float scaleY = (float)bitmap1.Height / bitmap2.Height;
 
-                return ImageSource.FromStream(() => outputStream);
+                    SKMatrix scaleMatrix = SKMatrix.CreateScale(scaleX, scaleY);
+                    canvas.SetMatrix(scaleMatrix);
+
+                    // Draw the second image
+                    canvas.DrawBitmap(bitmap2, SKPoint.Empty, paint);
+                    canvas.Flush();
+
+                    // Encode the result to PNG format and save to byte array
+                    using SKImage image = SKImage.FromBitmap(resultBitmap);
+                    using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
+                    _combinedImageData = data.ToArray();  // Cache the image data as a byte array
+
+                    // Return the new ImageSource from the byte array
+                    return ImageSource.FromStream(() => new MemoryStream(_combinedImageData));
+                }
+                catch (Exception ex)
+                {
+                    Shell.Current.DisplayAlert("Error", ex.ToString(), "OK");
+                }
+
+                return null;
             }
         }
 
@@ -63,7 +95,15 @@ namespace SniperLog.Extensions.WrapperClasses
         public DrawableImagePaths(string imagePath)
         {
             ImagePath = imagePath;
-            OverDrawPath = ImagePath + OverDrawPostFix;
+
+            if (ImagePath.Length > 5)
+            {
+                OverDrawPath = ImagePath.Insert(ImagePath.Length - 4, OverDrawPostFix);
+            }
+            else
+            {
+                OverDrawPath = string.Empty;
+            }
         }
 
         public override bool Equals(object? obj)

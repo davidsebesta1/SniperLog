@@ -73,10 +73,7 @@ namespace SniperLog.ViewModels.SRanges
 
                 if (!string.IsNullOrEmpty(BackgroundImagePath))
                 {
-                    using (FileStream reader = File.OpenRead(BackgroundImagePath))
-                    {
-                        await Range.SaveImageAsync(reader);
-                    }
+                    await Range.SaveImageAsync(BackgroundImagePath);
                 }
             }
             else
@@ -88,10 +85,7 @@ namespace SniperLog.ViewModels.SRanges
 
                 if (!string.IsNullOrEmpty(BackgroundImagePath) && BackgroundImagePath != Range.BackgroundImgPathFull)
                 {
-                    using (FileStream reader = File.OpenRead(BackgroundImagePath))
-                    {
-                        await Range.SaveImageAsync(reader);
-                    }
+                    await Range.SaveImageAsync(BackgroundImagePath);
                 }
             }
 

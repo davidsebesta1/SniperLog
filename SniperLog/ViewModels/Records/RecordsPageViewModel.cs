@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions.WrapperClasses;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 
 namespace SniperLog.ViewModels.Records
 {
@@ -51,7 +53,7 @@ namespace SniperLog.ViewModels.Records
         private int _distanceMeters;
 
         [ObservableProperty]
-        private string _imgPath;
+        private DrawableImagePaths _imgPath = new DrawableImagePaths(string.Empty, string.Empty);
 
         [ObservableProperty]
         private string _notes;
@@ -134,14 +136,18 @@ namespace SniperLog.ViewModels.Records
             try
             {
                 await SelectedRange.TrySendWeatherRequestMessage();
+                await FinalizeCreatingNewRecord(true);
             }
             catch (Exception e)
             {
                 await FinalizeCreatingNewRecord(false);
                 return;
             }
+            finally
+            {
+                ResetForm();
+            }
 
-            await FinalizeCreatingNewRecord(true);
         }
 
         private async Task FinalizeCreatingNewRecord(bool weatherSuccess)
@@ -161,13 +167,22 @@ namespace SniperLog.ViewModels.Records
                 await record.SaveNotesAsync(Notes);
             }
 
-            if(!string.IsNullOrEmpty(ImgPath) && File.Exists(ImgPath))
+            if (!string.IsNullOrEmpty(ImgPath))
             {
-                await record.SaveImageAsync(File.OpenRead(ImgPath));
+                await record.SaveImageAsync(ImgPath);
             }
 
             await SearchRecords(DateSearchVal);
-            await Shell.Current.GoToAsync("..");
+        }
+
+        private void ResetForm()
+        {
+            ElevationClicks = 0;
+            WindageClicks = 0;
+            DistanceMeters = 0;
+            ImgPath.ImagePath = string.Empty;
+            ImgPath.OverDrawPath = string.Empty;
+            Notes = string.Empty;
         }
 
         [RelayCommand]

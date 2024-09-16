@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using SniperLog.Extensions;
 using Microsoft.Data.Sqlite;
+using SniperLog.Extensions.WrapperClasses;
 
 namespace %Namespace%
 {

@@ -9,7 +9,7 @@ namespace SniperLog.Models
         {
             get
             {
-                return Path.Combine("Data", "ShootingRanges", ID.ToString(), "backgroundimage.png");
+                return Path.Combine("Data", "ShootingRecords", ID.ToString(), "backgroundimage.png");
             }
         }
 

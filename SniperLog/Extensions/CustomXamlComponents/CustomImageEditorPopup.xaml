@@ -12,19 +12,19 @@
              CloseWhenBackgroundIsClicked="False"
              Title="{Binding PageTitle}">
 
-    <Frame WidthRequest="350" HeightRequest="550" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
-        <Grid Padding="0" RowDefinitions="35,*,65">
+    <Frame WidthRequest="350" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
+        <VerticalStackLayout>
             <Label Grid.Row="0" Text="{Binding PageTitle}" FontSize="18"/>
 
-            <Grid Grid.Row="1" Padding="0">
-                <Image Source="{Binding BackgroundImage}" Aspect="AspectFill"/>
+            <Grid Grid.Row="1" Padding="0" Margin="0,10,0,0">
+                <Image Source="{Binding BackgroundImage.ImagePath}" Aspect="AspectFit"/>
                 <toolkit:DrawingView x:Name="DrawingView" BackgroundColor="Transparent" IsMultiLineModeEnabled="True" Lines="{Binding Lines, Mode=TwoWay}" LineColor="Red"/>
             </Grid>
 
-            <Grid Grid.Row="2" ColumnDefinitions="125,*,125">
-                <Button Grid.Column="0" BackgroundColor="{StaticResource PanelBackgroundLight}" Text="Cancel" HeightRequest="45" VerticalOptions="End"/>
-                <Button Grid.Column="2" BackgroundColor="{StaticResource Primary}" Text="Edit Image" HeightRequest="45" VerticalOptions="End"/>
+            <Grid Grid.Row="2" ColumnDefinitions="125,*,125" Margin="0,10,0,0">
+                <Button Grid.Column="0" BackgroundColor="{StaticResource PanelBackgroundLight}" Text="Cancel" HeightRequest="45" VerticalOptions="End" Command="{Binding CancelCommand}"/>
+                <Button Grid.Column="2" BackgroundColor="{StaticResource Primary}" Text="Edit Image" HeightRequest="45" VerticalOptions="End" Command="{Binding EditImageCommand}" CommandParameter="{x:Reference DrawingView}"/>
             </Grid>
-        </Grid>
+        </VerticalStackLayout>
     </Frame>
 </mopups:PopupPage>

@@ -13,10 +13,16 @@
 #endif
             }
         }
+
+        public static bool IsPathInAppData(string path)
+        {
+            return path.StartsWith(AppDataPath);
+        }
+
         public static string GetPathFromAppData(string relativePath)
         {
 #if WINDOWS
-            if(string.IsNullOrEmpty(relativePath))
+            if (string.IsNullOrEmpty(relativePath))
             {
                 return Environment.ExpandEnvironmentVariables("%APPDATA%");
             }

@@ -1,4 +1,5 @@
-﻿
+﻿using SniperLog.Extensions.WrapperClasses;
+
 namespace SniperLog.Models.Interfaces
 {
     public interface IImageSaveable
@@ -33,10 +34,10 @@ namespace SniperLog.Models.Interfaces
         /// <summary>
         /// Saves the image to the predefined path
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="paths"></param>
         /// <returns></returns>
-        public virtual async Task SaveImageAsync(FileStream stream)
-        {
+        public virtual async Task SaveImageAsync(DrawableImagePaths paths)
+        { 
             throw new NotImplementedException();
         }
 

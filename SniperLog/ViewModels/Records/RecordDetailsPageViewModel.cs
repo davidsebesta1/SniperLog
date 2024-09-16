@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using SniperLog.Extensions.WrapperClasses;
-using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Records
 {
@@ -36,16 +35,16 @@ namespace SniperLog.ViewModels.Records
         {
             try
             {
+                PageTitle = value != null ? $"{Record.Date.ToString("d")}\n{Record.Date.ToString("t")}" : string.Empty;
 
-            PageTitle = $"{Record.Date.ToString("d")}\n{Record.Date.ToString("t")}";
+                ElevationClicks = value?.ElevationClicksOffset ?? 0;
+                WindageClicks = value?.WindageClicksOffset ?? 0;
+                DistanceMeters = value?.Distance ?? 0;
 
-            ElevationClicks = value.ElevationClicksOffset;
-            WindageClicks = value.WindageClicksOffset;
-            DistanceMeters = value.Distance;
-
-            Img = new DrawableImagePaths((await value.GetImagesAsync()).ElementAtOrDefault(0)?.BackgroundImgPathFull);
-            Notes = value.NotesText;
-            }catch(Exception e)
+                Img = value != null ? new DrawableImagePaths((await value.GetImagesAsync()).ElementAtOrDefault(0)?.BackgroundImgPathFull) : null;
+                Notes = value?.NotesText ?? string.Empty;
+            }
+            catch (Exception e)
             {
                 await Shell.Current.DisplayAlert("Err", e.ToString(), "okay");
             }
@@ -55,6 +54,8 @@ namespace SniperLog.ViewModels.Records
         private async Task ReturnBack()
         {
             await Shell.Current.GoToAsync("..");
+
+            Record = null;
         }
 
         [RelayCommand]
@@ -72,13 +73,32 @@ namespace SniperLog.ViewModels.Records
         [RelayCommand]
         private async Task Edit()
         {
-            Record.ElevationClicksOffset = ElevationClicks;
-            Record.WindageClicksOffset = WindageClicks;
-            Record.Distance = DistanceMeters;
-
-            if (Record.NotesText != Notes)
+            try
             {
-                await Record.SaveNotesAsync(Notes);
+                Record.ElevationClicksOffset = ElevationClicks;
+                Record.WindageClicksOffset = WindageClicks;
+                Record.Distance = DistanceMeters;
+
+                if (Record.NotesText != Notes)
+                {
+                    await Record.SaveNotesAsync(Img);
+                }
+
+                ShootingRecordImage image = (await Record.GetImagesAsync()).ElementAtOrDefault(0);
+
+                if (image.ImageSavePath != Img.ImagePath || File.Exists(Img.OverDrawPath))
+                {
+                    await image.SaveImageAsync(Img);
+                }
+
+            }
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlert("Err", e.ToString(), "Ok");
+            }
+            finally
+            {
+                await Shell.Current.GoToAsync("..");
             }
         }
     }

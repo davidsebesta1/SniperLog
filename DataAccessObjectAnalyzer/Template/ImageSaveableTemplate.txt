@@ -23,16 +23,41 @@ public ImageSource ImgStream
 /// <summary>
 /// Saves the image to the predefined path
 /// </summary>
-/// <param name="stream"></param>
+/// <param name="paths"></param>
 /// <returns></returns>
-public async Task SaveImageAsync(FileStream stream)
+public virtual async Task SaveImageAsync(DrawableImagePaths paths)
 {
-    Directory.CreateDirectory(Path.GetDirectoryName(BackgroundImgPathFull));
-    Path.GetFileNameWithoutExtension(BackgroundImgPathFull);
-    using (FileStream localFileStream = File.OpenWrite(BackgroundImgPathFull))
+    if (!File.Exists(paths.ImagePath))
     {
-        Microsoft.Maui.Graphics.IImage img = Microsoft.Maui.Graphics.Platform.PlatformImage.FromStream(stream);
-        await img.SaveAsync(localFileStream, ImageFormat.Png);
+        return;
+    }
+
+    if (paths.ImagePath != BackgroundImgPathFull)
+    {
+        using (FileStream stream = File.OpenRead(paths.ImagePath))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(BackgroundImgPathFull));
+            using (FileStream localFileStream = File.OpenWrite(BackgroundImgPathFull))
+            {
+                using Microsoft.Maui.Graphics.IImage img = Microsoft.Maui.Graphics.Platform.PlatformImage.FromStream(stream);
+                await img.SaveAsync(localFileStream, ImageFormat.Png);
+            }
+        }
+    }
+
+    if (!File.Exists(paths.OverDrawPath))
+    {
+        return;
+    }
+
+    using (FileStream stream = File.OpenRead(paths.OverDrawPath))
+    {
+        string overdrawImgPath = BackgroundImgPathFull.Insert(BackgroundImgPathFull.Length - 4, DrawableImagePaths.OverDrawPostFix);
+        using (FileStream localFileStream = File.OpenWrite(overdrawImgPath))
+        {
+            using Microsoft.Maui.Graphics.IImage img = Microsoft.Maui.Graphics.Platform.PlatformImage.FromStream(stream);
+            await img.SaveAsync(localFileStream, ImageFormat.Png);
+        }
     }
 }
 

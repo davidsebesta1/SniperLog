@@ -19,6 +19,7 @@ namespace SniperLog.Pages.Records
             _validatorService.TryAddValidation(ElevOffsetEntry, n => int.TryParse((string)n, out int res));
             _validatorService.TryAddValidation(WindOffsetEntry, n => int.TryParse((string)n, out int res));
             _validatorService.TryAddValidation(DistanceEntry, n => int.TryParse((string)n, out int res) && res > 0);
+
         }
 
         protected override void OnDisappearing()

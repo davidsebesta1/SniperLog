@@ -10,5 +10,11 @@ namespace SniperLog.Extensions.CustomXamlComponents
             InitializeComponent();
             BindingContext = vm;
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+        }
     }
 }

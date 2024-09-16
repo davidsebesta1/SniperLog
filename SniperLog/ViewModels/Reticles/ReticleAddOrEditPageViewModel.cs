@@ -60,10 +60,7 @@ namespace SniperLog.ViewModels.Reticles
 
             if (TmpImgPath != Reticle.BackgroundImgPathFull)
             {
-                using (FileStream reader = File.OpenRead(TmpImgPath))
-                {
-                    await Reticle.SaveImageAsync(reader);
-                }
+                await Reticle.SaveImageAsync(TmpImgPath);
             }
 
             await Reticle.SaveAsync();

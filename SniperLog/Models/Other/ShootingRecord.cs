@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Extensions.WrapperClasses;
 using System.Collections.ObjectModel;
 using System.Data;
 
@@ -114,13 +115,13 @@ namespace SniperLog.Models
         /// <summary>
         /// Saves an image object with reference to this record
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="paths"></param>
         /// <returns></returns>
-        public async Task SaveImageAsync(FileStream stream)
+        public async Task SaveImageAsync(DrawableImagePaths paths)
         {
             ShootingRecordImage recordImage = new ShootingRecordImage(ID);
             await recordImage.SaveAsync();
-            await recordImage.SaveImageAsync(stream);
+            await recordImage.SaveImageAsync(paths);
         }
 
         public async Task<ObservableCollection<ShootingRecordImage>> GetImagesAsync()
