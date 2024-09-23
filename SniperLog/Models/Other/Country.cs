@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using SniperLog.Services.Database;
-using SniperLog.Services.Database.Attributes;
 using System.Data;
 
 namespace SniperLog.Models
@@ -113,7 +111,6 @@ namespace SniperLog.Models
         {
             return !(left == right);
         }
-
 
         #endregion
 

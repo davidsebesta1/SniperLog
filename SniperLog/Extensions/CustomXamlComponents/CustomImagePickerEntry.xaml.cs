@@ -79,14 +79,24 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     public bool IsImageSelected
     {
         get => (bool)GetValue(IsImageSelectedProperty);
-        private set => SetValue(IsImageSelectedProperty, value);
+        private set
+        {
+            SetValue(IsImageSelectedProperty, value);
+            IsImageEditorVisible = value && IsImageSelected;
+        }
     }
 
     public bool AllowImageEditing
     {
         get => (bool)GetValue(AllowImageEditingProperty);
-        set => SetValue(AllowImageEditingProperty, value);
+        set
+        {
+            SetValue(AllowImageEditingProperty, value);
+            IsImageEditorVisible = value && IsImageSelected;
+        }
     }
+
+    public bool IsImageEditorVisible { get; private set; } = false;
 
     private int StrokeThickness
     {
