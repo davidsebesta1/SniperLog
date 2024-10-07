@@ -84,9 +84,15 @@ namespace SniperLog.ViewModels.Records
                     await Record.SaveNotesAsync(Img);
                 }
 
-                ShootingRecordImage image = (await Record.GetImagesAsync()).ElementAtOrDefault(0);
+                ShootingRecordImage? image = (await Record.GetImagesAsync()).ElementAtOrDefault(0);
 
-                if (image.ImageSavePath != Img.ImagePath || File.Exists(Img.OverDrawPath))
+                if (image == null && !string.IsNullOrEmpty(Img.ImagePath))
+                {
+                    image = new ShootingRecordImage(Record.ID);
+                    await image.SaveAsync();
+                }
+
+                if (image != null && (image.ImageSavePath != Img.ImagePath || File.Exists(Img.OverDrawPath)))
                 {
                     await image.SaveImageAsync(Img);
                 }

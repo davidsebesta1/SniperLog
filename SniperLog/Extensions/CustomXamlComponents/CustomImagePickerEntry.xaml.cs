@@ -17,6 +17,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     public static readonly BindableProperty SelectedImagePathProperty = BindableProperty.Create(nameof(SelectedImagePath), typeof(DrawableImagePaths), typeof(Frame), new DrawableImagePaths(string.Empty, string.Empty), propertyChanged: OnSelectedImagePathChanged);
     public static readonly BindableProperty IsImageSelectedProperty = BindableProperty.Create(nameof(IsImageSelected), typeof(bool), typeof(Frame), false);
     public static readonly BindableProperty AllowImageEditingProperty = BindableProperty.Create(nameof(AllowImageEditing), typeof(bool), typeof(Frame), false);
+    private static readonly BindableProperty IsImageEditorVisibleProperty = BindableProperty.Create(nameof(IsImageEditorVisible), typeof(bool), typeof(Frame), false);
     private static readonly BindableProperty StrokeThicknessProperty = BindableProperty.Create(nameof(StrokeThickness), typeof(int), typeof(Border), 3);
 
     public const int BaseHeight = 205;
@@ -33,7 +34,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     {
         if (bindable is CustomImagePickerEntry customTextEntry)
         {
-            customTextEntry.EntryHeightFinal = (int)newValue + BaseHeight + 35;
+            customTextEntry.EntryHeightFinal = (int)newValue + BaseHeight + FirstRowBaseHeight;
             customTextEntry.EntryRowDefs = [new RowDefinition() { Height = FirstRowBaseHeight }, new RowDefinition() { Height = EntryRowBaseHeight + (int)newValue }];
 
             customTextEntry.OnPropertyChanged(nameof(EntryHeightFinal));
@@ -66,8 +67,22 @@ public partial class CustomImagePickerEntry : CustomEntryBase
 
     private static void OnSelectedImagePathChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is CustomImagePickerEntry customTextEntry && newValue is DrawableImagePaths imgPaths)
+        if (bindable is CustomImagePickerEntry customTextEntry)
         {
+            DrawableImagePaths imgPaths;
+            if (newValue is string str)
+            {
+                imgPaths = new DrawableImagePaths(str);
+            }
+            else if (newValue is DrawableImagePaths paths)
+            {
+                imgPaths = paths;
+            }
+            else
+            {
+                return;
+            }
+
             customTextEntry.IsImageSelected = !string.IsNullOrEmpty(imgPaths.ImagePath);
             customTextEntry.OnPropertyChanged(nameof(IsImageSelected));
 
@@ -79,13 +94,27 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     public bool IsImageSelected
     {
         get => (bool)GetValue(IsImageSelectedProperty);
-        private set => SetValue(IsImageSelectedProperty, value);
+        private set
+        {
+            SetValue(IsImageSelectedProperty, value);
+            IsImageEditorVisible = value && AllowImageEditing;
+        }
     }
 
     public bool AllowImageEditing
     {
         get => (bool)GetValue(AllowImageEditingProperty);
-        set => SetValue(AllowImageEditingProperty, value);
+        set
+        {
+            SetValue(AllowImageEditingProperty, value);
+            IsImageEditorVisible = value && IsImageSelected;
+        }
+    }
+
+    public bool IsImageEditorVisible
+    {
+        get => (bool)GetValue(IsImageEditorVisibleProperty);
+        set => SetValue(IsImageEditorVisibleProperty, value);
     }
 
     private int StrokeThickness

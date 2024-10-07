@@ -96,7 +96,7 @@ namespace SniperLog.Extensions.WrapperClasses
         {
             ImagePath = imagePath;
 
-            if (ImagePath.Length > 5)
+            if (!string.IsNullOrEmpty(imagePath) && ImagePath.Length > 5)
             {
                 OverDrawPath = ImagePath.Insert(ImagePath.Length - 4, OverDrawPostFix);
             }
