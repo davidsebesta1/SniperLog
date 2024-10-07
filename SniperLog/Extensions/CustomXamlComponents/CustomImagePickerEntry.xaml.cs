@@ -146,8 +146,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         });
         if (result != null)
         {
-            SelectedImagePath.ImagePath = result.FullPath;
-            OnPropertyChanged(nameof(SelectedImagePath));
+            SelectedImagePath = new DrawableImagePaths(result.FullPath);
         }
     }
 
@@ -163,8 +162,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
             File.Delete(SelectedImagePath.ImagePath);
         }
 
-        SelectedImagePath.ImagePath = string.Empty;
-        OnPropertyChanged(nameof(SelectedImagePath));
+        SelectedImagePath = new DrawableImagePaths(string.Empty);
     }
 
     private async void CameraOption_Tapped(object sender, TappedEventArgs e)
@@ -191,8 +189,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
                     }
                 }
 
-                SelectedImagePath.ImagePath = localFilePath;
-                OnPropertyChanged(nameof(SelectedImagePath));
+                SelectedImagePath = new DrawableImagePaths(localFilePath);
             }
         }
         catch (IOException ioException)
