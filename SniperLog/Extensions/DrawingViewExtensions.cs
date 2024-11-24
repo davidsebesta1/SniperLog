@@ -4,15 +4,18 @@ using SkiaSharp;
 
 namespace SniperLog.Extensions
 {
+    /// <summary>
+    /// A static extension class for extending <see cref="DrawingView"/>,
+    /// </summary>
     public static class DrawingViewExtensions
     {
         /// <summary>
         /// Captures whole drawing view area and returns a stream that contains it.
         /// <para>Please dispose the stream yourself.</para>
         /// </summary>
-        /// <param name="drawingView"></param>
+        /// <param name="drawingView">This drawing view.</param>
         /// <returns>A new stream.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">Throws if the drawing view has no size.</exception>
         public static Stream CaptureDrawingView(this DrawingView drawingView)
         {
             int width = (int)drawingView.Width;
