@@ -39,7 +39,7 @@ namespace SniperLog
             Routing.RegisterRoute("Firearms/AddOrEdit", typeof(FirearmAddOrEditPage));
 
             Routing.RegisterRoute("Records", typeof(RecordsPage));
-            Routing.RegisterRoute("Records/Details", typeof(RecordDetailsPage));
+            Routing.RegisterRoute("Records/RecordDetail", typeof(RecordDetailsPage));
         }
     }
 }

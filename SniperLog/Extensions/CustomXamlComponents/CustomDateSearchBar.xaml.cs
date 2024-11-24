@@ -77,9 +77,9 @@ public partial class CustomDateSearchBar : ContentView
     private void ImageButton_Pressed(object sender, EventArgs e)
     {
         DateValue = null;
-        if (EnterCommand != null && EnterCommand.CanExecute(string.Empty))
+        if (EnterCommand != null && EnterCommand.CanExecute(null))
         {
-            EnterCommand.Execute(string.Empty);
+            EnterCommand.Execute(null);
         }
     }
 

@@ -53,9 +53,8 @@ namespace SniperLog.ViewModels.Records
         [RelayCommand]
         private async Task ReturnBack()
         {
-            await Shell.Current.GoToAsync("..");
-
             Record = null;
+            await Shell.Current.GoToAsync("..");
         }
 
         [RelayCommand]
@@ -81,7 +80,7 @@ namespace SniperLog.ViewModels.Records
 
                 if (Record.NotesText != Notes)
                 {
-                    await Record.SaveNotesAsync(Img);
+                    await Record.SaveNotesAsync(Notes);
                 }
 
                 ShootingRecordImage? image = (await Record.GetImagesAsync()).ElementAtOrDefault(0);

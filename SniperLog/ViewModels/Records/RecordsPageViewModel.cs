@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
 
 namespace SniperLog.ViewModels.Records
 {
@@ -207,7 +206,7 @@ namespace SniperLog.ViewModels.Records
         [RelayCommand]
         private async Task GoToDetails(ShootingRecord record)
         {
-            await Shell.Current.GoToAsync("Records/Details", new Dictionary<string, object>(1) { { "Record", record } });
+            await Shell.Current.GoToAsync("Records/RecordDetail", new Dictionary<string, object>(1) { { "Record", record } });
         }
 
         async partial void OnSelectedFirearmChanged(Firearm? value)
