@@ -29,7 +29,7 @@ namespace SniperLog.Pages.Records
 
             await (BindingContext as RecordsPageViewModel).RefreshEntriesCommand.ExecuteAsync(false);
 
-            Firearm first = (await _firearmCacher.GetAll()).First();
+            Firearm first = (await _firearmCacher.GetAll()).FirstOrDefault();
             (BindingContext as RecordsPageViewModel).SelectedFirearm = first;
         }
 

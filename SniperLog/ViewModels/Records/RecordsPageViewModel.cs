@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
+using SniperLog.Extensions;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
@@ -20,6 +21,9 @@ namespace SniperLog.ViewModels.Records
         #endregion
 
         #region Properties
+
+        //[ObservableProperty]
+        //private LineChart _elevationChart;
 
         [ObservableProperty]
         private ObservableCollection<ShootingRange> _shootingRanges;
@@ -203,15 +207,35 @@ namespace SniperLog.ViewModels.Records
             Records = records.Where(n => n.Date.Date == date.Value.Date).ToObservableCollection();
         }
 
+        private async Task RefreshChart()
+        {
+            if (SelectedFirearm == null)
+                return;
+
+            IEnumerable<ShootingRecord> records = await _shootingRecordsCacher.GetAll();
+
+            var wher = records.Where(n => n.Firearm_ID == SelectedFirearm.ID);
+            var ord = wher.OrderBy(n => n.Distance);
+            /*
+            var select = ord.Select(n => new ChartEntry(n.ElevationClicksOffset)
+            {
+                Label = n.Distance.ToString() + " m",
+                ValueLabel = n.ElevationClicksOffset.ToString()
+            });
+            */
+            
+        }
+
         [RelayCommand]
         private async Task GoToDetails(ShootingRecord record)
         {
-            await Shell.Current.GoToAsync("Records/RecordDetail", new Dictionary<string, object>(1) { { "Record", record } });
+            await Shell.Current.GoToAsync("Records/RecordDetails", new Dictionary<string, object>(1) { { "Record", record } });
         }
 
         async partial void OnSelectedFirearmChanged(Firearm? value)
         {
             await SearchRecords(null);
+            await RefreshChart();
         }
 
         async partial void OnSelectedRangeChanged(ShootingRange? value)

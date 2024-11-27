@@ -22,7 +22,7 @@ namespace SniperLog.ViewModels.Other
         [RelayCommand]
         private async Task LoadInitialDatabase()
         {
-            await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(await MauiAssetHelper.ReadTextFileAsync("SETUPQUERY.sql"));
+            await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(await MauiExtensions.ReadTextFileAsync("SETUPQUERY.sql"));
         }
 
         [RelayCommand]

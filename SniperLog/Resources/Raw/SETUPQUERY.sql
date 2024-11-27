@@ -178,6 +178,6 @@ CREATE TRIGGER IF NOT EXISTS DeleteShootingRecordImages
             ON ShootingRecord
       FOR EACH ROW
 BEGIN
-    DELETE FROM ShootingRecordImagePath
-          WHERE ShootingRecordImagePath.ShootingRecord_ID = OLD.ID;
+    DELETE FROM ShootingRecordImage
+          WHERE ShootingRecordImage.ShootingRecord_ID = OLD.ID;
 END;

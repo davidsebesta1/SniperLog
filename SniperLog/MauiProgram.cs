@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using SniperLog.Config;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
@@ -46,6 +47,7 @@ namespace SniperLog
                  .UseMauiApp<App>()
                  .UseMauiCommunityToolkit()
                  .SetupServices()
+                 .UseSkiaSharp()
                  .ConfigureMopups()
                  .ConfigureFonts(fonts =>
                  {

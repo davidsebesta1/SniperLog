@@ -5,6 +5,7 @@
              xmlns:model="clr-namespace:SniperLog.Models"
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
              xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:RecordsPageViewModel"
              Title="{Binding PageTitle}">
 
@@ -27,7 +28,7 @@
             <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
-            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+            
 
             <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
