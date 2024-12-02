@@ -227,20 +227,25 @@ namespace SniperLog.Models
         /// <returns></returns>
         private async Task SendWeatherRequestMessage()
         {
+            CurrentWeather = await GetCurrentWeather();
+        }
+
+        /// <summary>
+        /// Gets the current weather on this range.
+        /// </summary>
+        /// <returns>Weather message from server. Or default it unable to connect.</returns>
+        public async Task<WeatherResponseMessage> GetCurrentWeather()
+        {
             if (Location == null)
-            {
-                return;
-            }
+                return default;
+
 
             INetworkMessage message = await ServicesHelper.GetService<ConnectionToDataServer>().SendRequest(new WeatherRequestMessage((double)Latitude, (double)Longitude));
 
             if (message == default || message == null)
-            {
-                return;
-            }
+                return default;
 
-            CurrentWeather = default(WeatherResponseMessage);
-            CurrentWeather = (WeatherResponseMessage)message;
+            return (WeatherResponseMessage)message;
         }
 
         partial void OnCurrentWeatherChanged(WeatherResponseMessage value)
@@ -256,9 +261,7 @@ namespace SniperLog.Models
         {
             var subranges = await ServicesHelper.GetService<DataCacherService<SubRange>>().GetAllBy(n => n.ShootingRange_ID == ID);
             if (subranges.Count == 0)
-            {
                 return 'A';
-            }
 
             return (char)(subranges.MaxBy(n => (int)n.Prefix).Prefix + 1);
         }

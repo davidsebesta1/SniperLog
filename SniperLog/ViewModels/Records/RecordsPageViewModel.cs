@@ -223,13 +223,13 @@ namespace SniperLog.ViewModels.Records
                 ValueLabel = n.ElevationClicksOffset.ToString()
             });
             */
-            
+
         }
 
         [RelayCommand]
         private async Task GoToDetails(ShootingRecord record)
         {
-            await Shell.Current.GoToAsync("Records/RecordDetails", new Dictionary<string, object>(1) { { "Record", record } });
+            await Shell.Current.GoToAsync("RecordDetails", new Dictionary<string, object>(1) { { "Record", record } });
         }
 
         async partial void OnSelectedFirearmChanged(Firearm? value)

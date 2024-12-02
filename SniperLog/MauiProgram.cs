@@ -10,6 +10,7 @@ using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
 using SniperLog.Pages.Records;
+using SniperLog.Pages.Records.Popups;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
 using SniperLog.Pages.ShootingRanges.Subranges;
@@ -33,10 +34,20 @@ using System.Net;
 
 namespace SniperLog
 {
+    /// <summary>
+    /// Main class of the program aswell as entry point.
+    /// </summary>
     public static class MauiProgram
     {
+        /// <summary>
+        /// Singleton instance of the <see cref="MauiApp"/>
+        /// </summary>
         public static MauiApp ApplicationInstance { get; private set; }
 
+        /// <summary>
+        /// Inicializes the builder and returns app singleton reference.
+        /// </summary>
+        /// <returns>App singleton reference.</returns>
         public static MauiApp CreateMauiApp()
         {
             SQLitePCL.Batteries.Init();
@@ -67,6 +78,11 @@ namespace SniperLog
             return ApplicationInstance;
         }
 
+        /// <summary>
+        /// Extension method to setup services for this application.
+        /// </summary>
+        /// <param name="builder">This app builder.</param>
+        /// <returns>Builder with setup services.</returns>
         public static MauiAppBuilder SetupServices(this MauiAppBuilder builder)
         {
             #region Data Cacher Services
@@ -115,6 +131,7 @@ namespace SniperLog
 
             builder.Services.AddSingleton<RecordsPageViewModel>();
             builder.Services.AddSingleton<RecordDetailsPageViewModel>();
+            builder.Services.AddSingleton<WeatherEditPopupPageViewModel>();
 
             builder.Services.AddSingleton<CustomImageEditorPopupViewModel>();
 
@@ -151,6 +168,7 @@ namespace SniperLog
 
             builder.Services.AddSingleton<RecordsPage>();
             builder.Services.AddSingleton<RecordDetailsPage>();
+            builder.Services.AddSingleton<WeatherEditPopupPage>();
 
             #endregion
 
