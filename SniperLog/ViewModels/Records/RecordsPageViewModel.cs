@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
-using SniperLog.Extensions;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
@@ -22,8 +25,14 @@ namespace SniperLog.ViewModels.Records
 
         #region Properties
 
-        //[ObservableProperty]
-        //private LineChart _elevationChart;
+        [ObservableProperty]
+        private List<Axis> _xAxises = [new Axis() { NamePaint = new SolidColorPaint(SKColors.White), LabelsPaint = new SolidColorPaint(SKColors.White), Labels = new ObservableCollection<string>() }];
+
+        [ObservableProperty]
+        private List<Axis> _yAxises = [new Axis() { NamePaint = new SolidColorPaint(SKColors.White), LabelsPaint = new SolidColorPaint(SKColors.White) }];
+
+        [ObservableProperty]
+        private List<ISeries> _series = [];
 
         [ObservableProperty]
         private ObservableCollection<ShootingRange> _shootingRanges;
@@ -216,13 +225,23 @@ namespace SniperLog.ViewModels.Records
 
             var wher = records.Where(n => n.Firearm_ID == SelectedFirearm.ID);
             var ord = wher.OrderBy(n => n.Distance);
-            /*
-            var select = ord.Select(n => new ChartEntry(n.ElevationClicksOffset)
+
+            XAxises[0].Labels.Clear();
+
+            foreach (var item in ord)
             {
-                Label = n.Distance.ToString() + " m",
-                ValueLabel = n.ElevationClicksOffset.ToString()
+                XAxises[0].Labels.Add(item.Distance.ToString());
+            }
+
+
+            Series.Clear();
+            Series.Add(new LineSeries<int>
+            {
+                Values = ord.Select(n => n.ElevationClicksOffset).ToList(),
+                Name = "Base",
+                Stroke = null
             });
-            */
+
 
         }
 

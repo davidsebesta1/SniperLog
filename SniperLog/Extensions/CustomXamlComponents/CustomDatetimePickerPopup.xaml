@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.Extensions.CustomXamlComponents.ViewModels"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             BackgroundColor="#AA000000"
+             x:Class="SniperLog.Extensions.CustomDatetimePickerPopup"
+             x:DataType="viewmodel:CustomDatetimePickerPopupViewModel"
+             BindingContext="viewmodel:CustomDatetimePickerPopupViewModel">
+
+    <Frame WidthRequest="350" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource Background}" Padding="15" CornerRadius="10">
+        <Grid RowDefinitions="50,*">
+            <custom:CustomSwitchEntry x:Name="SwitchEntry" LeftOptionText="Date" RightOptionText="Time" IsMandatory="False" Grid.Row="0" SelectedOption="{Binding SelectedOption, Mode=TwoWay}"/>
+
+            <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" CornerRadius="10" Grid.Row="1" Margin="0,10,0,0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </Frame.GestureRecognizers>
+                <Grid>
+                    <Label Text="{Binding CurrentText}"/>
+                    <DatePicker x:Name="DatePicker" IsVisible="False" Date="{Binding PickedDate, Mode=TwoWay}"/>
+                    <TimePicker x:Name="TimePicker" IsVisible="False" Time="{Binding PickedTime, Mode=TwoWay}"/>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Frame>
+</mopups:PopupPage>

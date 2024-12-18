@@ -128,6 +128,7 @@
 		<MauiImage Update="Resources\Images\directionicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\dropdownarrow.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\editimageicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\datetimeicon.png" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -140,6 +141,7 @@
 	  <None Remove="Resources\Fonts\Inter-Regular.ttf" />
 	  <None Remove="Resources\Images\cameraicon.svg" />
 	  <None Remove="Resources\Images\cancelicon.svg" />
+	  <None Remove="Resources\Images\datetimeicon.png" />
 	  <None Remove="Resources\Images\deleteicon.svg" />
 	  <None Remove="Resources\Images\directionicon.svg" />
 	  <None Remove="Resources\Images\dropdownarrow.svg" />
@@ -205,6 +207,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDatetimePickerPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDataViewCell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -12,9 +12,10 @@
 
     <Frame WidthRequest="350" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource Background}" Padding="25" CornerRadius="10">
         <VerticalStackLayout>
-            <Grid ColumnDefinitions="*, 45">
-                <Label Grid.Row="0" Text="{Binding PageTitle}" FontSize="18" VerticalTextAlignment="Center"/>
-                <Button Grid.Column="1" ImageSource="refreshicon.png" BackgroundColor="Transparent" Command="{Binding RefreshWeatherCommand}"/>
+            <Grid ColumnDefinitions="*, 45, 45">
+                <Label Grid.Column="0" Text="{Binding PageTitle}" FontSize="18" VerticalTextAlignment="Center"/>
+                <Button Grid.Column="1" ImageSource="datetimeicon.png" BackgroundColor="Transparent" Command="{Binding SelectDatetimeCommand}"/>
+                <Button Grid.Column="2" ImageSource="refreshicon.png" BackgroundColor="Transparent" Command="{Binding RefreshWeatherCommand}"/>
             </Grid>
 
             <custom:CustomTextEntry x:Name="TemperatureEntry" Keyboard="Numeric" EntryTitle="Temperature (°C)" TextValue="{Binding Temperature, Mode=TwoWay}" EntryHeight="1"/>

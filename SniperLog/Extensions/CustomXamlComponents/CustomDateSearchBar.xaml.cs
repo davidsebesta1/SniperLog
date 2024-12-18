@@ -1,7 +1,9 @@
-using Microsoft.Maui.Handlers;
 using System.Globalization;
 using System.Windows.Input;
-using YamlDotNet.Core.Tokens;
+
+#if ANDROID
+using Microsoft.Maui.Handlers;
+#endif
 
 namespace SniperLog.Extensions.CustomXamlComponents;
 

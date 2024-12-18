@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using SniperLog.Config;
+using SniperLog.Extensions;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
 using SniperLog.Pages.Firearms;
@@ -135,6 +136,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<CustomImageEditorPopupViewModel>();
 
+            builder.Services.AddSingleton<CustomDatetimePickerPopupViewModel>();
+
             #endregion
 
             #region Pages
@@ -169,6 +172,8 @@ namespace SniperLog
             builder.Services.AddSingleton<RecordsPage>();
             builder.Services.AddSingleton<RecordDetailsPage>();
             builder.Services.AddSingleton<WeatherEditPopupPage>();
+
+            builder.Services.AddSingleton<CustomDatetimePickerPopup>();
 
             #endregion
 

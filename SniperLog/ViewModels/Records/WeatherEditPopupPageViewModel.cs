@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Mopups.Services;
+using SniperLog.Extensions;
+using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLogNetworkLibrary;
 
 namespace SniperLog.ViewModels.Records
@@ -29,6 +31,9 @@ namespace SniperLog.ViewModels.Records
         [ObservableProperty]
         private ushort? _directionDegrees;
 
+        [ObservableProperty]
+        private DateTime _timeTaken;
+
         #endregion
 
         #region Ctor
@@ -52,6 +57,7 @@ namespace SniperLog.ViewModels.Records
                 Humidity = 0;
                 WindSpeed = 0;
                 DirectionDegrees = 0;
+                TimeTaken = DateTime.Now;
                 return;
             }
 
@@ -61,11 +67,33 @@ namespace SniperLog.ViewModels.Records
             Humidity = newValue.ReferencedWeather.Humidity;
             WindSpeed = newValue.ReferencedWeather.WindSpeed;
             DirectionDegrees = newValue.ReferencedWeather.DirectionDegrees;
+            TimeTaken = newValue.Date;
         }
 
         #endregion
 
         #region Commands
+
+        [RelayCommand]
+        private async Task SelectDatetime()
+        {
+            try
+            {
+                CustomDatetimePickerPopup popup = ServicesHelper.Services.GetService<CustomDatetimePickerPopup>();
+                CustomDatetimePickerPopupViewModel vm = (popup.BindingContext as CustomDatetimePickerPopupViewModel);
+
+                await MopupService.Instance.PushAsync(popup);
+
+                vm.PickedDate = TimeTaken.Date;
+                vm.PickedTime = TimeTaken.TimeOfDay;
+
+                TimeTaken = await popup.PopupDismissedTask;
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fatal Error", ex.ToString(), "Okay");
+            }
+        }
 
         [RelayCommand]
         private async Task RefreshWeather()
@@ -88,7 +116,7 @@ namespace SniperLog.ViewModels.Records
             }
             catch (TimeoutException e)
             {
-                //TODO: Handle?
+                await Shell.Current.DisplayAlert("Timeout", "No response from the server", "Okay");
             }
             catch (Exception e)
             {

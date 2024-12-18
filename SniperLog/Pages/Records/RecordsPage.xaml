@@ -28,7 +28,11 @@
             <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
-            
+
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
+                <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding Series}"/>
+
+            </Frame>
 
             <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
