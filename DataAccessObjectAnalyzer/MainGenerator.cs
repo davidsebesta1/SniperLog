@@ -16,7 +16,7 @@ namespace DataAccessObjectAnalyzer
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            var daoClasses = context.SyntaxProvider
+            IncrementalValuesProvider<ClassDeclarationSyntax> daoClasses = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsCandidateClass(s),
                     transform: static (context, _) => GetClassWithInterfaces(context))
@@ -45,10 +45,8 @@ namespace DataAccessObjectAnalyzer
 
         private static string GenerateDAOCodeForClass(ClassDeclarationSyntax classNode)
         {
-            var stringBuilder = new StringBuilder();
-            string className = classNode.Identifier.Text;
+            StringBuilder stringBuilder = new StringBuilder();
 
-            // You can reuse your original code-generation logic here
             stringBuilder.Append(File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
 
             GenerateNoteSaveableCode(stringBuilder, classNode);

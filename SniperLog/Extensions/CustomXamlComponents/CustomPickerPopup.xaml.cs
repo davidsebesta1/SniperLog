@@ -1,7 +1,5 @@
 using Mopups.Pages;
-using Mopups.Services;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
-using SniperLog.ViewModels;
 using System.Windows.Input;
 
 namespace SniperLog.Extensions.CustomXamlComponents
@@ -20,14 +18,10 @@ namespace SniperLog.Extensions.CustomXamlComponents
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            CustomPickerPopupViewModel vm = (CustomPickerPopupViewModel)BindingContext;
 
-            await (BindingContext as CustomPickerPopupViewModel).SearchCommand.ExecuteAsync(string.Empty);
-        }
-
-        private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            _selectionChangedCommand.Execute(e.SelectedItem);
-            await MopupService.Instance.PopAsync();
+            vm.SelectionChangedCommandEntry = _selectionChangedCommand;
+            vm.SearchCommand.Execute(string.Empty);
         }
     }
 }

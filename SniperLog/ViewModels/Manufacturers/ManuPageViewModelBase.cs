@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Pages.Manufacturers;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Manufacturers
@@ -43,9 +44,15 @@ namespace SniperLog.ViewModels.Manufacturers
         }
 
         [RelayCommand]
+        protected async Task CreateNewManufacturer()
+        {
+            await Shell.Current.GoToAsync(nameof(ManufacturerAddOrEditPage), new Dictionary<string, object>(2) { { "Manufacturer", null }, { "ManuType", await _manTypeCacher.GetFirstBy(n => n.Name == ManufacturerTypeNameInternal) } });
+        }
+
+        [RelayCommand]
         protected async Task EditManufacturer(Manufacturer manufacturer)
         {
-            await Shell.Current.GoToAsync("Manufacturers/AddOrEdit", new Dictionary<string, object>(2) { { "Manufacturer", manufacturer }, { "ManuType", await _manTypeCacher.GetFirstBy(n => n.Name == ManufacturerTypeNameInternal) } });
+            await Shell.Current.GoToAsync(nameof(ManufacturerAddOrEditPage), new Dictionary<string, object>(2) { { "Manufacturer", manufacturer }, { "ManuType", await _manTypeCacher.GetFirstBy(n => n.Name == ManufacturerTypeNameInternal) } });
         }
 
         [RelayCommand]
@@ -58,12 +65,6 @@ namespace SniperLog.ViewModels.Manufacturers
                 await manufacturer.DeleteAsync();
                 Manufacturers.Remove(manufacturer);
             }
-        }
-
-        [RelayCommand]
-        protected async Task CreateNewManufacturer()
-        {
-            await Shell.Current.GoToAsync("Manufacturers/AddOrEdit", new Dictionary<string, object>(2) { { "Manufacturer", null }, { "ManuType", await _manTypeCacher.GetFirstBy(n => n.Name == ManufacturerTypeNameInternal) } });
         }
     }
 }

@@ -26,7 +26,7 @@ namespace SniperLog.Models
 
         [ObservableProperty]
         [ForeignKey(typeof(SubRange), nameof(SubRange.ID))]
-        public int _subRange_ID;
+        private int _subRange_ID;
 
         [ObservableProperty]
         [ForeignKey(typeof(Firearm), nameof(Firearm.ID))]
@@ -36,19 +36,34 @@ namespace SniperLog.Models
         [ForeignKey(typeof(Weather), nameof(Weather.ID))]
         private int? _weather_ID;
 
+        /// <summary>
+        /// Total clicks done from 0.
+        /// </summary>
         [ObservableProperty]
         private int _elevationClicksOffset;
 
+        /// <summary>
+        /// Total clicks done from 0.
+        /// </summary>
         [ObservableProperty]
         private int _windageClicksOffset;
 
+        /// <summary>
+        /// Distance at which this record was taken.
+        /// </summary>
         [ObservableProperty]
         private int _distance;
 
+        /// <summary>
+        /// Bitwise representation of time for serialization. Use <see cref="Date"/> for actual date.
+        /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(Date))]
         private long _timeTaken;
 
+        /// <summary>
+        /// Date and time at which this record was taken.
+        /// </summary>
         public DateTime Date => DateTime.FromBinary(TimeTaken);
 
         #endregion

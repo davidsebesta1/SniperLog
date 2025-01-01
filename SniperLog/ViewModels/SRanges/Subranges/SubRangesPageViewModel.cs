@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Pages.ShootingRanges;
+using SniperLog.Pages.ShootingRanges.Subranges;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.SRanges.Subranges
@@ -35,13 +37,13 @@ namespace SniperLog.ViewModels.SRanges.Subranges
         [RelayCommand]
         private async Task AddSubrange()
         {
-            await Shell.Current.GoToAsync("AddOrEditSubrange", new Dictionary<string, object>(2) { { "Subrange", null }, { "SRange", Range } });
+            await Shell.Current.GoToAsync(nameof(SubRangeAddOrEditPage), new Dictionary<string, object>(2) { { "Subrange", null }, { "SRange", Range } });
         }
 
         [RelayCommand]
         private async Task EditSubrange(SubRange range)
         {
-            await Shell.Current.GoToAsync("AddOrEditSubrange", new Dictionary<string, object>(2) { { "Subrange", range }, { "SRange", Range } });
+            await Shell.Current.GoToAsync(nameof(SubRangeAddOrEditPage), new Dictionary<string, object>(2) { { "Subrange", range }, { "SRange", Range } });
         }
 
         [RelayCommand]

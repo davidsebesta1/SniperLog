@@ -30,12 +30,13 @@
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
 
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
-                <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding Series}"/>
-
+                <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding ElevationSeries}"/>
             </Frame>
 
             <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
-            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
+                <lvc:CartesianChart x:Name="YGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxisesWindage}" Series="{Binding WindageSeries}"/>
+            </Frame>
 
             <Label Text="Shooting Record" Style="{StaticResource Headline}" VerticalTextAlignment="Center" Margin="0,15,0,0"/>
             <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using SniperLog.Extensions;
 using SniperLog.Services.Database.Attributes;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace SniperLog.Models
@@ -27,6 +28,9 @@ namespace SniperLog.Models
         [ObservableProperty]
         private string _name;
 
+        /// <summary>
+        /// Value of a single click. Dependant on <see cref="ReferencedSightClickType"/>.
+        /// </summary>
         [ObservableProperty]
         private double _oneClickValue;
 
@@ -55,11 +59,13 @@ namespace SniperLog.Models
 
         #region DAO Methods
 
+        /// <inheritdoc/>
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
             return new FirearmSight(row);
         }
 
+        /// <inheritdoc/>
         public async Task<int> SaveAsync()
         {
             try
@@ -77,6 +83,7 @@ namespace SniperLog.Models
             }
         }
 
+        /// <inheritdoc/>
         public async Task<bool> DeleteAsync()
         {
             try
@@ -88,6 +95,20 @@ namespace SniperLog.Models
                 ServicesHelper.GetService<DataCacherService<FirearmSight>>().Remove(this);
             }
         }
+
+        /// <summary>
+        /// Gets an unsorted collection of <see cref="FirearmSightSetting"/> which have relation to this sight.
+        /// </summary>
+        /// <returns>A new collection or null if this object hasn't been saved yet.</returns>
+        public async Task<ObservableCollection<FirearmSightSetting>> GetBaseSightSettingsAsync()
+        {
+            if (ID == -1)
+                return null;
+
+            DataCacherService<FirearmSightSetting> cacher = ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>();
+            return await cacher.GetAllBy(n => n.FirearmSight_ID == ID);
+        }
+
         #endregion
 
         #region Object

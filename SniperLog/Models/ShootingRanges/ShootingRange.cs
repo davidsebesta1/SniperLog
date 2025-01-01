@@ -123,7 +123,6 @@ namespace SniperLog.Models
         /// <param name="address"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        /// <param name="relativeImagePathFromAppdata"></param>
         public ShootingRange(int iD, string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite)
         {
             ID = iD;
@@ -141,7 +140,6 @@ namespace SniperLog.Models
         /// <param name="address"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        /// <param name="relativeImagePathFromAppdata"></param>
         public ShootingRange(string name, string? address, double? latitude, double? longitude, bool isMarkedAsFavourite) : this(-1, name, address, latitude, longitude, isMarkedAsFavourite)
         {
 
@@ -150,6 +148,7 @@ namespace SniperLog.Models
         #endregion
 
         #region DAO Methods
+
         public async Task<int> SaveAsync()
         {
             try
@@ -195,7 +194,6 @@ namespace SniperLog.Models
         /// <summary>
         /// Initializes default subrange for this range on first save
         /// </summary>
-        /// <returns></returns>
         public async Task InitDefaultSubRangeForInstance()
         {
             SubRange subRange = new SubRange(ID, 0, 0, 0, 0, 'A');
@@ -205,7 +203,6 @@ namespace SniperLog.Models
         /// <summary>
         /// Attempts to send a request while checking if the current weather is either null or the 5 minute time has elapsed locally
         /// </summary>
-        /// <returns></returns>
         public async Task TrySendWeatherRequestMessage()
         {
             if (CurrentWeather.Equals(default(WeatherResponseMessage)))
@@ -224,7 +221,6 @@ namespace SniperLog.Models
         /// <summary>
         /// Sends request to the server and asynchronously sets the CurrentWeather property
         /// </summary>
-        /// <returns></returns>
         private async Task SendWeatherRequestMessage()
         {
             CurrentWeather = await GetCurrentWeather();
@@ -233,19 +229,19 @@ namespace SniperLog.Models
         /// <summary>
         /// Gets the current weather on this range.
         /// </summary>
-        /// <returns>Weather message from server. Or default it unable to connect.</returns>
+        /// <returns>Weather message from server. Or default it unable to connect to the internet.</returns>
+        /// <exception cref="TimeoutException"/>
         public async Task<WeatherResponseMessage> GetCurrentWeather()
         {
             if (Location == null)
                 return default;
 
-
             INetworkMessage message = await ServicesHelper.GetService<ConnectionToDataServer>().SendRequest(new WeatherRequestMessage((double)Latitude, (double)Longitude));
 
-            if (message == default || message == null)
+            if (message is not WeatherResponseMessage castedMessage)
                 return default;
 
-            return (WeatherResponseMessage)message;
+            return castedMessage;
         }
 
         partial void OnCurrentWeatherChanged(WeatherResponseMessage value)

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Pages.Reticles;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Reticles
@@ -34,13 +35,13 @@ namespace SniperLog.ViewModels.Reticles
         [RelayCommand]
         private async Task CreateNewReticle()
         {
-            await Shell.Current.GoToAsync("Reticles/AddOrEdit", new Dictionary<string, object>(1) { { "Reticle", null } });
+            await Shell.Current.GoToAsync(nameof(ReticleAddOrEditPage), new Dictionary<string, object>(1) { { "Reticle", null } });
         }
 
         [RelayCommand]
         private async Task EditReticle(SightReticle reticle)
         {
-            await Shell.Current.GoToAsync("Reticles/AddOrEdit", new Dictionary<string, object>(1) { { "Reticle", reticle } });
+            await Shell.Current.GoToAsync(nameof(ReticleAddOrEditPage), new Dictionary<string, object>(1) { { "Reticle", reticle } });
         }
 
         [RelayCommand]

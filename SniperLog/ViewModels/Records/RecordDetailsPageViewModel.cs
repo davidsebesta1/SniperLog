@@ -98,6 +98,8 @@ namespace SniperLog.ViewModels.Records
                     await image.SaveImageAsync(Img);
                 }
 
+                await Record.SaveAsync();
+
             }
             catch (Exception e)
             {

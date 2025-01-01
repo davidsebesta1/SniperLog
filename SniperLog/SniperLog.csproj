@@ -310,6 +310,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Images\SubrangeBackgroundIcons\" />
+	  <Folder Include="Services\Ballistics\" />
 	</ItemGroup>
 
 	<ItemGroup>

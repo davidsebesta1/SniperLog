@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Pages.Firearms;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Firearms
@@ -32,13 +33,13 @@ namespace SniperLog.ViewModels.Firearms
         [RelayCommand]
         private async Task CreateNew()
         {
-            await Shell.Current.GoToAsync("Firearms/AddOrEdit", new Dictionary<string, object>(1) { { "Firearm", null } });
+            await Shell.Current.GoToAsync(nameof(FirearmAddOrEditPage), new Dictionary<string, object>(1) { { "Firearm", null } });
         }
 
         [RelayCommand]
         private async Task Edit(Firearm firearm)
         {
-            await Shell.Current.GoToAsync("Firearms/AddOrEdit", new Dictionary<string, object>(1) { { "Firearm", firearm } });
+            await Shell.Current.GoToAsync(nameof(FirearmAddOrEditPage), new Dictionary<string, object>(1) { { "Firearm", firearm } });
         }
 
         [RelayCommand]

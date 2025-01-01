@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -25,51 +27,127 @@ namespace SniperLog.ViewModels.Records
 
         #region Properties
 
+        /// <summary>
+        /// X axis for the graph.
+        /// </summary>
         [ObservableProperty]
-        private List<Axis> _xAxises = [new Axis() { NamePaint = new SolidColorPaint(SKColors.White), LabelsPaint = new SolidColorPaint(SKColors.White), Labels = new ObservableCollection<string>() }];
+        private List<Axis> _xAxises = [new Axis()
+        {
+            NamePaint = new SolidColorPaint(SKColors.White),
+            LabelsPaint = new SolidColorPaint(SKColors.White),
+            Labels = new ObservableCollection<string>(),
+            MinStep = 50,
+        }];
 
+        /// <summary>
+        /// Y axis of the graph.
+        /// </summary>
         [ObservableProperty]
-        private List<Axis> _yAxises = [new Axis() { NamePaint = new SolidColorPaint(SKColors.White), LabelsPaint = new SolidColorPaint(SKColors.White) }];
+        private List<Axis> _yAxises = [new Axis()
+        {
+            NamePaint = new SolidColorPaint(SKColors.White),
+            LabelsPaint = new SolidColorPaint(SKColors.White),
+            LabelsDensity = 0.01f,
+        }];
 
+        /// <summary>
+        /// Y axis of the graph.
+        /// </summary>
         [ObservableProperty]
-        private List<ISeries> _series = [];
+        private List<Axis> _yAxisesWindage = [new Axis()
+        {
+            NamePaint = new SolidColorPaint(SKColors.White),
+            LabelsPaint = new SolidColorPaint(SKColors.White),
+            LabelsDensity = 1f,
+        }];
 
+        /// <summary>
+        /// Series for the elevation clicks.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<ISeries> _elevationSeries = [];
+
+        /// <summary>
+        /// Series for the windage clicks.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<ISeries> _windageSeries = [];
+
+        /// <summary>
+        /// Collection of available shooting ranges.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<ShootingRange> _shootingRanges;
 
+        /// <summary>
+        /// Collection of available shooting ranges based on the selected <see cref="SelectedRange"/>.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<SubRange> _subRanges;
 
+        /// <summary>
+        /// Collection of available firearms.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<Firearm> _firearms;
 
+        /// <summary>
+        /// Collection of available shooting records based on selected <see cref="SelectedFirearm"/>.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<ShootingRecord> _records;
 
+        /// <summary>
+        /// Selected <see cref="ShootingRange"/>.
+        /// </summary>
         [ObservableProperty]
         private ShootingRange? _selectedRange;
 
+        /// <summary>
+        /// Selected <see cref="SubRange"/>.
+        /// </summary>
         [ObservableProperty]
         private SubRange? _selectedSubRange;
 
+        /// <summary>
+        /// Selected <see cref="Firearm"/>
+        /// </summary>
         [ObservableProperty]
         private Firearm? _selectedFirearm;
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private int _elevationClicks;
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private int _windageClicks;
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private int _distanceMeters;
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private DrawableImagePaths _imgPath = new DrawableImagePaths(string.Empty, string.Empty);
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private string _notes;
 
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
         [ObservableProperty]
         private DateTime? _dateSearchVal;
 
@@ -91,6 +169,166 @@ namespace SniperLog.ViewModels.Records
         #endregion
 
         #region Commands & Methods
+
+        /// <summary>
+        /// Refreshes the elevation and windage chart
+        /// </summary>
+        /// <returns></returns>
+        public async Task RefreshChart()
+        {
+            if (SelectedFirearm == null)
+                return;
+
+            ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
+            var ord = baseSightSettings.OrderBy(n => n.Distance);
+            var distances = ord.Select(n => n.Distance);
+
+            XAxises[0].Labels.Clear();
+
+            foreach (var item in distances)
+            {
+                XAxises[0].Labels.Add(item.ToString());
+            }
+
+            List<WeatherClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
+            ElevationSeries.Clear();
+
+            ElevationSeries.Add(new LineSeries<int>
+            {
+                Values = ord.Select(n => n.ElevationValue).ToList(),
+                Name = "Base",
+                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                Fill = null,
+                LineSmoothness = 0,
+
+            });
+
+            if (weatherOffsets != null)
+            {
+                ElevationSeries.Add(new LineSeries<int?>
+                {
+                    Values = (ICollection<int?>)weatherOffsets.Where(n => n.HasValue && n.Value.VerticalClicks != null).Select(n => n.Value.VerticalClicks).ToList(),
+                    Name = "Base",
+                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    Fill = null,
+                    LineSmoothness = 0,
+                });
+            }
+
+            WindageSeries.Clear();
+
+            WindageSeries.Add(new LineSeries<int>
+            {
+                Values = ord.Select(n => n.WindageValue).ToList(),
+                Name = "Base",
+                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                Fill = null,
+                LineSmoothness = 0,
+            });
+
+            if (weatherOffsets != null)
+            {
+                WindageSeries.Add(new LineSeries<int?>
+                {
+                    Values = (ICollection<int?>)weatherOffsets.Where(n => n.HasValue && n.Value.WindageClicks != null).Select(n => n.Value.WindageClicks).ToList(),
+                    Name = "Base",
+                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    Fill = null,
+                    LineSmoothness = 0,
+                });
+            }
+        }
+
+
+        public async Task<List<WeatherClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances)
+        {
+            if (SelectedFirearm == null)
+                return null;
+
+            if (SelectedRange == null)
+                return null;
+
+            ObservableCollection<ShootingRecord> relatedRecords = await _shootingRecordsCacher.GetAllBy(n => n.ReferencedFirearm == SelectedFirearm);
+            int count = distances.Count();
+
+            List<WeatherClickOffset?> list = new List<WeatherClickOffset?>(count);
+
+            WeatherResponseMessage msg;
+            try
+            {
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+
+                if (accessType == NetworkAccess.None)
+                {
+                    using IToast toast = Toast.Make("Unable to load weather offsets. No internet.", ToastDuration.Long, 14);
+
+                    await toast.Show();
+                    return null;
+                }
+
+                msg = await SelectedRange.GetCurrentWeather();
+
+            }
+            catch (TimeoutException timeoutEx)
+            {
+                using IToast toast = Toast.Make("Unable to load weather offsets. Can't download weather data.", ToastDuration.Long, 14);
+
+                await toast.Show();
+                return null;
+            }
+
+            if (msg.Equals(default(WeatherResponseMessage)))
+                return null;
+
+            foreach (int distance in distances)
+            {
+                var rangeRelated = relatedRecords.Where(n => n.Distance - distance == 0);
+
+                WeatherClickOffset? nearest = GetNearestElevationClicksToCurrentWeather(rangeRelated, msg);
+                list.Add(nearest);
+            }
+
+            return list;
+        }
+
+        private WeatherClickOffset? GetNearestElevationClicksToCurrentWeather(IEnumerable<ShootingRecord> related, WeatherResponseMessage weather)
+        {
+            if (SelectedRange == null)
+                return null;
+
+            if (!related.Any())
+                return null;
+
+
+            ShootingRecord shootingRecord = null;
+            double bestScoreSoFar = double.MaxValue; // score for best match, lower is better
+            foreach (ShootingRecord record in related)
+            {
+                if (record.ReferencedWeather == null)
+                    continue;
+
+                double tempDiff = Math.Abs((double)(weather.Temperature - record.ReferencedWeather.Temperature));
+                int pressureDiff = Math.Abs((int)(weather.Pressure - record.ReferencedWeather.Pressure));
+                int humidityDiff = Math.Abs((int)(weather.Humidity - record.ReferencedWeather.Humidity));
+
+                double score = tempDiff + pressureDiff + humidityDiff;
+
+                if (score < bestScoreSoFar)
+                {
+                    bestScoreSoFar = score;
+                    shootingRecord = record;
+                }
+            }
+
+            if (shootingRecord == null)
+                return null;
+
+            return new WeatherClickOffset(shootingRecord.ElevationClicksOffset, shootingRecord.WindageClicksOffset);
+        }
 
         [RelayCommand]
         private async Task RefreshEntries(bool resetSubRange = false)
@@ -216,35 +454,6 @@ namespace SniperLog.ViewModels.Records
             Records = records.Where(n => n.Date.Date == date.Value.Date).ToObservableCollection();
         }
 
-        private async Task RefreshChart()
-        {
-            if (SelectedFirearm == null)
-                return;
-
-            IEnumerable<ShootingRecord> records = await _shootingRecordsCacher.GetAll();
-
-            var wher = records.Where(n => n.Firearm_ID == SelectedFirearm.ID);
-            var ord = wher.OrderBy(n => n.Distance);
-
-            XAxises[0].Labels.Clear();
-
-            foreach (var item in ord)
-            {
-                XAxises[0].Labels.Add(item.Distance.ToString());
-            }
-
-
-            Series.Clear();
-            Series.Add(new LineSeries<int>
-            {
-                Values = ord.Select(n => n.ElevationClicksOffset).ToList(),
-                Name = "Base",
-                Stroke = null
-            });
-
-
-        }
-
         [RelayCommand]
         private async Task GoToDetails(ShootingRecord record)
         {
@@ -261,6 +470,8 @@ namespace SniperLog.ViewModels.Records
         {
             await RefreshEntries(true);
             await SearchRecords(null);
+
+            await RefreshChart();
         }
 
         async partial void OnSelectedSubRangeChanged(SubRange? value)
@@ -269,5 +480,33 @@ namespace SniperLog.ViewModels.Records
         }
 
         #endregion
+
+        /// <summary>
+        /// Temporary struct for offsets by weather.
+        /// </summary>
+        public readonly struct WeatherClickOffset
+        {
+            /// <summary>
+            /// Vertical clicks offset by this weather.
+            /// </summary>
+            public readonly int? VerticalClicks;
+
+            /// <summary>
+            /// Horizontal clicks offset by this weather.
+            /// </summary>
+            public readonly int? WindageClicks;
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="verticalClicks">Vertical clicks.</param>
+            /// <param name="horizontalClicks">Horizontal clicks.</param>
+            public WeatherClickOffset(int verticalClicks, int horizontalClicks)
+            {
+                VerticalClicks = verticalClicks;
+                WindageClicks = horizontalClicks;
+            }
+        }
     }
+
 }
