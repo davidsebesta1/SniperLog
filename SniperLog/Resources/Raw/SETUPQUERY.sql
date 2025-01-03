@@ -89,6 +89,37 @@ CREATE TABLE IF NOT EXISTS FirearmSightSetting(
     FOREIGN KEY (FirearmSight_ID) REFERENCES FirearmSight(ID)
 );
 
+--Ammo
+CREATE TABLE IF NOT EXISTS Bullet(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Caliber_ID INTEGER NOT NULL,
+    WeightGrams DECIMAL(10,2) NOT NULL,
+    BallisticCoeficient DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (Caliber_ID) REFERENCES FirearmCaliber(ID)
+);
+
+--Ammunition
+CREATE TABLE IF NOT EXISTS Ammunition(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Bullet_ID INTEGER NOT NULL,
+    TotalLengthMm DECIMAL(10,2) NOT NULL,
+    GunpowderAmountGrams DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (Bullet_ID) REFERENCES Bullet(ID)
+);
+
+--Muzzle velocities
+CREATE TABLE IF NOT EXISTS MuzzleVelocity(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Ammo_ID INTEGER NOT NULL,
+    Firearm_ID INTEGER NOT NULL,
+    VelocityMS DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (Ammo_ID) REFERENCES Ammunition(ID),
+    FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID)
+);
+
 -- Optic
 CREATE TABLE IF NOT EXISTS FirearmSight(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -151,6 +182,7 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
     ShootingRange_ID INTEGER NOT NULL,
     SubRange_ID INTEGER NOT NULL,
     Firearm_ID INTEGER NOT NULL,
+    Ammo_ID INTEGER NOT NULL,
     Weather_ID INTEGER,
     ElevationClicksOffset INTEGER NOT NULL,
     WindageClicksOffset INTEGER NOT NULL,
@@ -161,6 +193,7 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID),
     FOREIGN KEY (SubRange_ID) REFERENCES SubRange(ID),
     FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID),
+    FOREIGN KEY (Ammo_ID) REFERENCES Ammunition(ID),
     FOREIGN KEY (Weather_ID) REFERENCES Weather(ID)
 );
 

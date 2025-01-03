@@ -142,7 +142,7 @@ namespace SniperLog.Models
 
         public static bool operator ==(Firearm? left, Firearm? right)
         {
-            return EqualityComparer<Firearm>.Default.Equals(left, right);
+            return left is Firearm f1 && right is Firearm f2 && f1.Equals(f2);
         }
 
         public static bool operator !=(Firearm? left, Firearm? right)

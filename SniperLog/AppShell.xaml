@@ -21,6 +21,7 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate local:MainPage}" Icon="homeicon.png"></ShellContent>
         <ShellContent Title="Records" ContentTemplate="{DataTemplate records:RecordsPage}" Icon="recordsicon.png"></ShellContent>
         <ShellContent Title="Firearms" ContentTemplate="{DataTemplate firearms:FirearmsPage}" Icon="firearmsicon.png"></ShellContent>
+        <ShellContent Title="Ammunition" ContentTemplate="{DataTemplate firearms:AmmunitionsPage}" Icon="firearmsicon.png"></ShellContent>
         <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate sRanges:SRangesPage}" Icon="shootingrangesicon.png"></ShellContent>
         <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate manufacturers:ManufacturersPage}" Icon="manufacturersicon.png"></ShellContent>
         <ShellContent Title="Sights" ContentTemplate="{DataTemplate sights:SightsPage}" Icon="sightsicon.png"></ShellContent>

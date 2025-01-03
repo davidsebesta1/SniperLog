@@ -243,6 +243,12 @@
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\AmmunitionAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\AmmunitionsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmAddOrEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -309,8 +315,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Pages\Firearms\Bullets\" />
 	  <Folder Include="Resources\Images\SubrangeBackgroundIcons\" />
-	  <Folder Include="Services\Ballistics\" />
 	</ItemGroup>
 
 	<ItemGroup>

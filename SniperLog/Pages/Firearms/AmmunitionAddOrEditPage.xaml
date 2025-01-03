@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Firearms.AmmunitionAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Firearms"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:AmmunitionAddOrEditPageViewModel"
+             Title="{Binding PageTitle}">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomPickerEntry x:Name="BulletEntry" EntryTitle="Bullet" IsMandatory="True" EntryHeight="1" SourceCollection="{Binding Bullets}" SelectedItem="{Binding Bullet, Mode=TwoWay}" ErrorText="Bullet must be selected"/>
+            <custom:CustomTextEntry x:Name="TotalLenEntry" EntryTitle="Total Length" IsMandatory="True" EntryTitleSubtext="cm" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding TotalLengthMm, Mode=TwoWay}" PlaceholderText="Total length..."/>
+            <custom:CustomTextEntry x:Name="PowerWeightEntry" EntryTitle="Gunpowder Weight" IsMandatory="True" EntryTitleSubtext="grams" EntryHeight="1" ErrorText="Weight must not be empty" TextValue="{Binding GunpowderAmountGrams, Mode=TwoWay}" PlaceholderText="Total gunpowder weight..."/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

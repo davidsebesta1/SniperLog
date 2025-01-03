@@ -40,6 +40,9 @@ namespace SniperLog
 
             Routing.RegisterRoute(nameof(RecordsPage), typeof(RecordsPage));
             Routing.RegisterRoute(nameof(RecordDetailsPage), typeof(RecordDetailsPage));
+
+            Routing.RegisterRoute(nameof(AmmunitionsPage), typeof(AmmunitionsPage));
+            Routing.RegisterRoute(nameof(AmmunitionAddOrEditPage), typeof(AmmunitionAddOrEditPage));
         }
     }
 }

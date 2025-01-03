@@ -138,6 +138,9 @@ namespace SniperLog
 
             builder.Services.AddSingleton<CustomDatetimePickerPopupViewModel>();
 
+            builder.Services.AddSingleton<AmmunitionsPageViewModel>();
+            builder.Services.AddSingleton<AmmunitionAddOrEditPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -174,6 +177,9 @@ namespace SniperLog
             builder.Services.AddSingleton<WeatherEditPopupPage>();
 
             builder.Services.AddSingleton<CustomDatetimePickerPopup>();
+
+            builder.Services.AddSingleton<AmmunitionsPage>();
+            builder.Services.AddSingleton<AmmunitionAddOrEditPageViewModel>();
 
             #endregion
 

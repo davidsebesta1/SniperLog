@@ -7,6 +7,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using SniperLog.Extensions.WrapperClasses;
+using SniperLog.Services.Ballistics;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
 
@@ -179,6 +180,24 @@ namespace SniperLog.ViewModels.Records
             if (SelectedFirearm == null)
                 return;
 
+            if (SelectedRange != null)
+            {
+                WeatherResponseMessage msg = await SelectedRange.GetCurrentWeather();
+                BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
+                var offset = ballisticCalculatorService.CalculateOffset(msg, 300, 2700, 0.319, ClickType.MRADs, 0.1d);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
             ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
             var ord = baseSightSettings.OrderBy(n => n.Distance);
             var distances = ord.Select(n => n.Distance);
@@ -190,7 +209,7 @@ namespace SniperLog.ViewModels.Records
                 XAxises[0].Labels.Add(item.ToString());
             }
 
-            List<WeatherClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
+            List<ClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
             ElevationSeries.Clear();
 
             ElevationSeries.Add(new LineSeries<int>
@@ -244,7 +263,7 @@ namespace SniperLog.ViewModels.Records
         }
 
 
-        public async Task<List<WeatherClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances)
+        public async Task<List<ClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances)
         {
             if (SelectedFirearm == null)
                 return null;
@@ -255,7 +274,7 @@ namespace SniperLog.ViewModels.Records
             ObservableCollection<ShootingRecord> relatedRecords = await _shootingRecordsCacher.GetAllBy(n => n.ReferencedFirearm == SelectedFirearm);
             int count = distances.Count();
 
-            List<WeatherClickOffset?> list = new List<WeatherClickOffset?>(count);
+            List<ClickOffset?> list = new List<ClickOffset?>(count);
 
             WeatherResponseMessage msg;
             try
@@ -288,14 +307,14 @@ namespace SniperLog.ViewModels.Records
             {
                 var rangeRelated = relatedRecords.Where(n => n.Distance - distance == 0);
 
-                WeatherClickOffset? nearest = GetNearestElevationClicksToCurrentWeather(rangeRelated, msg);
+                ClickOffset? nearest = GetNearestElevationClicksToCurrentWeather(rangeRelated, msg);
                 list.Add(nearest);
             }
 
             return list;
         }
 
-        private WeatherClickOffset? GetNearestElevationClicksToCurrentWeather(IEnumerable<ShootingRecord> related, WeatherResponseMessage weather)
+        private ClickOffset? GetNearestElevationClicksToCurrentWeather(IEnumerable<ShootingRecord> related, WeatherResponseMessage weather)
         {
             if (SelectedRange == null)
                 return null;
@@ -327,7 +346,7 @@ namespace SniperLog.ViewModels.Records
             if (shootingRecord == null)
                 return null;
 
-            return new WeatherClickOffset(shootingRecord.ElevationClicksOffset, shootingRecord.WindageClicksOffset);
+            return new ClickOffset(shootingRecord.ElevationClicksOffset, shootingRecord.WindageClicksOffset);
         }
 
         [RelayCommand]
@@ -409,7 +428,7 @@ namespace SniperLog.ViewModels.Records
                 await weather.SaveAsync();
             }
 
-            ShootingRecord record = new ShootingRecord(SelectedRange.ID, SelectedSubRange.ID, SelectedFirearm.ID, weather?.ID, ElevationClicks, WindageClicks, DistanceMeters, DateTime.Now.ToBinary());
+            ShootingRecord record = new ShootingRecord(SelectedRange.ID, SelectedSubRange.ID, SelectedFirearm.ID, 1, weather?.ID, ElevationClicks, WindageClicks, DistanceMeters, DateTime.Now.ToBinary());
             await record.SaveAsync();
 
             if (!string.IsNullOrEmpty(Notes))
@@ -481,32 +500,5 @@ namespace SniperLog.ViewModels.Records
 
         #endregion
 
-        /// <summary>
-        /// Temporary struct for offsets by weather.
-        /// </summary>
-        public readonly struct WeatherClickOffset
-        {
-            /// <summary>
-            /// Vertical clicks offset by this weather.
-            /// </summary>
-            public readonly int? VerticalClicks;
-
-            /// <summary>
-            /// Horizontal clicks offset by this weather.
-            /// </summary>
-            public readonly int? WindageClicks;
-
-            /// <summary>
-            /// Constructor.
-            /// </summary>
-            /// <param name="verticalClicks">Vertical clicks.</param>
-            /// <param name="horizontalClicks">Horizontal clicks.</param>
-            public WeatherClickOffset(int verticalClicks, int horizontalClicks)
-            {
-                VerticalClicks = verticalClicks;
-                WindageClicks = horizontalClicks;
-            }
-        }
     }
-
 }

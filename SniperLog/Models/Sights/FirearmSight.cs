@@ -145,4 +145,31 @@ namespace SniperLog.Models
 
         #endregion
     }
+
+    /// <summary>
+    /// Struct for click offsets.
+    /// </summary>
+    public readonly struct ClickOffset
+    {
+        /// <summary>
+        /// Vertical clicks offset..
+        /// </summary>
+        public readonly int? VerticalClicks;
+
+        /// <summary>
+        /// Horizontal clicks offset.
+        /// </summary>
+        public readonly int? WindageClicks;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="verticalClicks">Vertical clicks.</param>
+        /// <param name="horizontalClicks">Horizontal clicks.</param>
+        public ClickOffset(int? verticalClicks, int? horizontalClicks)
+        {
+            VerticalClicks = verticalClicks;
+            WindageClicks = horizontalClicks;
+        }
+    }
 }
