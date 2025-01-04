@@ -23,7 +23,7 @@ namespace SniperLog.Pages.Firearms
             _validatorService.TryAddValidation(TotalLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
             _validatorService.TryAddValidation(PowerWeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
-            await (BindingContext as FirearmAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
+            await (BindingContext as AmmunitionAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
         }
 
         protected override void OnDisappearing()

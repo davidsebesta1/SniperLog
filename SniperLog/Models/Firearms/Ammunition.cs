@@ -15,7 +15,7 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(Bullet), nameof(Bullet.ID))]
         [ObservableProperty]
-        private int _bulletID;
+        private int _bullet_ID;
 
         [ObservableProperty]
         private double _totalLengthMm;
@@ -26,7 +26,7 @@ namespace SniperLog.Models
         public Ammunition(int iD, int bulletID, double totalLengthMm, double gunpowderAmountGrams)
         {
             ID = iD;
-            BulletID = bulletID;
+            Bullet_ID = bulletID;
             TotalLengthMm = totalLengthMm;
             GunpowderAmountGrams = gunpowderAmountGrams;
         }

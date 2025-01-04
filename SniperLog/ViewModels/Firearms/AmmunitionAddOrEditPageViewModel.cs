@@ -78,7 +78,7 @@ namespace SniperLog.ViewModels.Firearms
             }
             else
             {
-                Ammunition.BulletID = Bullet.ID;
+                Ammunition.Bullet_ID = Bullet.ID;
                 Ammunition.TotalLengthMm = TotalLengthMm;
                 Ammunition.GunpowderAmountGrams = GunpowderAmountGrams;
             }

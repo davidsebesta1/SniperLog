@@ -10,23 +10,32 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(FirearmCaliber), nameof(FirearmCaliber.ID))]
         [ObservableProperty]
-        private int _caliberID;
+        private int _caliber_ID;
+
+        [ForeignKey(typeof(Manufacturer), nameof(Manufacturer.ID))]
+        [ObservableProperty]
+        private int _manufacturer_ID;
 
         [ObservableProperty]
-        private double _weightGrams;
+        private double? _weightGrams;
 
         [ObservableProperty]
-        private double _ballisticCoeficient;
+        private double? _bCG1;
 
-        public Bullet(int iD, int caliberID, double weightGrams, double ballisticCoeficient)
+        [ObservableProperty]
+        private double? _bCG7;
+
+        public Bullet(int iD, int caliberID, int manuId, double? weightGrams, double? bc1, double? bc7)
         {
             ID = iD;
-            CaliberID = caliberID;
+            Caliber_ID = caliberID;
+            Manufacturer_ID = manuId;
             WeightGrams = weightGrams;
-            BallisticCoeficient = ballisticCoeficient;
+            BCG1 = bc1;
+            BCG7 = bc7;
         }
 
-        public Bullet(int caliberID, double weightGrams, double ballisticCoeficient) : this(-1, caliberID, weightGrams, ballisticCoeficient)
+        public Bullet(int caliberID, int manuId, double? weightGrams, double? bc1, double? bc7) : this(-1, caliberID, manuId, weightGrams, bc1, bc7)
         {
 
         }
@@ -79,12 +88,12 @@ namespace SniperLog.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ID, WeightGrams, BallisticCoeficient);
+            return HashCode.Combine(ID, WeightGrams, BCG1, BCG7);
         }
 
         public override string? ToString()
         {
-            return WeightGrams + "g, BC: " + BallisticCoeficient;
+            return WeightGrams + "g, BC1: " + BCG1 + ", BC7: " + BCG7;
         }
     }
 }

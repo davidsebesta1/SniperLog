@@ -93,9 +93,12 @@ CREATE TABLE IF NOT EXISTS FirearmSightSetting(
 CREATE TABLE IF NOT EXISTS Bullet(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     Caliber_ID INTEGER NOT NULL,
-    WeightGrams DECIMAL(10,2) NOT NULL,
-    BallisticCoeficient DECIMAL(10,2) NOT NULL,
+    Manufacturer_ID INTEGER NOT NULL,
+    WeightGrams DECIMAL(10,2),
+    BCG1 DECIMAL(10,2),
+    BCG7 DECIMAL(10,2),
 
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID)
     FOREIGN KEY (Caliber_ID) REFERENCES FirearmCaliber(ID)
 );
 

@@ -204,6 +204,12 @@
 	  <Compile Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml.cs">
 	    <DependentUpon>CustomTextEntry.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Manufacturers\FirearmManufacturers\AmmoManuPage.xaml.cs">
+	    <DependentUpon>AmmoManuPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Manufacturers\FirearmManufacturers\BulletManuPage.xaml.cs">
+	    <DependentUpon>BulletManuPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -249,10 +255,22 @@
 	  <MauiXaml Update="Pages\Firearms\AmmunitionsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\Bullets\BulletAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\Bullets\BulletsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmAddOrEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\AmmoManuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\BulletManuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\FirearmManuPage.xaml">
@@ -315,7 +333,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Pages\Firearms\Bullets\" />
 	  <Folder Include="Resources\Images\SubrangeBackgroundIcons\" />
 	</ItemGroup>
 

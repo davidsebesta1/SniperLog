@@ -18,7 +18,7 @@
     <Grid RowDefinitions="55,*" Padding="15">
         <Label Text="Manufacturers" Grid.Row="0" Style="{StaticResource Headline}"/>
 
-        <Grid RowDefinitions="170,170" ColumnDefinitions="170,170" ColumnSpacing="25" Grid.Row="1">
+        <Grid RowDefinitions="170,170,170" ColumnDefinitions="170,170" ColumnSpacing="25" RowSpacing="25" Grid.Row="1">
             <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="0" Grid.Column="0" Padding="0">
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToFirearmManufacturersCommand}"/>
@@ -42,6 +42,31 @@
                     <Label Text="Sights Manufacturers" Grid.Row="1" FontSize="18" Padding="15,0,0,15"/>
                 </Grid>
             </Frame>
+            
+            <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" Grid.Column="0" Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToBulletManufacturersCommand}"/>
+                </Frame.GestureRecognizers>
+
+                <Grid RowDefinitions="*,60" Padding="0">
+                    <Image Source="manufacturerbackground.png" HorizontalOptions="End" VerticalOptions="End" Grid.RowSpan="2" Margin="3"/>
+                    <Image Source="firearmsighticonwhite.png" Margin="20,20,20,0" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Text="Bullet Manufacturers" Grid.Row="1" FontSize="18" Padding="15,0,0,15"/>
+                </Grid>
+            </Frame>
+
+            <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" Grid.Column="1" Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToAmmunitionManufacturersCommand}"/>
+                </Frame.GestureRecognizers>
+
+                <Grid RowDefinitions="*,60" Padding="0">
+                    <Image Source="manufacturerbackground.png" HorizontalOptions="End" VerticalOptions="End" Grid.RowSpan="2" Margin="3"/>
+                    <Image Source="firearmsighticonwhite.png" Margin="20,20,20,0" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Text="Ammunition Manufacturers" Grid.Row="1" FontSize="18" Padding="15,0,0,15"/>
+                </Grid>
+            </Frame>
         </Grid>
+
     </Grid>
 </ContentPage>

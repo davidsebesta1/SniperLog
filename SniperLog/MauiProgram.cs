@@ -7,6 +7,7 @@ using SniperLog.Extensions;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
 using SniperLog.Pages;
 using SniperLog.Pages.Firearms;
+using SniperLog.Pages.Firearms.Bullets;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Other;
@@ -31,6 +32,7 @@ using SniperLog.ViewModels.Sights;
 using SniperLog.ViewModels.Sights.ClickSettings;
 using SniperLog.ViewModels.SRanges;
 using SniperLog.ViewModels.SRanges.Subranges;
+using SniperLog.ViewModels.Firearms.Bullets;
 using System.Net;
 
 namespace SniperLog
@@ -141,6 +143,9 @@ namespace SniperLog
             builder.Services.AddSingleton<AmmunitionsPageViewModel>();
             builder.Services.AddSingleton<AmmunitionAddOrEditPageViewModel>();
 
+            builder.Services.AddSingleton<BulletsPageViewModel>();
+            builder.Services.AddSingleton<BulletAddOrEditPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -156,7 +161,7 @@ namespace SniperLog
             builder.Services.AddSingleton<SubRangeAddOrEditPage>();
 
             builder.Services.AddSingleton<ManufacturersPage>();
-            builder.Services.AddSingleton<FirearmManuPage>();
+            builder.Services.AddSingleton<BulletManuPage>();
             builder.Services.AddSingleton<SightManuPage>();
             builder.Services.AddSingleton<ManufacturerAddOrEditPage>();
 
@@ -179,7 +184,10 @@ namespace SniperLog
             builder.Services.AddSingleton<CustomDatetimePickerPopup>();
 
             builder.Services.AddSingleton<AmmunitionsPage>();
-            builder.Services.AddSingleton<AmmunitionAddOrEditPageViewModel>();
+            builder.Services.AddSingleton<AmmunitionAddOrEditPage>();
+
+            builder.Services.AddSingleton<BulletsPage>();
+            builder.Services.AddSingleton<BulletAddOrEditPage>();
 
             #endregion
 

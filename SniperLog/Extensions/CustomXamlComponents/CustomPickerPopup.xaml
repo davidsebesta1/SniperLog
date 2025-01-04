@@ -10,7 +10,7 @@
              x:DataType="viewmodel:CustomPickerPopupViewModel">
 
     <Frame HorizontalOptions="FillAndExpand" HeightRequest="600" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
-        <Grid Padding="0" RowDefinitions="450,150">
+        <Grid Padding="0" RowDefinitions="*,*">
             <CollectionView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" SelectionMode="Single" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectionChangedCommand}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="x:Object">
@@ -22,7 +22,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <VerticalStackLayout Grid.Row="1" MaximumHeightRequest="120" MinimumHeightRequest="90" VerticalOptions="End">
+            <VerticalStackLayout Grid.Row="1" MaximumHeightRequest="150" MinimumHeightRequest="90" VerticalOptions="End">
                 <Button x:Name="SelectNoneButton" Command="{Binding SelectNoneCommand}" IsVisible="{Binding SelectNoneVisiblity}" Text="Select None" TextColor="{StaticResource Text}" HeightRequest="40"/>
                 <custom:CustomSearchBar PlaceholderText="Search..." EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
             </VerticalStackLayout>
