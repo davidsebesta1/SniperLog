@@ -34,6 +34,10 @@ using SniperLog.ViewModels.SRanges;
 using SniperLog.ViewModels.SRanges.Subranges;
 using SniperLog.ViewModels.Firearms.Bullets;
 using System.Net;
+using SniperLog.ViewModels.Manufacturers.BulletManufacturers;
+using SniperLog.ViewModels.Manufacturers.AmmunitionManufacturers;
+using SniperLog.ViewModels.Firearms.MuzzleVelocities;
+using SniperLog.Pages.Firearms.MuzzleVelocities;
 
 namespace SniperLog
 {
@@ -114,9 +118,12 @@ namespace SniperLog
             builder.Services.AddSingleton<SubRangeAddOrEditPageViewModel>();
 
             builder.Services.AddSingleton<ManufacturersPageViewModel>();
+
             builder.Services.AddSingleton<FirearmManuPageViewModel>();
             builder.Services.AddSingleton<SightManuPageViewModel>();
             builder.Services.AddSingleton<ManufacturerAddOrEditPageViewModel>();
+            builder.Services.AddSingleton<BulletManuPageViewModel>(); 
+            builder.Services.AddSingleton<AmmoManuPageViewModel>();
 
             builder.Services.AddTransient<CustomPickerPopupViewModel>();
 
@@ -146,6 +153,9 @@ namespace SniperLog
             builder.Services.AddSingleton<BulletsPageViewModel>();
             builder.Services.AddSingleton<BulletAddOrEditPageViewModel>();
 
+            builder.Services.AddSingleton<MuzzleVelocitiesPageViewModel>();
+            builder.Services.AddSingleton<MuzzleVelocityAddOrEditPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -161,8 +171,11 @@ namespace SniperLog
             builder.Services.AddSingleton<SubRangeAddOrEditPage>();
 
             builder.Services.AddSingleton<ManufacturersPage>();
+
             builder.Services.AddSingleton<BulletManuPage>();
             builder.Services.AddSingleton<SightManuPage>();
+            builder.Services.AddSingleton<AmmoManuPage>();
+            builder.Services.AddSingleton<FirearmManuPage>();
             builder.Services.AddSingleton<ManufacturerAddOrEditPage>();
 
             builder.Services.AddSingleton<SightsPage>();
@@ -188,6 +201,9 @@ namespace SniperLog
 
             builder.Services.AddSingleton<BulletsPage>();
             builder.Services.AddSingleton<BulletAddOrEditPage>();
+
+            builder.Services.AddSingleton<MuzzleVelocitiesPage>();
+            builder.Services.AddSingleton<MuzzleVelocityAddOrEditPage>();
 
             #endregion
 

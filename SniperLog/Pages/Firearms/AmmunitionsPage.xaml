@@ -17,11 +17,10 @@
         </Grid>
     </Shell.TitleView>
 
-
     <Grid RowDefinitions="90,55,*" Padding="15">
         <HorizontalStackLayout Grid.Row="0">
             <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
-            <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
+            <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0" VerticalOptions="Center"/>
         </HorizontalStackLayout>
 
         <custom:CustomSearchBar Grid.Row="1" PlaceholderText="Caliber, length, BC..." EnterCommand="{Binding SearchCommand}"/>

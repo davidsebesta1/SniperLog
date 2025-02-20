@@ -102,13 +102,7 @@
 
 		<MauiImage Update="Resources\Images\editicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
-		<MauiImage Update="Resources\Images\FlyoutIcons\firearmsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\manufacturersicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\recordsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\reticlesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\shootingrangesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\sightsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\settingsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\FlyoutIcons\*" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<MauiImage Update="Resources\Images\searchicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
 		<MauiImage Update="Resources\Images\cancelicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
@@ -147,6 +141,8 @@
 	  <None Remove="Resources\Images\dropdownarrow.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\editimageicon.svg" />
+	  <None Remove="Resources\Images\FlyoutIcons\ammoicon.svg" />
+	  <None Remove="Resources\Images\FlyoutIcons\bulletsicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
 	  <None Remove="Resources\Images\galleryicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
@@ -265,6 +261,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\MuzzleVelocities\MuzzleVelocitiesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\MuzzleVelocities\MuzzleVelocityAddOrEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\AmmoManuPage.xaml">

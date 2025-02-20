@@ -6,6 +6,7 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using SniperLog.Config;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLog.Services.Ballistics;
 using SniperLogNetworkLibrary;
@@ -21,12 +22,15 @@ namespace SniperLog.ViewModels.Records
         private readonly DataCacherService<SubRange> _subrangeCacher;
         private readonly DataCacherService<Firearm> _firearmsCacher;
         private readonly DataCacherService<ShootingRecord> _shootingRecordsCacher;
+        private readonly DataCacherService<Ammunition> _ammunitonsCacher;
 
         private readonly ValidatorService _validatorService;
 
         #endregion
 
         #region Properties
+
+        #region Trajectories
 
         /// <summary>
         /// X axis for the graph.
@@ -74,6 +78,16 @@ namespace SniperLog.ViewModels.Records
         [ObservableProperty]
         private ObservableCollection<ISeries> _windageSeries = [];
 
+        #endregion
+
+        #region Selectable shooting ranges and firearms
+
+        /// <summary>
+        /// Collection of available ammunition.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<Ammunition> _ammunitions;
+
         /// <summary>
         /// Collection of available shooting ranges.
         /// </summary>
@@ -116,6 +130,15 @@ namespace SniperLog.ViewModels.Records
         [ObservableProperty]
         private Firearm? _selectedFirearm;
 
+        #endregion
+
+        #region New record inputs
+        /// <summary>
+        /// User input for the a new record.
+        /// </summary>
+        [ObservableProperty]
+        private Ammunition _selectedAmmunition;
+
         /// <summary>
         /// User input for the a new record.
         /// </summary>
@@ -146,6 +169,10 @@ namespace SniperLog.ViewModels.Records
         [ObservableProperty]
         private string _notes;
 
+        #endregion
+
+        #region Table
+
         /// <summary>
         /// User input for the a new record.
         /// </summary>
@@ -154,9 +181,11 @@ namespace SniperLog.ViewModels.Records
 
         #endregion
 
+        #endregion
+
         #region Ctor
 
-        public RecordsPageViewModel(DataCacherService<ShootingRange> shootingRangesCacher, DataCacherService<SubRange> subrangeCacher, DataCacherService<Firearm> firearmsCacher, DataCacherService<ShootingRecord> shootingRecordsCacher, ValidatorService validatorService)
+        public RecordsPageViewModel(DataCacherService<ShootingRange> shootingRangesCacher, DataCacherService<SubRange> subrangeCacher, DataCacherService<Firearm> firearmsCacher, DataCacherService<ShootingRecord> shootingRecordsCacher, DataCacherService<Ammunition> ammoCacher, ValidatorService validatorService)
         {
             PageTitle = "Records";
 
@@ -164,6 +193,8 @@ namespace SniperLog.ViewModels.Records
             _subrangeCacher = subrangeCacher;
             _firearmsCacher = firearmsCacher;
             _shootingRecordsCacher = shootingRecordsCacher;
+            _ammunitonsCacher = ammoCacher;
+
             _validatorService = validatorService;
         }
 
@@ -177,88 +208,101 @@ namespace SniperLog.ViewModels.Records
         /// <returns></returns>
         public async Task RefreshChart()
         {
-            if (SelectedFirearm == null)
-                return;
-
-            if (SelectedRange != null)
+            try
             {
-                WeatherResponseMessage msg = await SelectedRange.GetCurrentWeather();
-                BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
-                var offset = ballisticCalculatorService.CalculateOffset(msg, 300, 2700, 0.319, ClickType.MRADs, 0.1d);
-            }
+                if (SelectedFirearm is null)
+                    return;
 
-
-
-
-
-
-
-
-
-
-
-
-            ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
-            var ord = baseSightSettings.OrderBy(n => n.Distance);
-            var distances = ord.Select(n => n.Distance);
-
-            XAxises[0].Labels.Clear();
-
-            foreach (var item in distances)
-            {
-                XAxises[0].Labels.Add(item.ToString());
-            }
-
-            List<ClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
-            ElevationSeries.Clear();
-
-            ElevationSeries.Add(new LineSeries<int>
-            {
-                Values = ord.Select(n => n.ElevationValue).ToList(),
-                Name = "Base",
-                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                Fill = null,
-                LineSmoothness = 0,
-
-            });
-
-            if (weatherOffsets != null)
-            {
-                ElevationSeries.Add(new LineSeries<int?>
+                if (SelectedRange != null)
                 {
-                    Values = (ICollection<int?>)weatherOffsets.Where(n => n.HasValue && n.Value.VerticalClicks != null).Select(n => n.Value.VerticalClicks).ToList(),
+                    WeatherResponseMessage msg = await SelectedRange.GetCurrentWeather();
+                    BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
+                    var offset = ballisticCalculatorService.CalculateOffset(msg, 300, 2700, 0.319, ClickType.MRADs, 0.1d);
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+                ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
+                var ord = baseSightSettings.OrderBy(n => n.Distance);
+                var distances = ord.Select(n => n.Distance);
+
+                XAxises[0].Labels.Clear();
+
+                foreach (var item in distances)
+                {
+                    XAxises[0].Labels.Add(item.ToString());
+                }
+
+                List<ClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
+                ElevationSeries.Clear();
+
+                ElevationSeries.Add(new LineSeries<int>
+                {
+                    Values = ord.Select(n => n.ElevationValue).ToList(),
                     Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                    Fill = null,
+                    LineSmoothness = 0,
+
+                });
+
+                if (weatherOffsets != null)
+                {
+                    ElevationSeries.Add(new LineSeries<int?>
+                    {
+                        Values = weatherOffsets.Where(n => n.HasValue && n.Value.VerticalClicks != null).Select(n => n.Value.VerticalClicks).ToList(),
+                        Name = "Base",
+                        Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                        GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+                }
+
+                WindageSeries.Clear();
+
+                WindageSeries.Add(new LineSeries<int>
+                {
+                    Values = ord.Select(n => n.WindageValue).ToList(),
+                    Name = "Base",
+                    Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
+                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
                     Fill = null,
                     LineSmoothness = 0,
                 });
-            }
 
-            WindageSeries.Clear();
-
-            WindageSeries.Add(new LineSeries<int>
-            {
-                Values = ord.Select(n => n.WindageValue).ToList(),
-                Name = "Base",
-                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                Fill = null,
-                LineSmoothness = 0,
-            });
-
-            if (weatherOffsets != null)
-            {
-                WindageSeries.Add(new LineSeries<int?>
+                if (weatherOffsets != null)
                 {
-                    Values = (ICollection<int?>)weatherOffsets.Where(n => n.HasValue && n.Value.WindageClicks != null).Select(n => n.Value.WindageClicks).ToList(),
-                    Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    Fill = null,
-                    LineSmoothness = 0,
-                });
+                    WindageSeries.Add(new LineSeries<int?>
+                    {
+                        Values = weatherOffsets.Where(n => n.HasValue && n.Value.WindageClicks != null).Select(n => n.Value.WindageClicks).ToList(),
+                        Name = "Base",
+                        Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                        GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+                }
+            }
+            catch (TimeoutException timeoutEx)
+            {
+
+            }
+            catch (Exception e)
+            {
+                await Shell.Current.DisplayAlert("Error", e.Message, "Okay");
             }
         }
 
@@ -352,6 +396,7 @@ namespace SniperLog.ViewModels.Records
         [RelayCommand]
         private async Task RefreshEntries(bool resetSubRange = false)
         {
+            Ammunitions = await _ammunitonsCacher.GetAll();
             ShootingRanges = await _shootingRangesCacher.GetAll();
             SubRanges = await _subrangeCacher.GetAllBy(n => SelectedRange != null && n.ShootingRange_ID == SelectedRange.ID);
 
@@ -384,6 +429,21 @@ namespace SniperLog.ViewModels.Records
             }
 
             return collection;
+        }
+
+        [RelayCommand]
+        private async Task Appearing()
+        {
+            PreferencesConfig config = ApplicationConfigService.GetConfig<PreferencesConfig>();
+
+            Firearm? lastSaved = await _firearmsCacher.GetFirstBy(n => n.ID == config.LastSelectedFirearm);
+
+            if (lastSaved != SelectedFirearm)
+            {
+                SelectedFirearm = lastSaved;
+            }
+
+            await RefreshChart();
         }
 
         [RelayCommand]
@@ -428,7 +488,7 @@ namespace SniperLog.ViewModels.Records
                 await weather.SaveAsync();
             }
 
-            ShootingRecord record = new ShootingRecord(SelectedRange.ID, SelectedSubRange.ID, SelectedFirearm.ID, 1, weather?.ID, ElevationClicks, WindageClicks, DistanceMeters, DateTime.Now.ToBinary());
+            ShootingRecord record = new ShootingRecord(SelectedRange.ID, SelectedSubRange.ID, SelectedFirearm.ID, SelectedAmmunition.ID, weather?.ID, ElevationClicks, WindageClicks, DistanceMeters, DateTime.Now.ToBinary());
             await record.SaveAsync();
 
             if (!string.IsNullOrEmpty(Notes))
@@ -442,6 +502,9 @@ namespace SniperLog.ViewModels.Records
             }
 
             await SearchRecords(DateSearchVal);
+            ApplicationConfigService.GetConfig<PreferencesConfig>().SetLastSelectedFirearm(SelectedFirearm);
+            SelectedFirearm.SetLastSelectedAmmunition(SelectedAmmunition);
+
         }
 
         private void ResetForm()
@@ -483,6 +546,13 @@ namespace SniperLog.ViewModels.Records
         {
             await SearchRecords(null);
             await RefreshChart();
+
+            if (value != null)
+                SelectedAmmunition = await value.GetLastSelectedAmmunition();
+            else
+                SelectedAmmunition = null;
+
+            
         }
 
         async partial void OnSelectedRangeChanged(ShootingRange? value)

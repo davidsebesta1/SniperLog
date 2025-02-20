@@ -22,6 +22,7 @@ namespace SniperLog.Pages.Records
             _validatorService.TryAddValidation(FirearmEntry, n => n != null);
             _validatorService.TryAddValidation(SRangeEntry, n => n != null);
             _validatorService.TryAddValidation(SubRangeEntry, n => n != null);
+            _validatorService.TryAddValidation(AmmoEntry, n => n != null);
 
             _validatorService.TryAddValidation(ElevOffsetEntry, n => int.TryParse((string)n, out int res));
             _validatorService.TryAddValidation(WindOffsetEntry, n => int.TryParse((string)n, out int res));
@@ -30,15 +31,7 @@ namespace SniperLog.Pages.Records
             RecordsPageViewModel vm = (BindingContext as RecordsPageViewModel);
             await vm.RefreshEntriesCommand.ExecuteAsync(false);
 
-            Firearm first = (await _firearmCacher.GetAll()).FirstOrDefault();
-
-            if (first != vm.SelectedFirearm)
-            {
-                vm.SelectedFirearm = first;
-                return;
-            }
-
-            await vm.RefreshChart();
+            await vm.AppearingCommand.ExecuteAsync(null);
         }
 
         protected override void OnDisappearing()

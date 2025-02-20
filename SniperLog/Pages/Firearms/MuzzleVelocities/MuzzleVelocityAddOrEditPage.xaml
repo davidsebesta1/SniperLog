@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Firearms.MuzzleVelocities.MuzzleVelocityAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Firearms.MuzzleVelocities"
+              xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:MuzzleVelocityAddOrEditPageViewModel"
+             Title="{Binding PageTitle}">
+    
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomPickerEntry x:Name="AmmunitionEntry" EntryTitle="Ammunition" IsMandatory="True" EntryHeight="1" SourceCollection="{Binding Ammunition}" SelectedItem="{Binding SelectedAmmo, Mode=TwoWay}" ErrorText="Ammunition must be selected"/>
+            <custom:CustomTextEntry x:Name="MuzzleVelEntry" EntryTitle="Muzzle Velocity" IsMandatory="True" EntryTitleSubtext="m/s" EntryHeight="1" ErrorText="Muzzle velocity must be greater than 0" TextValue="{Binding MuzzleVelocityData, Mode=TwoWay}" PlaceholderText="Muzzle velocity..."/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

@@ -1,10 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.Models
 {
@@ -15,11 +10,11 @@ namespace SniperLog.Models
 
         [ForeignKey(typeof(Ammunition), nameof(Ammunition.ID))]
         [ObservableProperty]
-        private int _ammoID;
+        private int _ammo_ID;
 
         [ForeignKey(typeof(Firearm), nameof(Firearm.ID))]
         [ObservableProperty]
-        private int _firearmID;
+        private int _firearm_ID;
 
         [ObservableProperty]
         private double _velocityMS;
@@ -27,8 +22,8 @@ namespace SniperLog.Models
         public MuzzleVelocity(int iD, int ammoID, int firearmID, double velocityMS)
         {
             ID = iD;
-            AmmoID = ammoID;
-            FirearmID = firearmID;
+            Ammo_ID = ammoID;
+            Firearm_ID = firearmID;
             VelocityMS = velocityMS;
         }
 
@@ -71,8 +66,6 @@ namespace SniperLog.Models
                 ServicesHelper.GetService<DataCacherService<MuzzleVelocity>>().Remove(this);
             }
         }
-
-
 
         public override bool Equals(object? obj)
         {

@@ -9,5 +9,12 @@ namespace SniperLog.Pages.Firearms.Bullets
             InitializeComponent();
             BindingContext = vm;
         }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            await (BindingContext as BulletsPageViewModel).RefreshCommand.ExecuteAsync(null);
+        }
     }
 }

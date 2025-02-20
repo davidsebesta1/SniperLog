@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Config;
 using SniperLog.Extensions;
 using System.Data;
 
@@ -93,8 +94,7 @@ namespace SniperLog.Models
                     ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId, GetSqliteParams(false));
                     return ID;
                 }
-                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery,
-                       GetSqliteParams(true));
+                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery, GetSqliteParams(true));
             }
             finally
             {
@@ -111,9 +111,22 @@ namespace SniperLog.Models
             finally
             {
                 ServicesHelper.GetService<DataCacherService<Firearm>>().Remove(this);
+                SetLastSelectedAmmunition(null);
                 DeleteNotes();
             }
         }
+
+        /// <summary>
+        /// Gets the last selected ammunition for this firearm for recording entries.
+        /// </summary>
+        /// <returns>Ammunition that was lastly selected or null.</returns>
+        public async Task<Ammunition?> GetLastSelectedAmmunition() => await ApplicationConfigService.GetConfig<PreferencesConfig>().GetLastSelectedAmmunition(this);
+
+        /// <summary>
+        /// Sets the last selected ammunition for this firearm and saves the preferences.
+        /// </summary>
+        /// <param name="ammo">The ammunition that has been selected as last.</param>
+        public void SetLastSelectedAmmunition(Ammunition? ammo) => ApplicationConfigService.GetConfig<PreferencesConfig>().SetLastSelectedAmmunition(this, ammo);
 
         #endregion
 

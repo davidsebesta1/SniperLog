@@ -25,7 +25,7 @@
             <custom:CustomPickerEntry x:Name="ManufacturerEntry" EntryTitle="Manufacturer" IsMandatory="True" EntryHeight="1" SourceCollection="{Binding Manufacturers}" SelectedItem="{Binding Manufacturer, Mode=TwoWay}" ErrorText="Manufacturer must be selected"/>
             <custom:CustomTextEntry x:Name="WeightEntry" EntryTitle="Weight" IsMandatory="True" EntryTitleSubtext="grams" EntryHeight="1" ErrorText="Grams must not be empty" TextValue="{Binding WeightGrams, Mode=TwoWay}" PlaceholderText="Weight..."/>
             <custom:CustomTextEntry x:Name="BC1Entry" EntryTitle="Ballistic Coeficient G1" IsMandatory="True" EntryHeight="1" ErrorText="BC1 must not be empty" TextValue="{Binding Bc1, Mode=TwoWay}" PlaceholderText="Coeficient..."/>
-            <custom:CustomTextEntry x:Name="BC7Entry" EntryTitle="Ballistic Coeficient G7" IsMandatory="True" EntryHeight="1" ErrorText="BC7 must not be empty" TextValue="{Binding Bc1, Mode=TwoWay}" PlaceholderText="Coeficient..."/>
+            <custom:CustomTextEntry x:Name="BC7Entry" EntryTitle="Ballistic Coeficient G7" IsMandatory="True" EntryHeight="1" ErrorText="BC7 must not be empty" TextValue="{Binding Bc7, Mode=TwoWay}" PlaceholderText="Coeficient..."/>
 
             <Grid ColumnDefinitions="150,*,150">
                 <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>

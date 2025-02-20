@@ -1,5 +1,6 @@
 ﻿using SniperLog.Pages.Firearms;
 using SniperLog.Pages.Firearms.Bullets;
+using SniperLog.Pages.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 using SniperLog.Pages.Records;
@@ -25,6 +26,8 @@ namespace SniperLog
             Routing.RegisterRoute(nameof(ManufacturersPage), typeof(ManufacturersPage));
             Routing.RegisterRoute(nameof(BulletManuPage), typeof(BulletManuPage));
             Routing.RegisterRoute(nameof(SightManuPage), typeof(SightManuPage));
+            Routing.RegisterRoute(nameof(AmmoManuPage), typeof(AmmoManuPage));
+            Routing.RegisterRoute(nameof(FirearmManuPage), typeof(FirearmManuPage));
             Routing.RegisterRoute(nameof(ManufacturerAddOrEditPage), typeof(ManufacturerAddOrEditPage));
 
             Routing.RegisterRoute(nameof(SightsPage), typeof(SightsPage));
@@ -47,6 +50,9 @@ namespace SniperLog
 
             Routing.RegisterRoute(nameof(BulletsPage), typeof(BulletsPage));
             Routing.RegisterRoute(nameof(BulletAddOrEditPage), typeof(BulletAddOrEditPage));
+
+            Routing.RegisterRoute(nameof(MuzzleVelocitiesPage), typeof(MuzzleVelocitiesPage));
+            Routing.RegisterRoute(nameof(MuzzleVelocityAddOrEditPage), typeof(MuzzleVelocityAddOrEditPage));
         }
     }
 }
