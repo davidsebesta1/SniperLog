@@ -162,14 +162,21 @@ namespace SniperLog.Models
         public readonly int? WindageClicks;
 
         /// <summary>
+        /// Distance for which this click offset is.
+        /// </summary>
+        public readonly int? Distance;
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="verticalClicks">Vertical clicks.</param>
         /// <param name="horizontalClicks">Horizontal clicks.</param>
-        public ClickOffset(int? verticalClicks, int? horizontalClicks)
+        /// <param name="distance">Distance.</param>
+        public ClickOffset(int? verticalClicks, int? horizontalClicks, int? distance)
         {
             VerticalClicks = verticalClicks;
             WindageClicks = horizontalClicks;
+            Distance = distance;
         }
     }
 }

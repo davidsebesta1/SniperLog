@@ -1,226 +1,109 @@
-﻿using SniperLogNetworkLibrary;
+﻿using BallisticCalculator;
+using Gehtsoft.Measurements;
+using SniperLogNetworkLibrary;
 
 namespace SniperLog.Services.Ballistics
 {
     public class BallisticCalculatorService
     {
-        /// <summary>
-        /// Earths gravity.
-        /// </summary>
-        public const double Gravity = 9.81d;
-
-        /// <summary>
-        /// Feet per second to meters/second conversion constant.
-        /// </summary>
-        public const double FtToMeters = 0.3048d;
-
-        /// <summary>
-        /// Specific gas constant for dry air (J/(kg·K)).
-        /// </summary>
-        public const double RDry = 287.05d;
-
-        /// <summary>
-        /// Specific gas constant for water vapor air (J/(kg·K)).
-        /// </summary>
-        public const double RVapor = 461.5d;
-
-        /// <summary>
-        /// Kg/m³ at sea level (dry air)
-        /// </summary>
-        public const double SeaLevelDensity = 1.225d;
-
-        /// <summary>
-        /// Value to add to C° in order to convert them to Kelvin.
-        /// </summary>
-        public const double CelsiusToKelvin = 273.15d;
 
         /// <summary>
         /// Calculates the offset for given conditions.
         /// </summary>
         /// <param name="weather">Weather to take into account.</param>
         /// <param name="distance">Distance to the target.</param>
-        /// <param name="muzzleVelocityFps">Muzzle velocity in feet per second.</param>
-        /// <param name="bc"></param>
-        /// <param name="clickType"></param>
-        /// <param name="clickValue"></param>
         /// <returns></returns>
-        public ClickOffset CalculateOffset(WeatherResponseMessage weather, int distance, double muzzleVelocityFps, double bc, ClickType clickType, double clickValue)
+        public async Task<List<ClickOffset>> CalculateOffset(Firearm firearm, Models.Ammunition ammo, WeatherResponseMessage weather, int minRange, int maxRange, int step, double oneClickValue)
         {
-            double temperatureK = weather.Temperature.Value + CelsiusToKelvin;
-            double muzzleVelocityMS = muzzleVelocityFps * FtToMeters;
-            double airDensity = CalculateAirDensity(weather.Pressure.Value, weather.Temperature.Value, weather.Humidity.Value * 0.01d);
-            double dragConstant = AdjustDragForAirDensity(airDensity);
+            var t = (await ServicesHelper.GetService<DataCacherService<MuzzleVelocity>>().GetAllBy(n => n.Ammo_ID == ammo.ID && n.Firearm_ID == firearm.ID));
+            double vel = t.Average(n => n.VelocityMS);
 
-            double timeOfFlight = CalculateTOF(muzzleVelocityMS, distance, bc, dragConstant, 3);
+            BallisticCalculator.Ammunition ballisticAmmo = new BallisticCalculator.Ammunition(
+                weight: new Measurement<WeightUnit>(ammo.ReferencedBullet.WeightGrams, WeightUnit.Gram),
 
-            double bulletDrop = CalculateDrop(timeOfFlight);
-            double windDrift = CalculateWindDrift(weather.WindSpeed.Value, (double)weather.DirectionDegrees.Value, timeOfFlight);
+                muzzleVelocity: new Measurement<VelocityUnit>(vel, VelocityUnit.MetersPerSecond),
+                ballisticCoefficient: new BallisticCoefficient((double)ammo.ReferencedBullet.BCG1, DragTableId.G1),
+                bulletDiameter: new Measurement<DistanceUnit>(ammo.ReferencedBullet.BulletDiameter, DistanceUnit.Millimeter),
+                bulletLength: new Measurement<DistanceUnit>(ammo.ReferencedBullet.BulletLength, DistanceUnit.Millimeter));
 
-            int elevationClicks;
-            int windageClicks;
-            if (clickType == ClickType.MOA)
+            Sight sight = new Sight(
+                sightHeight: new Measurement<DistanceUnit>((double)firearm.SightHeightCm, DistanceUnit.Centimeter),
+                verticalClick: new Measurement<AngularUnit>(firearm.ReferencedFirearmSight.OneClickValue, firearm.ReferencedFirearmSight.ReferencedSightClickType.ClickTypeName == "MRAD" ? AngularUnit.MRad : AngularUnit.MOA),
+                horizontalClick: new Measurement<AngularUnit>(firearm.ReferencedFirearmSight.OneClickValue, firearm.ReferencedFirearmSight.ReferencedSightClickType.ClickTypeName == "MRAD" ? AngularUnit.MRad : AngularUnit.MOA)
+                );
+
+            Rifling rifling = new Rifling(
+                riflingStep: new Measurement<DistanceUnit>(12, DistanceUnit.Inch),
+                direction: TwistDirection.Right);
+
+            double min = (await ServicesHelper.GetService<DataCacherService<FirearmSightSetting>>().GetAllBy(n => n.FirearmSight_ID == firearm.FirearmSight_ID)).Min(n => n.Distance);
+            ZeroingParameters zero = new ZeroingParameters(
+                distance: new Measurement<DistanceUnit>(min, DistanceUnit.Meter),
+                ammunition: null,
+                atmosphere: null
+                );
+
+            Rifle rifle = new Rifle(sight: sight, zero: zero, rifling: rifling);
+
+            Atmosphere atmosphere = new Atmosphere(
+                pressure: new Measurement<PressureUnit>((double)weather.Pressure * 100, PressureUnit.Pascal),
+                pressureAtSeaLevel: false,
+                altitude: new Measurement<DistanceUnit>(163, DistanceUnit.Meter),
+                temperature: new Measurement<TemperatureUnit>((double)weather.Temperature, TemperatureUnit.Celsius),
+                humidity: (double)(weather.Humidity / (double)100));
+
+            TrajectoryCalculator calc = new TrajectoryCalculator();
+
+            //shot parameters
+            var shot = new ShotParameters()
             {
-                double dropMOA = ConvertToMOA(bulletDrop, distance);
-                double driftMOA = ConvertToMOA(windDrift, distance);
-                elevationClicks = ConvertToMOAClicks(dropMOA, clickValue);
-                windageClicks = ConvertToMOAClicks(driftMOA, clickValue);
-            }
-            else
+                MaximumDistance = new Measurement<DistanceUnit>(1000, DistanceUnit.Meter),
+                Step = new Measurement<DistanceUnit>(50, DistanceUnit.Meter),
+                //calculate sight angle for the specified zero distance
+                SightAngle = calc.SightAngle(ballisticAmmo, rifle, atmosphere)
+            };
+
+            //define winds
+
+            Wind[] wind =
+            [
+                new Wind()
+                {
+                    Direction = new Measurement<AngularUnit>((double)weather.DirectionDegrees, AngularUnit.Degree),
+                    Velocity = new Measurement<VelocityUnit>((double)weather.WindSpeed, VelocityUnit.MetersPerSecond),
+                    MaximumRange = new Measurement<DistanceUnit>(500, DistanceUnit.Meter),
+                }
+            ];
+
+
+            //calculate trajectory
+            TrajectoryPoint[] trajectory = calc.Calculate(ballisticAmmo, rifle, atmosphere, shot, wind);
+
+            List<ClickOffset> offsets = new List<ClickOffset>();
+            for (int i = minRange; i <= maxRange; i += step)
             {
-                elevationClicks = ConvertToMRADClicks(bulletDrop, clickValue);
-                windageClicks = ConvertToMRADClicks(windDrift, clickValue);
-            }
+                TrajectoryPoint point = null;
+                int closestRange = int.MaxValue;
+                foreach (TrajectoryPoint p in trajectory)
+                {
+                    double diff = Math.Abs(p.Distance.To(DistanceUnit.Meter).Value - i);
+                    if (point == null || diff < closestRange)
+                    {
+                        point = p;
+                        closestRange = (int)diff;
+                    }
+                }
 
-            return new ClickOffset(elevationClicks, windageClicks);
-        }
+                double d = point.DropAdjustment.To(AngularUnit.MRad).Value;
+                double w = point.WindageAdjustment.To(AngularUnit.MRad).Value;
 
-        /// <summary>
-        /// Calculates the air density used for ballistic calculation.
-        /// </summary>
-        /// <param name="pressureHPA">Pressure in hPa.</param>
-        /// <param name="temperatureC">Temperature in degrees Celsius.</param>
-        /// <param name="normalizedHumidity">Humidity in value 0f-1f.</param>
-        /// <returns>Pressure in kg/m³.</returns>
-        public double CalculateAirDensity(double pressureHPA, double temperatureC, double normalizedHumidity)
-        {
-            // Convert inputs
-            double temperatureK = temperatureC + CelsiusToKelvin; // Temperature in Kelvin
-            double pressurePa = pressureHPA * 100;               // Pressure in Pascals
-
-            // Calculate saturation vapor pressure (Magnus-Tetens approximation)
-            double saturationVaporPressure = CalculatePSaturation(temperatureC); // Pa
-
-            // Calculate actual vapor pressure
-            double vaporPressure = normalizedHumidity * saturationVaporPressure; // Pa
-
-            // Specific gas constant for moist air
-            double f = vaporPressure / pressurePa; // Molar fraction of water vapor
-            double specificGasConstant = RDry * (1 - f * (1 - RDry / RVapor));
-
-            // Air density using the Wikipedia formula
-            double airDensity = pressurePa / (specificGasConstant * temperatureK);
-
-            return airDensity;
-        }
-
-        /// <summary>
-        /// Calculates Saturation Vapor Pressure (Pa) using Magnus-Tetens approximation.
-        /// </summary>
-        /// <param name="temperatureC">Temperature in degrees Celsius.</param>
-        /// <returns>Saturation Vapor Pressure in Pascals.</returns>
-        public double CalculatePSaturation(double temperatureC)
-        {
-            return 6.1078 * Math.Pow(10, (7.5 * temperatureC) / (temperatureC + 237.3)) * 100;
-        }
-
-        /// <summary>
-        /// Function to adjust drag constant for air density.
-        /// </summary>
-        /// <param name="airDensity">The air density in kg/m³.</param>
-        /// <returns>Adjusted air density in kg/m³.</returns>
-        public double AdjustDragForAirDensity(double airDensity)
-        {
-            return 0.5 * airDensity / SeaLevelDensity;
-        }
-
-        /// <summary>
-        /// Calculates the Time of Flight (TOF).
-        /// </summary>
-        /// <param name="muzzleVelocity">Muzzle velocity of the bullet in m/s.</param>
-        /// <param name="distance">Distance to the target in meters.</param>
-        /// <param name="bc">Ballistic coeficient.</param>
-        /// <param name="dragConstant">Drag constant. Usually either G1 or G7.</param>
-        /// <returns></returns>
-        public double CalculateTOF(double muzzleVelocity, double distance, double bc, double dragConstant, double launchAngle = 0, double airDensity = 1.225)
-        {
-            double time = 0.0;        // Time elapsed in seconds
-            double x = 0.0;           // Horizontal position in meters
-            double y = 0.0;           // Vertical position in meters
-            double vx = muzzleVelocity * Math.Cos(DegreeToRadian(launchAngle)); // Horizontal velocity
-            double vy = muzzleVelocity * Math.Sin(DegreeToRadian(launchAngle)); // Vertical velocity
-            double deltaT = 0.001;    // Small time step for integration (in seconds)
-
-            while (x < distance)
-            {
-                // Update velocities (gravity affects vertical velocity only)
-                vy -= Gravity * deltaT;
-
-                // Update positions
-                x += vx * deltaT;
-                y += vy * deltaT;
-
-                // Update time
-                time += deltaT;
+                if (point != null)
+                    offsets.Add(new ClickOffset(Math.Abs((int)Math.Round(d / oneClickValue)), Math.Abs((int)Math.Round(w / oneClickValue)), (int)Math.Round(point.Distance.To(DistanceUnit.Meter).Value)));
             }
 
-            return time; // Total time of flight in seconds
+            return offsets;
         }
 
-        /// <summary>
-        /// Calculates the bullet drop in meters.
-        /// </summary>
-        /// <param name="timeOfFlight">Time of flight in seconds.</param>
-        /// <returns>Bullet drop in meters.</returns>
-        public double CalculateDrop(double timeOfFlight)
-        {
-            return 0.5 * Gravity * Math.Pow(timeOfFlight, 2);
-        }
-
-        /// <summary>
-        /// Calculates Wind Drift in meters.
-        /// </summary>
-        /// <param name="windSpeed">Wind speed in m/s.</param>
-        /// <param name="windAngle">Wind angle in degrees (direction)</param>
-        /// <param name="timeOfFlight">Time of flight of the bullet in seconds.</param>
-        /// <returns>Wind drift in meters.</returns>
-        public double CalculateWindDrift(double windSpeed, double windAngle, double timeOfFlight)
-        {
-            double windComponent = windSpeed * Math.Sin(DegreeToRadian(windAngle));
-            return windComponent * timeOfFlight;
-        }
-
-        /// <summary>
-        /// Converts meters of drop/drift to MOA (Minute of angle).
-        /// </summary>
-        /// <param name="correction">Correction in meters.</param>
-        /// <param name="distance">Distance to the target.</param>
-        /// <returns>Correction to the target in MOA.</returns>
-        public double ConvertToMOA(double correction, double distance)
-        {
-            return (correction / distance) * 100d * 60d / 2.54d; // 1 MOA = ~2.54 cm at 100 m
-        }
-
-        /// <summary>
-        /// Converts meters of drop/drift to MRAD clicks.
-        /// </summary>
-        /// <param name="correction">Correction in meters.</param>
-        /// <param name="distance">Distance in meters.</param>
-        /// <returns>Clicks to adjust the optic. Rounded down to nearest whole number.</returns>
-        public int ConvertToMRADClicks(double correction, double distance)
-        {
-            return (int)Math.Floor((correction * 0.01d) / (distance * 0.01d));
-        }
-
-        /// <summary>
-        /// Converts MOA to Scope Clicks.
-        /// </summary>
-        /// <param name="adjustmentMOA">MOA value.</param>
-        /// <param name="clickValue">One click value of the scape.</param>
-        /// <returns>Clicks to adjust the optic. Rounded DOWN to nearest whole number.</returns>
-        public int ConvertToMOAClicks(double adjustmentMOA, double clickValue)
-        {
-            return (int)Math.Floor(adjustmentMOA / clickValue);
-        }
-
-        /// <summary>
-        /// Converts degrees to radians.
-        /// </summary>
-        /// <param name="angle">Angle in degrees.</param>
-        /// <returns>Angle in radians.</returns>
-        public double DegreeToRadian(double angle)
-        {
-            return Math.PI * angle / 180d;
-        }
     }
 
     public enum ClickType
@@ -228,4 +111,72 @@ namespace SniperLog.Services.Ballistics
         MOA,
         MRADs
     }
+    /*
+    var ammo = new Ammunition(
+        weight: new Measurement<WeightUnit>(185, WeightUnit.Grain),
+        muzzleVelocity: new Measurement<VelocityUnit>(822, VelocityUnit.MetersPerSecond),
+        ballisticCoefficient: new BallisticCoefficient(0.319, DragTableId.G1),
+        bulletDiameter: new Measurement<DistanceUnit>(0.308, DistanceUnit.Inch),
+        bulletLength: new Measurement<DistanceUnit>(120, DistanceUnit.Millimeter));
+
+    var sight = new Sight(
+        sightHeight: new Measurement<DistanceUnit>(3.5, DistanceUnit.Inch),
+        verticalClick: new Measurement<AngularUnit>(0.1, AngularUnit.MRad),
+        horizontalClick: new Measurement<AngularUnit>(0.1, AngularUnit.MRad)
+        );
+
+    var rifling = new Rifling(
+        riflingStep: new Measurement<DistanceUnit>(12, DistanceUnit.Inch),
+        direction: TwistDirection.Right);
+
+    var zero = new ZeroingParameters(
+        distance: new Measurement<DistanceUnit>(100, DistanceUnit.Yard),
+        ammunition: null,
+        atmosphere: null
+        );
+
+    var rifle = new Rifle(sight: sight, zero: zero, rifling: rifling);
+
+    var atmosphere = new Atmosphere(
+        pressure: new Measurement<PressureUnit>(101200, PressureUnit.Pascal),
+        pressureAtSeaLevel: false,
+        altitude: new Measurement<DistanceUnit>(163, DistanceUnit.Foot),
+        temperature: new Measurement<TemperatureUnit>(-2, TemperatureUnit.Celsius),
+        humidity: 0.79);
+
+    var calc = new TrajectoryCalculator();
+
+    //shot parameters
+    var shot = new ShotParameters()
+    {
+        MaximumDistance = new Measurement<DistanceUnit>(1000, DistanceUnit.Meter),
+        Step = new Measurement<DistanceUnit>(50, DistanceUnit.Meter),
+        //calculate sight angle for the specified zero distance
+        SightAngle = calc.SightAngle(ammo, rifle, atmosphere)
+    };
+
+    //define winds
+
+    Wind[] wind =
+    [
+new Wind()
+{
+    Direction = new Measurement<AngularUnit>(202, AngularUnit.Degree),
+    Velocity = new Measurement<VelocityUnit>(2, VelocityUnit.MetersPerSecond),
+    MaximumRange = new Measurement<DistanceUnit>(500, DistanceUnit.Meter),
+}
+    ];
+
+
+    //calculate trajectory
+    var trajectory = calc.Calculate(ammo, rifle, atmosphere, shot, wind);
+
+    //print trajectory
+    Console.WriteLine($"Distance;Drop;Wind");
+    foreach (var point in trajectory)
+    {
+        Console.WriteLine($"{point.Distance:N0};{point.DropAdjustment.In(AngularUnit.MRad):N2};{point.WindageAdjustment.In(AngularUnit.MRad):N2}");
+    }
+}
+    */
 }

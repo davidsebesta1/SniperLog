@@ -29,7 +29,8 @@
             <custom:CustomPickerEntry x:Name="ManufacturerEntry" EntryTitle="Manufacturer" EntryHeight="1" SourceCollection="{Binding Manufacturers}" SelectedItem="{Binding Manufacturer, Mode=TwoWay}" ErrorText="Manufacturer must be selected"/>
             <custom:CustomPickerEntry x:Name="CaliberEntry" EntryTitle="Caliber" EntryHeight="1" SourceCollection="{Binding Calibers}" SelectedItem="{Binding FirearmCaliber, Mode=TwoWay}" ErrorText="Caliber must be selected"/>
             <custom:CustomPickerEntry x:Name="SightEntry" EntryTitle="Sight" EntryHeight="1" SourceCollection="{Binding Sights}" SelectedItem="{Binding FirearmSight, Mode=TwoWay}" ErrorText="Sight must be selected"/>
-            
+            <custom:CustomTextEntry x:Name="SightOffsetEntry" EntryTitle="Sight Offset" IsMandatory="False" EntryTitleSubtext="cm" EntryHeight="1" ErrorText="Offset must be greater than 0" TextValue="{Binding SightOffsetCm, Mode=TwoWay}" PlaceholderText="Sight offset.."/>
+
             <custom:CustomTextEntry x:Name="TotalLenEntry" EntryTitle="Total Length" IsMandatory="False" EntryTitleSubtext="cm" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding TotalLengthMm, Mode=TwoWay}" PlaceholderText="Total length.."/>
             <custom:CustomTextEntry x:Name="BarrelLenEntry" EntryTitle="Barrel Length" IsMandatory="False" EntryTitleSubtext="inch" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding BarrelLengthInch, Mode=TwoWay}" PlaceholderText="Barrel length..."/>
             <custom:CustomTextEntry x:Name="WeightEntry" EntryTitle="Weight" IsMandatory="False" EntryTitleSubtext="kg" EntryHeight="1" ErrorText="Weight must not be empty" TextValue="{Binding Weight, Mode=TwoWay}" PlaceholderText="Weight..."/>

@@ -17,7 +17,13 @@ namespace SniperLog.Models
         private int _manufacturer_ID;
 
         [ObservableProperty]
-        private double? _weightGrams;
+        private double _weightGrams;
+
+        [ObservableProperty]
+        private double _bulletDiameter;
+
+        [ObservableProperty]
+        private double _bulletLength;
 
         [ObservableProperty]
         private double? _bCG1;
@@ -25,17 +31,19 @@ namespace SniperLog.Models
         [ObservableProperty]
         private double? _bCG7;
 
-        public Bullet(int iD, int caliberID, int manuId, double? weightGrams, double? bc1, double? bc7)
+        public Bullet(int iD, int caliberID, int manuId, double weightGrams, double bulletdia, double bulletlen, double? bc1, double? bc7)
         {
             ID = iD;
             Caliber_ID = caliberID;
             Manufacturer_ID = manuId;
             WeightGrams = weightGrams;
+            BulletDiameter = bulletdia;
+            BulletLength = bulletlen;
             BCG1 = bc1;
             BCG7 = bc7;
         }
 
-        public Bullet(int caliberID, int manuId, double? weightGrams, double? bc1, double? bc7) : this(-1, caliberID, manuId, weightGrams, bc1, bc7)
+        public Bullet(int caliberID, int manuId, double weightGrams, double bulletdia, double bulletlen, double? bc1, double? bc7) : this(-1, caliberID, manuId, weightGrams, bulletdia, bulletlen, bc1, bc7)
         {
 
         }

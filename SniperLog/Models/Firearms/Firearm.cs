@@ -39,25 +39,35 @@ namespace SniperLog.Models
         [ObservableProperty]
         public string _name;
 
-        public string? Model { get; set; }
+        [ObservableProperty]
+        private string? _model;
 
-        public string? SerialNumber { get; set; }
+        [ObservableProperty]
+        private string? _serialNumber;
 
-        public double? TotalLengthMm { get; set; }
+        [ObservableProperty]
+        private double? _totalLengthMm;
 
-        public double? BarrelLengthInch { get; set; }
+        [ObservableProperty]
+        private double? _barrelLengthInch;
 
-        public string? RateOfTwist { get; set; }
+        [ObservableProperty]
+        private string? _rateOfTwist;
 
-        public double? Weight { get; set; }
+        [ObservableProperty]
+        private double? _weight;
 
-        public bool? HandednessForLeft { get; set; }
+        [ObservableProperty]
+        private bool? _handednessForLeft;
+
+        [ObservableProperty]
+        private double? _sightHeightCm;
 
         #endregion
 
         #region Constructors
 
-        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft)
+        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, double? sightHeightCm)
         {
             ID = iD;
             FirearmType_ID = firearmType_ID;
@@ -72,9 +82,10 @@ namespace SniperLog.Models
             RateOfTwist = rateOfTwist;
             Weight = weight;
             HandednessForLeft = handednessForLeft;
+            SightHeightCm = sightHeightCm;
         }
 
-        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, sight_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft) { }
+        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, double? sightHeightCm) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, sight_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft, sightHeightCm) { }
 
         #endregion
 

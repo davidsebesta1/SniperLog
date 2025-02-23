@@ -95,6 +95,8 @@ CREATE TABLE IF NOT EXISTS Bullet(
     Caliber_ID INTEGER NOT NULL,
     Manufacturer_ID INTEGER NOT NULL,
     WeightGrams DECIMAL(10,2),
+    BulletDiameter DECIMAL(10,2),
+    BulletLength DECIMAL(10,2),
     BCG1 DECIMAL(10,2),
     BCG7 DECIMAL(10,2),
 
@@ -162,6 +164,7 @@ CREATE TABLE IF NOT EXISTS Firearm(
     RateOfTwist VARCHAR(10),
     Weight DECIMAL(10,2),
     HandednessForLeft BOOLEAN,
+    SightHeightCm DECIMAL(10,2),
      
     FOREIGN KEY (FirearmType_ID) REFERENCES FirearmType(ID),
     FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID),

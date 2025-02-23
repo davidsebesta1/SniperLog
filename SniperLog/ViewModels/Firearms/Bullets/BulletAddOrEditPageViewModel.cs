@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.Firearms.Bullets
 {
@@ -27,6 +22,12 @@ namespace SniperLog.ViewModels.Firearms.Bullets
 
         [ObservableProperty]
         private double _weightGrams;
+
+        [ObservableProperty]
+        private double _bulletDiameter;
+
+        [ObservableProperty]
+        private double _bulletLength;
 
         [ObservableProperty]
         private double? _bc1;
@@ -59,6 +60,8 @@ namespace SniperLog.ViewModels.Firearms.Bullets
             Caliber = value?.ReferencedFirearmCaliber ?? null;
             Manufacturer = value?.ReferencedManufacturer ?? null;
             WeightGrams = value?.WeightGrams ?? 0;
+            BulletDiameter = value?.BulletDiameter ?? 0;
+            BulletLength = value?.BulletLength ?? 0;
             Bc1 = value?.BCG1;
             Bc7 = value?.BCG7;
         }
@@ -90,7 +93,7 @@ namespace SniperLog.ViewModels.Firearms.Bullets
 
             if (Bullet == null)
             {
-                Bullet = new Bullet(Caliber.ID, Manufacturer.ID, WeightGrams, Bc1, Bc7);
+                Bullet = new Bullet(Caliber.ID, Manufacturer.ID, WeightGrams, BulletDiameter, BulletLength, Bc1, Bc7);
             }
             else
             {
@@ -98,6 +101,8 @@ namespace SniperLog.ViewModels.Firearms.Bullets
                 Bullet.Caliber_ID = Caliber.ID;
                 Bullet.Manufacturer_ID = Manufacturer.ID;
                 Bullet.WeightGrams = WeightGrams;
+                Bullet.BulletDiameter = BulletDiameter;
+                Bullet.BulletLength = BulletLength;
                 Bullet.BCG1 = Bc1;
                 Bullet.BCG7 = Bc7;
             }

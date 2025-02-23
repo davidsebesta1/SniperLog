@@ -11,6 +11,7 @@ using SniperLog.Extensions.WrapperClasses;
 using SniperLog.Services.Ballistics;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SniperLog.ViewModels.Records
 {
@@ -203,35 +204,14 @@ namespace SniperLog.ViewModels.Records
         #region Commands & Methods
 
         /// <summary>
-        /// Refreshes the elevation and windage chart
+        /// Refreshes the elevation and windage chart.
         /// </summary>
-        /// <returns></returns>
         public async Task RefreshChart()
         {
             try
             {
                 if (SelectedFirearm is null)
                     return;
-
-                if (SelectedRange != null)
-                {
-                    WeatherResponseMessage msg = await SelectedRange.GetCurrentWeather();
-                    BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
-                    var offset = ballisticCalculatorService.CalculateOffset(msg, 300, 2700, 0.319, ClickType.MRADs, 0.1d);
-
-
-                }
-
-
-
-
-
-
-
-
-
-
-
 
                 ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
                 var ord = baseSightSettings.OrderBy(n => n.Distance);
@@ -240,13 +220,18 @@ namespace SniperLog.ViewModels.Records
                 XAxises[0].Labels.Clear();
 
                 foreach (var item in distances)
-                {
                     XAxises[0].Labels.Add(item.ToString());
-                }
 
-                List<ClickOffset?> weatherOffsets = await GetNearestWeatherClicksFromBase(distances);
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+                if (accessType == NetworkAccess.None)
+                    throw new IOException("Unable to load weather offsets. No internet.");
+
+                WeatherResponseMessage msg = SelectedRange == null ? default : await SelectedRange.GetCurrentWeather();
+
+                List<ClickOffset?>? weatherOffsets = await GetNearestWeatherClicksFromBase(distances, msg);
                 ElevationSeries.Clear();
 
+                // Base clicks
                 ElevationSeries.Add(new LineSeries<int>
                 {
                     Values = ord.Select(n => n.ElevationValue).ToList(),
@@ -258,6 +243,7 @@ namespace SniperLog.ViewModels.Records
 
                 });
 
+                // Weather offsets
                 if (weatherOffsets != null)
                 {
                     ElevationSeries.Add(new LineSeries<int?>
@@ -295,10 +281,38 @@ namespace SniperLog.ViewModels.Records
                         LineSmoothness = 0,
                     });
                 }
+
+                // Calculated offsets
+                if (SelectedRange != null)
+                {
+                    BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
+                    List<ClickOffset> offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
+
+                    ElevationSeries.Add(new LineSeries<int?>
+                    {
+                        Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(n => n.VerticalClicks).ToList(),
+                        Name = "Base",
+                        Stroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
+                        GeometryStroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+
+                    WindageSeries.Add(new LineSeries<int?>
+                    {
+                        Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(n => n.WindageClicks).ToList(),
+                        Name = "Base",
+                        Stroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
+                        GeometryStroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+                }
             }
             catch (TimeoutException timeoutEx)
             {
-
+                IToast toast = Toast.Make("Unable to retrive weather info", ToastDuration.Long);
+                await toast.Show();
             }
             catch (Exception e)
             {
@@ -307,7 +321,7 @@ namespace SniperLog.ViewModels.Records
         }
 
 
-        public async Task<List<ClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances)
+        public async Task<List<ClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances, WeatherResponseMessage msg)
         {
             if (SelectedFirearm == null)
                 return null;
@@ -315,37 +329,13 @@ namespace SniperLog.ViewModels.Records
             if (SelectedRange == null)
                 return null;
 
+            if (msg.Equals(default(WeatherResponseMessage)))
+                return null;
+
             ObservableCollection<ShootingRecord> relatedRecords = await _shootingRecordsCacher.GetAllBy(n => n.ReferencedFirearm == SelectedFirearm);
             int count = distances.Count();
 
             List<ClickOffset?> list = new List<ClickOffset?>(count);
-
-            WeatherResponseMessage msg;
-            try
-            {
-                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-
-                if (accessType == NetworkAccess.None)
-                {
-                    using IToast toast = Toast.Make("Unable to load weather offsets. No internet.", ToastDuration.Long, 14);
-
-                    await toast.Show();
-                    return null;
-                }
-
-                msg = await SelectedRange.GetCurrentWeather();
-
-            }
-            catch (TimeoutException timeoutEx)
-            {
-                using IToast toast = Toast.Make("Unable to load weather offsets. Can't download weather data.", ToastDuration.Long, 14);
-
-                await toast.Show();
-                return null;
-            }
-
-            if (msg.Equals(default(WeatherResponseMessage)))
-                return null;
 
             foreach (int distance in distances)
             {
@@ -390,7 +380,7 @@ namespace SniperLog.ViewModels.Records
             if (shootingRecord == null)
                 return null;
 
-            return new ClickOffset(shootingRecord.ElevationClicksOffset, shootingRecord.WindageClicksOffset);
+            return new ClickOffset(shootingRecord.ElevationClicksOffset, shootingRecord.WindageClicksOffset, related.First().Distance);
         }
 
         [RelayCommand]
@@ -551,8 +541,6 @@ namespace SniperLog.ViewModels.Records
                 SelectedAmmunition = await value.GetLastSelectedAmmunition();
             else
                 SelectedAmmunition = null;
-
-            
         }
 
         async partial void OnSelectedRangeChanged(ShootingRange? value)

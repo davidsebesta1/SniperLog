@@ -22,6 +22,8 @@ namespace SniperLog.Pages.Firearms.Bullets
             _validatorService.TryAddValidation(ManufacturerEntry, n => n != null);
 
             _validatorService.TryAddValidation(WeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BulletDiameterEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BulletLengthEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
             _validatorService.TryAddValidation(BC1Entry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
             _validatorService.TryAddValidation(BC7Entry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
