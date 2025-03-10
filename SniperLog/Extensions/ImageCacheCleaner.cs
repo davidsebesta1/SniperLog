@@ -1,36 +1,28 @@
 ﻿
-namespace SniperLog.Extensions
-{
-    public static class ImageCacheCleaner
-    {
-        public static void ClearCache()
-        {
-            string imageManagerDiskCache = Path.Combine(FileSystem.CacheDirectory);
+namespace SniperLog.Extensions;
 
-            foreach (string dir in Directory.GetDirectories(imageManagerDiskCache))
+/// <summary>
+/// Static class for clearing image cache. Primary used for android.
+/// </summary>
+public static class ImageCacheCleaner
+{
+    /// <summary>
+    /// Recursively traverse and delete all image files
+    /// </summary>
+    /// <param name="dir"></param>
+    private static void TraverseDirectoryAndDeleteImgFiles(string dir)
+    {
+        foreach (string file in Directory.GetFiles(dir))
+        {
+            if (FileExtensionsChecker.IsImageFile(file))
             {
-                TraverseDirectoryAndDeleteImgFiles(dir);
+                File.Delete(file);
             }
         }
 
-        /// <summary>
-        /// Recursively traverse and delete all image files
-        /// </summary>
-        /// <param name="dir"></param>
-        private static void TraverseDirectoryAndDeleteImgFiles(string dir)
+        foreach (string subdir in Directory.GetDirectories(dir))
         {
-            foreach (string file in Directory.GetFiles(dir))
-            {
-                if (FileExtensionsChecker.IsImageFile(file))
-                {
-                    File.Delete(file);
-                }
-            }
-
-            foreach (string subdir in Directory.GetDirectories(dir))
-            {
-                TraverseDirectoryAndDeleteImgFiles(subdir);
-            }
+            TraverseDirectoryAndDeleteImgFiles(subdir);
         }
     }
 }

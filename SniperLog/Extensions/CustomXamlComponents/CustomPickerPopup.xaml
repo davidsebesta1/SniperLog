@@ -11,7 +11,7 @@
 
     <Frame HorizontalOptions="FillAndExpand" HeightRequest="600" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
         <Grid Padding="0" RowDefinitions="*,*">
-            <CollectionView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" SelectionMode="Single" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectionChangedCommand}">
+            <CollectionView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" SelectionMode="Single" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectionChangedCommand}" MinimumHeightRequest="300" HeightRequest="500" MaximumHeightRequest="500">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="x:Object">
                         <VerticalStackLayout>
@@ -24,7 +24,7 @@
 
             <VerticalStackLayout Grid.Row="1" MaximumHeightRequest="150" MinimumHeightRequest="90" VerticalOptions="End">
                 <Button x:Name="SelectNoneButton" Command="{Binding SelectNoneCommand}" IsVisible="{Binding SelectNoneVisiblity}" Text="Select None" TextColor="{StaticResource Text}" HeightRequest="40"/>
-                <custom:CustomSearchBar PlaceholderText="Search..." EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
+                <custom:CustomSearchBar PlaceholderText="Search..." TextValue="{Binding SearchText, Mode=TwoWay}" EnterCommand="{Binding SearchCommand}" Margin="0,10,0,0"/>
             </VerticalStackLayout>
         </Grid>
     </Frame>

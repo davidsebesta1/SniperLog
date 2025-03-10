@@ -21,6 +21,7 @@ namespace SniperLog.Extensions.CustomXamlComponents
             CustomPickerPopupViewModel vm = (CustomPickerPopupViewModel)BindingContext;
 
             vm.SelectionChangedCommandEntry = _selectionChangedCommand;
+            vm.SearchText = string.Empty;
             vm.SearchCommand.Execute(string.Empty);
         }
     }

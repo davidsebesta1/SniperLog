@@ -35,6 +35,12 @@ namespace SniperLog.Extensions.CustomXamlComponents.ViewModels
         private bool _canSelectNone;
 
         /// <summary>
+        /// Search text binded property.
+        /// </summary>
+        [ObservableProperty]
+        private string _searchText;
+
+        /// <summary>
         /// The command used in <see cref="CustomPickerEntry"/>.
         /// </summary>
         public ICommand SelectionChangedCommandEntry { get; set; }
