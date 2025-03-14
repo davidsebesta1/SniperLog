@@ -1,67 +1,98 @@
 using System.Windows.Input;
 
-namespace SniperLog.Extensions.CustomXamlComponents;
-
-public partial class CustomSearchBar : ContentView
+namespace SniperLog.Extensions.CustomXamlComponents
 {
-    #region Bindables
-
-    public static readonly BindableProperty TextValueProperty = BindableProperty.Create(nameof(TextValue), typeof(string), typeof(Frame), string.Empty);
-    public static readonly BindableProperty PlaceholderTextValueProperty = BindableProperty.Create(nameof(PlaceholderText), typeof(string), typeof(Frame), string.Empty);
-
-    public static readonly BindableProperty EnterCommandProperty = BindableProperty.Create(nameof(EnterCommand), typeof(ICommand), typeof(Entry), null);
-
-    #endregion
-
-    #region Properties
-
-    public string TextValue
+    /// <summary>
+    /// A custom search bar control with a text entry field and a button to clear the text.
+    /// </summary>
+    public partial class CustomSearchBar : ContentView
     {
-        get => (string)GetValue(TextValueProperty);
-        set => SetValue(TextValueProperty, value);
-    }
+        #region Bindables
 
-    public string PlaceholderText
-    {
-        get => (string)GetValue(PlaceholderTextValueProperty);
-        set => SetValue(PlaceholderTextValueProperty, value);
-    }
+        /// <summary>
+        /// Bindable property for the entered <see cref="TextValue"/>.
+        /// </summary>
+        public static readonly BindableProperty TextValueProperty = BindableProperty.Create(nameof(TextValue), typeof(string), typeof(Frame), string.Empty);
 
-    public ICommand EnterCommand
-    {
-        get => (ICommand)GetValue(EnterCommandProperty);
-        set => SetValue(EnterCommandProperty, value);
-    }
+        /// <summary>
+        /// Bindable property for the <see cref="PlaceholderText"/> of the search bar.
+        /// </summary>
+        public static readonly BindableProperty PlaceholderTextValueProperty = BindableProperty.Create(nameof(PlaceholderText), typeof(string), typeof(Frame), string.Empty);
 
-    #endregion
+        /// <summary>
+        /// Bindable property for the <see cref="EnterCommand"/> to execute when the Enter key is pressed.
+        /// </summary>
+        public static readonly BindableProperty EnterCommandProperty = BindableProperty.Create(nameof(EnterCommand), typeof(ICommand), typeof(Entry), null);
 
-    #region Ctro
+        #endregion
 
-    public CustomSearchBar()
-    {
-        InitializeComponent();
-    }
+        #region Properties
 
-    #endregion
-
-    #region Events
-
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (EnterCommand != null && EnterCommand.CanExecute(e.NewTextValue))
+        /// <summary>
+        /// Gets or sets the text entered into the search bar.
+        /// </summary>
+        public string TextValue
         {
-            EnterCommand.Execute(e.NewTextValue);
+            get => (string)GetValue(TextValueProperty);
+            set => SetValue(TextValueProperty, value);
         }
-    }
 
-    private void ImageButton_Pressed(object sender, EventArgs e)
-    {
-        TextValue = string.Empty;
-        if (EnterCommand != null && EnterCommand.CanExecute(string.Empty))
+        /// <summary>
+        /// Gets or sets the placeholder text for the search bar.
+        /// </summary>
+        public string PlaceholderText
         {
-            EnterCommand.Execute(string.Empty);
+            get => (string)GetValue(PlaceholderTextValueProperty);
+            set => SetValue(PlaceholderTextValueProperty, value);
         }
-    }
 
-    #endregion
+        /// <summary>
+        /// Gets or sets the command to execute when the Enter key is pressed.
+        /// </summary>
+        public ICommand EnterCommand
+        {
+            get => (ICommand)GetValue(EnterCommandProperty);
+            set => SetValue(EnterCommandProperty, value);
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <inheritdoc/>
+        public CustomSearchBar()
+        {
+            InitializeComponent();
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Handles the text change event of the entry field. Executes the <see cref="EnterCommand"/> if it can be executed.
+        /// </summary>
+        private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (EnterCommand != null && EnterCommand.CanExecute(e.NewTextValue))
+            {
+                EnterCommand.Execute(e.NewTextValue);
+            }
+        }
+
+        /// <summary>
+        /// Handles the image button press event to clear the text value.
+        /// Executes the <see cref="EnterCommand"/> with an empty string if it can be executed.
+        /// </summary>
+        private void ImageButton_Pressed(object sender, EventArgs e)
+        {
+            TextValue = string.Empty;
+            if (EnterCommand != null && EnterCommand.CanExecute(string.Empty))
+            {
+                EnterCommand.Execute(string.Empty);
+            }
+        }
+
+        #endregion
+    }
 }

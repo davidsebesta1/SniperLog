@@ -12,13 +12,39 @@ public partial class CustomEntryBase : ContentView
     /// </summary>
     public static readonly BindableProperty EntryInputChangedCommandProperty = BindableProperty.Create(nameof(EntryInputChangedCommand), typeof(ICommand), typeof(Entry), null);
 
+    /// <summary>
+    /// Binding for <see cref="IsMandatory"/>.
+    /// </summary>
     public static readonly BindableProperty IsMandatoryProperty = BindableProperty.Create(nameof(IsMandatory), typeof(bool), typeof(Label), true);
 
+    /// <summary>
+    /// Binding for <see cref="EntryTitle"/>.
+    /// </summary>
     public static readonly BindableProperty EntryTitleProperty = BindableProperty.Create(nameof(EntryTitle), typeof(string), typeof(Label), string.Empty);
+
+    /// <summary>
+    /// Binding for <see cref="ErrorText"/>.
+    /// </summary>
     public static readonly BindableProperty ErrorTextProperty = BindableProperty.Create(nameof(ErrorText), typeof(string), typeof(Label), string.Empty);
+
+    /// <summary>
+    /// Binding for <see cref="ErrorTextVisible"/>.
+    /// </summary>
     public static readonly BindableProperty ErrorTextVisibleProperty = BindableProperty.Create(nameof(ErrorTextVisible), typeof(bool), typeof(Label), false);
+
+    /// <summary>
+    /// Binding for <see cref="EntryTitle"/>.
+    /// </summary>
     public static readonly BindableProperty EntryTitleSubtextProperty = BindableProperty.Create(nameof(EntryTitleSubtext), typeof(string), typeof(Label), null);
 
+    /// <summary>
+    /// Event for when entry input has been changed.
+    /// </summary>
+    public EventHandler<object> OnEntryInputChanged;
+
+    /// <summary>
+    /// Entry input changed command.
+    /// </summary>
     public ICommand EntryInputChangedCommand
     {
         get
@@ -30,8 +56,10 @@ public partial class CustomEntryBase : ContentView
             SetValue(EntryInputChangedCommandProperty, value);
         }
     }
-    public EventHandler<object> OnEntryInputChanged;
 
+    /// <summary>
+    /// Gets or sets whether the field is mandatory.
+    /// </summary>
     public bool IsMandatory
     {
         get
@@ -44,6 +72,9 @@ public partial class CustomEntryBase : ContentView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the entry title text.
+    /// </summary>
     public string EntryTitle
     {
         get
@@ -56,6 +87,9 @@ public partial class CustomEntryBase : ContentView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the entry title subtext.
+    /// </summary>
     public string EntryTitleSubtext
     {
         get
@@ -68,6 +102,9 @@ public partial class CustomEntryBase : ContentView
         }
     }
 
+    /// <summary>
+    /// Gets or sets the entry title error text.
+    /// </summary>
     public string ErrorText
     {
         get
@@ -80,6 +117,9 @@ public partial class CustomEntryBase : ContentView
         }
     }
 
+    /// <summary>
+    /// Gets or sets whether the <see cref="ErrorText"/> is visible.
+    /// </summary>
     public bool ErrorTextVisible
     {
         get

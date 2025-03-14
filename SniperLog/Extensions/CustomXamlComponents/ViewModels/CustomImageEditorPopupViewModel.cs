@@ -8,63 +8,76 @@ using SniperLog.ViewModels;
 using System.Collections.ObjectModel;
 using System.IO;
 
-namespace SniperLog.Extensions.CustomXamlComponents.ViewModels
+namespace SniperLog.Extensions.CustomXamlComponents.ViewModels;
+
+/// <summary>
+/// <see cref="CustomImageEditorPopup"/>'s viewmodel.
+/// </summary>
+public partial class CustomImageEditorPopupViewModel : BaseViewModel
 {
-    public partial class CustomImageEditorPopupViewModel : BaseViewModel
+    /// <summary>
+    /// Paths to the image and editable image.
+    /// </summary>
+    [ObservableProperty]
+    private DrawableImagePaths _backgroundImage;
+
+    /// <summary>
+    /// Drawn lines.
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<IDrawingLine> _lines;
+
+    /// <summary>
+    /// Parent picker entry.
+    /// </summary>
+    public CustomImagePickerEntry Entry;
+
+    /// <inheritdoc/>
+    public CustomImageEditorPopupViewModel() : base()
     {
-        [ObservableProperty]
-        private DrawableImagePaths _backgroundImage;
+        PageTitle = "Image Editor";
+    }
 
-        [ObservableProperty]
-        private ObservableCollection<IDrawingLine> _lines;
+    [RelayCommand]
+    private async Task Cancel()
+    {
+        await MopupService.Instance.PopAsync();
+    }
 
-        public CustomImagePickerEntry Entry;
-
-        public CustomImageEditorPopupViewModel() : base()
+    [RelayCommand]
+    private async Task EditImage(DrawingView drawingView)
+    {
+        if (Lines == null || Lines.Count <= 0)
         {
-            PageTitle = "Image Editor";
+            return;
         }
 
-        [RelayCommand]
-        private async Task Cancel()
+        if (!File.Exists(BackgroundImage.ImagePath))
         {
-            await MopupService.Instance.PopAsync();
+            return;
         }
 
-        [RelayCommand]
-        private async Task EditImage(DrawingView drawingView)
+        string tmpSavePath = Path.Combine(FileSystem.Current.CacheDirectory, Guid.NewGuid().ToString() + ".png");
+
+        using Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath));
+
+        int targetWidth = (int)originalImage.Width;
+        int targetHeight = (int)originalImage.Height;
+
+
+        using (FileStream localFileStream = File.OpenWrite(tmpSavePath))
         {
-            if (Lines == null || Lines.Count <= 0)
+            using (Stream stream = drawingView.CaptureDrawingView())
             {
-                return;
+                using Microsoft.Maui.Graphics.IImage img = PlatformImage.FromStream(stream);
+                using Microsoft.Maui.Graphics.IImage imgResized = img.Resize(targetWidth, targetHeight, ResizeMode.Fit);
+
+                await imgResized.SaveAsync(localFileStream, ImageFormat.Png);
             }
-
-            if (!File.Exists(BackgroundImage.ImagePath))
-            {
-                return;
-            }
-
-            string tmpSavePath = Path.Combine(FileSystem.Current.CacheDirectory, Guid.NewGuid().ToString() + ".png");
-
-            using Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath));
-
-            int targetWidth = (int)originalImage.Width;
-            int targetHeight = (int)originalImage.Height;
-
-
-            using (FileStream localFileStream = File.OpenWrite(tmpSavePath))
-            {
-                using (Stream stream = drawingView.CaptureDrawingView())
-                {
-                    using Microsoft.Maui.Graphics.IImage img = PlatformImage.FromStream(stream);
-                    using Microsoft.Maui.Graphics.IImage imgResized = img.Resize(targetWidth, targetHeight, ResizeMode.Fit);
-
-                    await imgResized.SaveAsync(localFileStream, ImageFormat.Png);
-                }
-            }
-
-            BackgroundImage.OverDrawPath = tmpSavePath;
-            await MopupService.Instance.PopAsync();
         }
+
+        BackgroundImage.OverDrawPath = tmpSavePath;
+        await MopupService.Instance.PopAsync();
     }
 }
+
