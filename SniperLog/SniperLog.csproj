@@ -155,6 +155,7 @@
 	  <None Remove="Resources\Images\stariconnormal.svg" />
 	  <None Remove="Resources\Images\Untitled.png" />
 	  <None Remove="Resources\Images\uploadicon.svg" />
+	  <None Remove="Resources\Raw\best.onnx" />
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
@@ -177,6 +178,7 @@
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.8" />
 		<PackageReference Include="YamlDotNet" Version="15.3.0" />
+		<PackageReference Include="YoloSharp" Version="6.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

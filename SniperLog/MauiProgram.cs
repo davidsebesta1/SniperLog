@@ -38,6 +38,7 @@ using SniperLog.ViewModels.Manufacturers.BulletManufacturers;
 using SniperLog.ViewModels.Manufacturers.AmmunitionManufacturers;
 using SniperLog.ViewModels.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Firearms.MuzzleVelocities;
+using SniperLog.Services.AI;
 
 namespace SniperLog
 {
@@ -215,7 +216,8 @@ namespace SniperLog
 
             #region Other
 
-            builder.Services.AddSingleton<ValidatorService>();
+            builder.Services.AddSingleton<ValidatorService>(); 
+            builder.Services.AddSingleton<BulletHoleDetectionService>();
 
             AppConfig config = ApplicationConfigService.GetConfig<AppConfig>();
             ConnectionToDataServer connectionToDataServer = new ConnectionToDataServer()

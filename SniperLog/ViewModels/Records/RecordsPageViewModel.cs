@@ -320,7 +320,6 @@ namespace SniperLog.ViewModels.Records
             }
         }
 
-
         public async Task<List<ClickOffset?>> GetNearestWeatherClicksFromBase(IEnumerable<int> distances, WeatherResponseMessage msg)
         {
             if (SelectedFirearm == null)
@@ -391,9 +390,8 @@ namespace SniperLog.ViewModels.Records
             SubRanges = await _subrangeCacher.GetAllBy(n => SelectedRange != null && n.ShootingRange_ID == SelectedRange.ID);
 
             if (resetSubRange)
-            {
                 SelectedSubRange = null;
-            }
+
             Firearms = await _firearmsCacher.GetAll();
         }
 
