@@ -1,6 +1,7 @@
 ﻿using Compunet.YoloSharp;
 using Compunet.YoloSharp.Data;
 using Microsoft.ML.OnnxRuntime;
+using SniperLog.Extensions;
 
 namespace SniperLog.Services.AI;
 
@@ -20,17 +21,14 @@ public class BulletHoleDetectionService
     /// </summary>
     public const int TargetImageWidth = 640;
 
-    private readonly string _mPath;
-
     private YoloPredictor _predictor;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="modelPath">Path to the YOLOv8 ONNX model.</param>
-    public BulletHoleDetectionService(string modelPath)
+    public BulletHoleDetectionService()
     {
-        _mPath = modelPath;
+
     }
 
     /// <summary>
@@ -41,12 +39,12 @@ public class BulletHoleDetectionService
     public async Task<YoloResult<Detection>> DetectObjects(string imagePath)
     {
         if (_predictor == null)
-            InitYolo();
+            await InitYolo();
 
         return await _predictor.DetectAsync(imagePath);
     }
 
-    private void InitYolo()
+    private async Task InitYolo()
     {
         SessionOptions sessionOptions = new SessionOptions();
 
@@ -59,7 +57,7 @@ public class BulletHoleDetectionService
             SessionOptions = sessionOptions
         };
 
-        _predictor = new YoloPredictor(_mPath, options);
+        _predictor = new YoloPredictor(await MauiExtensions.ReadBytesAsync("HoleDetect.onnx"), options);
     }
 }
 

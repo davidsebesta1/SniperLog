@@ -8,6 +8,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using SniperLog.Config;
 using SniperLog.Extensions.WrapperClasses;
+using SniperLog.Pages.Records;
 using SniperLog.Services.Ballistics;
 using SniperLogNetworkLibrary;
 using System.Collections.ObjectModel;
@@ -527,7 +528,7 @@ namespace SniperLog.ViewModels.Records
         [RelayCommand]
         private async Task GoToDetails(ShootingRecord record)
         {
-            await Shell.Current.GoToAsync("RecordDetails", new Dictionary<string, object>(1) { { "Record", record } });
+            await Shell.Current.GoToAsync(nameof(RecordDetailsPage), new Dictionary<string, object>(1) { { "Record", record } });
         }
 
         async partial void OnSelectedFirearmChanged(Firearm? value)

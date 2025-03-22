@@ -18,6 +18,12 @@ namespace SniperLog.Extensions.CustomXamlComponents
             BindingContext = vm;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            
+        }
+
         /// <summary>
         /// Called when the popup is disappearing.
         /// </summary>

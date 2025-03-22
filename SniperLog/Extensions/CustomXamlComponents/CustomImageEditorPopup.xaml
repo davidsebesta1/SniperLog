@@ -12,9 +12,17 @@
              CloseWhenBackgroundIsClicked="False"
              Title="{Binding PageTitle}">
 
-    <Frame WidthRequest="350" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
+    <Frame WidthRequest="350" MaximumHeightRequest="700" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
         <VerticalStackLayout>
-            <Label Grid.Row="0" Text="{Binding PageTitle}" FontSize="18"/>
+            <VerticalStackLayout Grid.Row="0" Spacing="15">
+                <Label Text="{Binding PageTitle}" FontSize="20" FontAttributes="Bold"/>
+
+                <HorizontalStackLayout IsVisible="True" HorizontalOptions="StartAndExpand">
+                    <ImageButton HorizontalOptions="Start" BackgroundColor="{StaticResource PanelBackgroundLight}" Source="reticlesicon.png" Command="{Binding SearchHolesCommand}" CommandParameter="{x:Reference DrawingView}" HeightRequest="45" WidthRequest="45"/>
+                    <Label Margin="10, 0, 0, 0" Text="Detect Bullet Holes" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" FontSize="14"/>
+                    <ActivityIndicator Margin="10, 0, 0, 0" IsRunning="{Binding BulletHoleDetectorRunning}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
             <Grid Grid.Row="1" Padding="0" Margin="0,10,0,0">
                 <Image Source="{Binding BackgroundImage.ImagePath}" Aspect="AspectFit"/>

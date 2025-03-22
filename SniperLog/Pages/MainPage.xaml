@@ -19,14 +19,6 @@
     </Shell.TitleView>
 
     <VerticalStackLayout>
-        <Grid>
-            <!-- Image Display -->
-            <Image x:Name="TargetImage" Aspect="AspectFit" />
-
-            <!-- SkiaSharp Canvas for Drawing Bounding Boxes -->
-            <skia:SKCanvasView x:Name="OverlayCanvas" PaintSurface="OnCanvasPaint" />
-        </Grid>
-
-        <Button Text="Detect Bullet Holes" Clicked="OnDetectClicked" />
+       
     </VerticalStackLayout>
 </ContentPage>

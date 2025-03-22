@@ -36,6 +36,15 @@ public static class MauiExtensions
         return tempPath;
     }
 
+    public static async Task<byte[]> ReadBytesAsync(string filename)
+    {
+        using Stream stream = await FileSystem.OpenAppPackageFileAsync(filename);
+        using MemoryStream memoryStream = new MemoryStream();
+        stream.CopyTo(memoryStream);
+
+        return memoryStream.ToArray();
+    }
+
     /// <summary>
     /// Gets resource from resource dictionary of the MAUI app.
     /// </summary>

@@ -11,7 +11,7 @@
 
     <Frame HorizontalOptions="FillAndExpand" HeightRequest="600" BackgroundColor="{StaticResource Background}" Margin="15,0,15,0" BorderColor="Transparent">
         <Grid Padding="0" RowDefinitions="*,*">
-            <CollectionView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" SelectionMode="Single" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectionChangedCommand}" MinimumHeightRequest="300" HeightRequest="500" MaximumHeightRequest="500">
+            <CollectionView Grid.Row="0" ItemsSource="{Binding FilteredCollection}" SelectionMode="Single" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectionChangedCommand}" MinimumHeightRequest="300" MaximumHeightRequest="500" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="x:Object">
                         <VerticalStackLayout>

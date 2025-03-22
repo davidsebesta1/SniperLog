@@ -26,10 +26,10 @@ public partial class DrawableImagePaths : ObservableObject, IEquatable<DrawableI
     [NotifyPropertyChangedFor(nameof(CombinedImageSrc))]
     private string _overDrawPath;
 
-    private byte[] _combinedImageData;
+    private string _tmpFilePath;
 
     /// <summary>
-    /// Combined image from <see cref="ImagePath"/> and <see cref="OverDrawPath"></see>
+    /// Combined image from <see cref="ImagePath"/> and <see cref="OverDrawPath"/>
     /// </summary>
     public ImageSource CombinedImageSrc
     {
@@ -37,26 +37,21 @@ public partial class DrawableImagePaths : ObservableObject, IEquatable<DrawableI
         {
             if (!File.Exists(ImagePath))
                 return null;
-            
 
             if (!File.Exists(OverDrawPath))
-                return ImageSource.FromStream(() => File.OpenRead(ImagePath));
-            
+                return ImageSource.FromFile(ImagePath);
 
             try
             {
                 // If the combined image data has already been generated, return it as a new stream
-                if (_combinedImageData != null)
-                {
-                    return ImageSource.FromStream(() => new MemoryStream(_combinedImageData));
-                }
+                if (!string.IsNullOrEmpty(_tmpFilePath) && File.Exists(_tmpFilePath))
+                    return ImageSource.FromFile(_tmpFilePath);
 
                 using SKBitmap bitmap1 = SKBitmap.Decode(ImagePath);
                 using SKBitmap bitmap2 = SKBitmap.Decode(OverDrawPath);
 
                 if (bitmap1 == null || bitmap2 == null)
-                    return ImageSource.FromStream(() => File.OpenRead(ImagePath));
-                
+                    return ImageSource.FromFile(ImagePath);
 
                 int width = Math.Max(bitmap1.Width, bitmap2.Width);
                 int height = Math.Max(bitmap1.Height, bitmap2.Height);
@@ -84,10 +79,19 @@ public partial class DrawableImagePaths : ObservableObject, IEquatable<DrawableI
                 // Encode the result to PNG format and save to byte array
                 using SKImage image = SKImage.FromBitmap(resultBitmap);
                 using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
-                _combinedImageData = data.ToArray();  // Cache the image data as a byte array
 
                 // Return the new ImageSource from the byte array
-                return ImageSource.FromStream(() => new MemoryStream(_combinedImageData));
+                _tmpFilePath = Path.Combine(FileSystem.Current.CacheDirectory, Guid.NewGuid().ToString() + ".png");
+
+                using (Stream dataStream = data.AsStream(true))
+                {
+                    using (FileStream fStream = File.OpenWrite(_tmpFilePath))
+                    {
+                        dataStream.CopyTo(fStream);
+                    }
+                }
+
+                return ImageSource.FromFile(_tmpFilePath);
             }
             catch (Exception ex)
             {
@@ -125,6 +129,16 @@ public partial class DrawableImagePaths : ObservableObject, IEquatable<DrawableI
         {
             OverDrawPath = string.Empty;
         }
+    }
+
+    partial void OnImagePathChanged(string? oldValue, string newValue)
+    {
+        _tmpFilePath = string.Empty;
+    }
+
+    partial void OnOverDrawPathChanged(string? oldValue, string newValue)
+    {
+        _tmpFilePath = string.Empty;
     }
 
     /// <inheritdoc/>

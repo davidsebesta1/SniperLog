@@ -155,10 +155,10 @@
 	  <None Remove="Resources\Images\stariconnormal.svg" />
 	  <None Remove="Resources\Images\Untitled.png" />
 	  <None Remove="Resources\Images\uploadicon.svg" />
-	  <None Remove="Resources\Raw\best.onnx" />
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
+	  <None Remove="Resources\Raw\HoleDetect.onnx" />
 	  <None Remove="Resources\Raw\ManufacturerTypes.csv" />
 	  <None Remove="Resources\Raw\SETUPQUERY.sql" />
 	  <None Remove="Resources\Raw\SightClickTypes.csv" />
