@@ -36,9 +36,7 @@ namespace SniperLog.Services
         public bool TryAddValidation(CustomEntryBase entry, Func<object, bool> func, bool defaultValidation = false)
         {
             if (_validationFunctions.ContainsKey(entry))
-            {
                 return false;
-            }
 
             _validationValues.Add(entry, defaultValidation);
             _validationFunctions.Add(entry, func);
@@ -58,9 +56,7 @@ namespace SniperLog.Services
             bool res = _validationValues.Remove(entry) && _validationFunctions.Remove(entry);
 
             if (res)
-            {
-                entry.OnEntryInputChanged -= EntryInput;
-            }
+                entry.OnEntryInputChanged -= EntryInput;        
 
             return res;
         }

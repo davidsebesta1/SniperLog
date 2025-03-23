@@ -3,6 +3,7 @@ using SniperLog.Pages.Firearms.Bullets;
 using SniperLog.Pages.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
+using SniperLog.Pages.Other;
 using SniperLog.Pages.Records;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
@@ -53,6 +54,8 @@ namespace SniperLog
 
             Routing.RegisterRoute(nameof(MuzzleVelocitiesPage), typeof(MuzzleVelocitiesPage));
             Routing.RegisterRoute(nameof(MuzzleVelocityAddOrEditPage), typeof(MuzzleVelocityAddOrEditPage));
+
+            Routing.RegisterRoute(nameof(ImportExportPage), typeof(ImportExportPage));
         }
     }
 }

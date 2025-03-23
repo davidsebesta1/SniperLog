@@ -60,6 +60,7 @@ namespace SniperLog
         {
             SQLitePCL.Batteries.Init();
             ApplicationConfigService.Init();
+            AppContext.SetSwitch("System.Reflection.NullabilityInfoContext.IsSupported", true);
 
             MauiAppBuilder builder = MauiApp.CreateBuilder();
             builder
@@ -123,7 +124,7 @@ namespace SniperLog
             builder.Services.AddSingleton<FirearmManuPageViewModel>();
             builder.Services.AddSingleton<SightManuPageViewModel>();
             builder.Services.AddSingleton<ManufacturerAddOrEditPageViewModel>();
-            builder.Services.AddSingleton<BulletManuPageViewModel>(); 
+            builder.Services.AddSingleton<BulletManuPageViewModel>();
             builder.Services.AddSingleton<AmmoManuPageViewModel>();
 
             builder.Services.AddTransient<CustomPickerPopupViewModel>();
@@ -156,6 +157,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<MuzzleVelocitiesPageViewModel>();
             builder.Services.AddSingleton<MuzzleVelocityAddOrEditPageViewModel>();
+
+            builder.Services.AddSingleton<ImportExportPageViewModel>();
 
             #endregion
 
@@ -206,6 +209,8 @@ namespace SniperLog
             builder.Services.AddSingleton<MuzzleVelocitiesPage>();
             builder.Services.AddSingleton<MuzzleVelocityAddOrEditPage>();
 
+            builder.Services.AddSingleton<ImportExportPage>();
+
             #endregion
 
             #region Processors
@@ -216,7 +221,7 @@ namespace SniperLog
 
             #region Other
 
-            builder.Services.AddSingleton<ValidatorService>(); 
+            builder.Services.AddSingleton<ValidatorService>();
             builder.Services.AddSingleton<BulletHoleDetectionService>();
 
             AppConfig config = ApplicationConfigService.GetConfig<AppConfig>();

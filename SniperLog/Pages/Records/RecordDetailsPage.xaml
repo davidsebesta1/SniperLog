@@ -38,6 +38,7 @@
                         <Label Text="{Binding Record.ReferencedFirearm.ReferencedFirearmSight.Name, StringFormat='Sight: {0}', TargetNullValue='Sight: None'}"/>
                         <Label Text="{Binding Record.ReferencedShootingRange.Name, StringFormat='Shooting range: {0}', TargetNullValue='Shooting range: None'}"/>
                         <Label Text="{Binding Record.ReferencedSubRange.Prefix, StringFormat='Sub Range: {0}', TargetNullValue='Sub Range: None'}"/>
+                        <Label Text="{Binding Record.ReferencedAmmunition, StringFormat='Ammunition: {0}', TargetNullValue='Ammunition: None'}"/>
 
                         <Grid ColumnDefinitions="*,25">
                             <Label Text="Weather Stats" FontSize="18" VerticalOptions="Center"/>

@@ -55,8 +55,8 @@ namespace SniperLog.ViewModels.Other
             await manufacturer4.SaveAsync();
 
             //Reticles
-            SightReticle reticle1 = new SightReticle("TestRet", string.Empty);
-            SightReticle reticle2 = new SightReticle("TreeReticle", string.Empty);
+            SightReticle reticle1 = new SightReticle("TestRet");
+            SightReticle reticle2 = new SightReticle("TreeReticle");
 
             await reticle1.SaveAsync();
             await reticle2.SaveAsync();

@@ -131,6 +131,15 @@ public partial class DrawableImagePaths : ObservableObject, IEquatable<DrawableI
         }
     }
 
+    /// <summary>
+    /// Ctor from <see cref="ShootingRecordImage"/>.
+    /// </summary>
+    /// <param name="img">Record image object.</param>
+    public DrawableImagePaths(ShootingRecordImage img) : this(img.BackgroundImgPathFull)
+    {
+
+    }
+
     partial void OnImagePathChanged(string? oldValue, string newValue)
     {
         _tmpFilePath = string.Empty;
