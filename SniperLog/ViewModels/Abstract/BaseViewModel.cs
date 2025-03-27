@@ -34,7 +34,7 @@
         /// </summary>
         public BaseViewModel()
         {
-
+           
         }
 
         #endregion
