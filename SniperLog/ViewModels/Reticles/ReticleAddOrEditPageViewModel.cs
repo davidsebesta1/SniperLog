@@ -51,7 +51,7 @@ namespace SniperLog.ViewModels.Reticles
 
             if (Reticle == null)
             {
-                Reticle = new SightReticle(Name, string.Empty);
+                Reticle = new SightReticle(Name);
             }
             else
             {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Firearms.Bullets.BulletAddOrEditPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Firearms.Bullets"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:BulletAddOrEditPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="logo.png" WidthRequest="25"/>
+                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+            <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>
+
+            <custom:CustomPickerEntry x:Name="CaliberEntry" EntryTitle="Caliber" IsMandatory="True" EntryHeight="1" SourceCollection="{Binding Calibers}" SelectedItem="{Binding Caliber, Mode=TwoWay}" ErrorText="Caliber must be selected"/>
+            <custom:CustomPickerEntry x:Name="ManufacturerEntry" EntryTitle="Manufacturer" IsMandatory="True" EntryHeight="1" SourceCollection="{Binding Manufacturers}" SelectedItem="{Binding Manufacturer, Mode=TwoWay}" ErrorText="Manufacturer must be selected"/>
+            <custom:CustomTextEntry x:Name="WeightEntry" EntryTitle="Weight" IsMandatory="True" EntryTitleSubtext="grams" EntryHeight="1" ErrorText="Grams must not be empty" TextValue="{Binding WeightGrams, Mode=TwoWay}" PlaceholderText="Weight..."/>
+            <custom:CustomTextEntry x:Name="BulletDiameterEntry" EntryTitle="Bullet Diameter" IsMandatory="True" EntryTitleSubtext="mm" EntryHeight="1" ErrorText="Diameter must not be empty" TextValue="{Binding BulletDiameter, Mode=TwoWay}" PlaceholderText="Diameter..."/>
+            <custom:CustomTextEntry x:Name="BulletLengthEntry" EntryTitle="Bullet Length" IsMandatory="True" EntryTitleSubtext="mm" EntryHeight="1" ErrorText="Length must not be empty" TextValue="{Binding BulletLength, Mode=TwoWay}" PlaceholderText="Length..."/>
+            <custom:CustomTextEntry x:Name="BC1Entry" EntryTitle="Ballistic Coeficient G1" IsMandatory="True" EntryHeight="1" ErrorText="BC1 must not be empty" TextValue="{Binding Bc1, Mode=TwoWay}" PlaceholderText="Coeficient..."/>
+            <custom:CustomTextEntry x:Name="BC7Entry" EntryTitle="Ballistic Coeficient G7" IsMandatory="True" EntryHeight="1" ErrorText="BC7 must not be empty" TextValue="{Binding Bc7, Mode=TwoWay}" PlaceholderText="Coeficient..."/>
+
+            <Grid ColumnDefinitions="150,*,150">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCreationCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="{Binding CreateOrEditButtonText}" FontSize="20" Command="{Binding CreateCommand}"/>
+            </Grid>
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>

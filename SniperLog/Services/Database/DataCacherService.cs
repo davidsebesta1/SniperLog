@@ -23,7 +23,8 @@ namespace SniperLog.Services.Database
             {
                 DataTable? table = await SqLiteDatabaseConnection.Instance.ExecuteQueryAsync(T.SelectAllQuery);
 
-                if (table == null) return _objects;
+                if (table == null) 
+                    return _objects;
 
                 foreach (DataRow row in table.Rows)
                 {

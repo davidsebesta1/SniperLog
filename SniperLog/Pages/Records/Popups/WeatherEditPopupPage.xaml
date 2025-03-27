@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
+             xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             BackgroundColor="#AA000000"
+             x:Class="SniperLog.Pages.Records.Popups.WeatherEditPopupPage"
+             x:DataType="viewmodel:WeatherEditPopupPageViewModel"
+             BindingContext="viewmodel:WeatherEditPopupPageViewModel">
+
+    <Frame WidthRequest="350" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource Background}" Padding="25" CornerRadius="10">
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="*, 45, 45">
+                <Label Grid.Column="0" Text="{Binding PageTitle}" FontSize="18" VerticalTextAlignment="Center"/>
+                <Button Grid.Column="1" ImageSource="datetimeicon.png" BackgroundColor="Transparent" Command="{Binding SelectDatetimeCommand}"/>
+                <Button Grid.Column="2" ImageSource="refreshicon.png" BackgroundColor="Transparent" Command="{Binding RefreshWeatherCommand}"/>
+            </Grid>
+
+            <custom:CustomTextEntry x:Name="TemperatureEntry" Keyboard="Numeric" EntryTitle="Temperature (°C)" TextValue="{Binding Temperature, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="PressureEntry" Keyboard="Numeric" EntryTitle="Pressure" TextValue="{Binding Pressure, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="HumidityEntry" Keyboard="Numeric" EntryTitle="Humidity" TextValue="{Binding Humidity, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="WindspeedEntry" Keyboard="Numeric" EntryTitle="Wind Speed" TextValue="{Binding WindSpeed, Mode=TwoWay}" EntryHeight="1"/>
+            <custom:CustomTextEntry x:Name="WindDirEntry" Keyboard="Numeric" EntryTitle="Wind Direction (°)" TextValue="{Binding DirectionDegrees, Mode=TwoWay}" EntryHeight="1"/>
+
+            <Grid ColumnDefinitions="100,*,100">
+                <Button Grid.Column="0" CornerRadius="10" Text="Cancel" FontSize="20" BackgroundColor="{StaticResource PanelBackgroundLight}" Command="{Binding CancelCommand}"/>
+                <Button Grid.Column="2" CornerRadius="10" Text="Edit" FontSize="20" Command="{Binding EditCommand}"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </Frame>
+</mopups:PopupPage>

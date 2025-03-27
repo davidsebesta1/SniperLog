@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using SniperLog.Config;
 using SniperLog.Extensions;
 using System.Data;
 
@@ -38,25 +39,35 @@ namespace SniperLog.Models
         [ObservableProperty]
         public string _name;
 
-        public string? Model { get; set; }
+        [ObservableProperty]
+        private string? _model;
 
-        public string? SerialNumber { get; set; }
+        [ObservableProperty]
+        private string? _serialNumber;
 
-        public double? TotalLengthMm { get; set; }
+        [ObservableProperty]
+        private double? _totalLengthMm;
 
-        public double? BarrelLengthInch { get; set; }
+        [ObservableProperty]
+        private double? _barrelLengthInch;
 
-        public string? RateOfTwist { get; set; }
+        [ObservableProperty]
+        private string? _rateOfTwist;
 
-        public double? Weight { get; set; }
+        [ObservableProperty]
+        private double? _weight;
 
-        public bool? HandednessForLeft { get; set; }
+        [ObservableProperty]
+        private bool? _handednessForLeft;
+
+        [ObservableProperty]
+        private double? _sightHeightCm;
 
         #endregion
 
         #region Constructors
 
-        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft)
+        public Firearm(int iD, int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, double? sightHeightCm)
         {
             ID = iD;
             FirearmType_ID = firearmType_ID;
@@ -71,9 +82,10 @@ namespace SniperLog.Models
             RateOfTwist = rateOfTwist;
             Weight = weight;
             HandednessForLeft = handednessForLeft;
+            SightHeightCm = sightHeightCm;
         }
 
-        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, sight_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft) { }
+        public Firearm(int firearmType_ID, int? manufacturer_ID, int caliber_ID, int sight_ID, string name, string? model, string? serialNumber, double? totalLengthMm, double? barrelLengthInch, string? rateOfTwist, double? weight, bool? handednessForLeft, double? sightHeightCm) : this(-1, firearmType_ID, manufacturer_ID, caliber_ID, sight_ID, name, model, serialNumber, totalLengthMm, barrelLengthInch, rateOfTwist, weight, handednessForLeft, sightHeightCm) { }
 
         #endregion
 
@@ -93,8 +105,7 @@ namespace SniperLog.Models
                     ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId, GetSqliteParams(false));
                     return ID;
                 }
-                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery,
-                       GetSqliteParams(true));
+                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery, GetSqliteParams(true));
             }
             finally
             {
@@ -111,9 +122,22 @@ namespace SniperLog.Models
             finally
             {
                 ServicesHelper.GetService<DataCacherService<Firearm>>().Remove(this);
+                SetLastSelectedAmmunition(null);
                 DeleteNotes();
             }
         }
+
+        /// <summary>
+        /// Gets the last selected ammunition for this firearm for recording entries.
+        /// </summary>
+        /// <returns>Ammunition that was lastly selected or null.</returns>
+        public async Task<Ammunition?> GetLastSelectedAmmunition() => await ApplicationConfigService.GetConfig<PreferencesConfig>().GetLastSelectedAmmunition(this);
+
+        /// <summary>
+        /// Sets the last selected ammunition for this firearm and saves the preferences.
+        /// </summary>
+        /// <param name="ammo">The ammunition that has been selected as last.</param>
+        public void SetLastSelectedAmmunition(Ammunition? ammo) => ApplicationConfigService.GetConfig<PreferencesConfig>().SetLastSelectedAmmunition(this, ammo);
 
         #endregion
 
@@ -142,7 +166,7 @@ namespace SniperLog.Models
 
         public static bool operator ==(Firearm? left, Firearm? right)
         {
-            return EqualityComparer<Firearm>.Default.Equals(left, right);
+            return left is Firearm f1 && right is Firearm f2 && f1.Equals(f2);
         }
 
         public static bool operator !=(Firearm? left, Firearm? right)

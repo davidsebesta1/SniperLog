@@ -1,15 +1,21 @@
 using Mopups.Pages;
-using Mopups.Services;
 using SniperLog.Extensions.CustomXamlComponents.ViewModels;
-using SniperLog.ViewModels;
 using System.Windows.Input;
 
 namespace SniperLog.Extensions.CustomXamlComponents
 {
+    /// <summary>
+    /// A custom popup page for selecting an item from a picker.
+    /// </summary>
     public partial class CustomPickerPopup : PopupPage
     {
         private readonly ICommand _selectionChangedCommand;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomPickerPopup"/> class.
+        /// </summary>
+        /// <param name="vm">The view model for the popup.</param>
+        /// <param name="selectionChangedCommand">The command to execute when a selection is made.</param>
         public CustomPickerPopup(CustomPickerPopupViewModel vm, ICommand selectionChangedCommand)
         {
             InitializeComponent();
@@ -17,17 +23,20 @@ namespace SniperLog.Extensions.CustomXamlComponents
             _selectionChangedCommand = selectionChangedCommand;
         }
 
-        protected override async void OnAppearing()
+        /// <summary>
+        /// Called when the popup page is appearing.
+        /// Sets up the selection command and clears the search text.
+        /// </summary>
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            await (BindingContext as CustomPickerPopupViewModel).SearchCommand.ExecuteAsync(string.Empty);
-        }
+            CustomPickerPopupViewModel vm = (CustomPickerPopupViewModel)BindingContext;
 
-        private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            _selectionChangedCommand.Execute(e.SelectedItem);
-            await MopupService.Instance.PopAsync();
+            vm.SelectionChangedCommandEntry = _selectionChangedCommand;
+            vm.SearchText = string.Empty;
+            vm.SearchCommand.Execute(string.Empty);
+            vm.SelectedItem = null;
         }
     }
 }

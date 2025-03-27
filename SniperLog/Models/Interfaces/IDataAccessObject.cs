@@ -3,53 +3,53 @@
 namespace SniperLog.Models.Interfaces
 {
     /// <summary>
-    /// Base interface providing features for Data Access Object pattern
+    /// Base interface providing features for Data Access Object pattern.
     /// </summary>
     public interface IDataAccessObject
     {
         /// <summary>
-        /// Primary key for any DAO object
+        /// Primary key for any DAO object.
         /// </summary>
         [PrimaryKey]
         public int ID { get; set; }
 
         /// <summary>
-        /// Asynchronous method for saving the object in database
+        /// Asynchronous method for saving the object in database.
         /// </summary>
-        /// <returns>ID of the object</returns>
+        /// <returns>The ID of the object.</returns>
         public Task<int> SaveAsync();
 
         /// <summary>
-        /// Asynchronous method for deleting the object from database
+        /// Asynchronous method for deleting the object from database.
         /// </summary>
-        /// <returns>Boolean value whenever the deletion was successful</returns>
+        /// <returns>Whether the deletion was successful.</returns>
         public Task<bool> DeleteAsync();
 
         /// <summary>
-        /// Query for returning all object of this type
+        /// Query for returning all object of this type.
         /// </summary>
         public static virtual string SelectAllQuery { get; }
 
         /// <summary>
-        /// Query for updating already existing object into database
+        /// Query for updating already existing object into database.
         /// </summary>
         public static virtual string InsertQuery { get; }
 
         /// <summary>
-        /// Query for inserting a new object into database. Returns object´s internal database ID.
+        /// Query for inserting a new object into database. Returns object's internal database ID.
         /// </summary>
         public static virtual string InsertQueryNoId { get; }
 
         /// <summary>
-        /// Query for deleteing object from database
+        /// Query for deleting object from database.
         /// </summary>
         public static virtual string DeleteQuery { get; }
 
         /// <summary>
-        /// Method for loading this object from a standard DataRow object
+        /// Method for loading this object from a standard DataRow object.
         /// </summary>
-        /// <param name="row"></param>
-        /// <returns>A new object casted to this interface</returns>
+        /// <param name="row">Data row from database.</param>
+        /// <returns>A new object casted to this interface.</returns>
         public static abstract IDataAccessObject LoadFromRow(DataRow row);
     }
 }

@@ -102,13 +102,7 @@
 
 		<MauiImage Update="Resources\Images\editicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
-		<MauiImage Update="Resources\Images\FlyoutIcons\firearmsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\manufacturersicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\recordsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\reticlesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\shootingrangesicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\sightsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
-		<MauiImage Update="Resources\Images\FlyoutIcons\settingsicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\FlyoutIcons\*" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<MauiImage Update="Resources\Images\searchicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
 		<MauiImage Update="Resources\Images\cancelicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
@@ -128,6 +122,7 @@
 		<MauiImage Update="Resources\Images\directionicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\dropdownarrow.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		<MauiImage Update="Resources\Images\editimageicon.svg" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
+		<MauiImage Update="Resources\Images\datetimeicon.png" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -140,11 +135,14 @@
 	  <None Remove="Resources\Fonts\Inter-Regular.ttf" />
 	  <None Remove="Resources\Images\cameraicon.svg" />
 	  <None Remove="Resources\Images\cancelicon.svg" />
+	  <None Remove="Resources\Images\datetimeicon.png" />
 	  <None Remove="Resources\Images\deleteicon.svg" />
 	  <None Remove="Resources\Images\directionicon.svg" />
 	  <None Remove="Resources\Images\dropdownarrow.svg" />
 	  <None Remove="Resources\Images\editicon.svg" />
 	  <None Remove="Resources\Images\editimageicon.svg" />
+	  <None Remove="Resources\Images\FlyoutIcons\ammoicon.svg" />
+	  <None Remove="Resources\Images\FlyoutIcons\bulletsicon.svg" />
 	  <None Remove="Resources\Images\FlyoutIcons\settingsicon.svg" />
 	  <None Remove="Resources\Images\galleryicon.svg" />
 	  <None Remove="Resources\Images\homeicon.svg" />
@@ -160,22 +158,28 @@
 	  <None Remove="Resources\Raw\Countries.csv" />
 	  <None Remove="Resources\Raw\FirearmCalibers.csv" />
 	  <None Remove="Resources\Raw\FirearmTypes.csv" />
+	  <None Remove="Resources\Raw\HoleDetect.onnx" />
 	  <None Remove="Resources\Raw\ManufacturerTypes.csv" />
 	  <None Remove="Resources\Raw\SETUPQUERY.sql" />
 	  <None Remove="Resources\Raw\SightClickTypes.csv" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BallisticCalculator" Version="1.1.3" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc4.5" />
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.6" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Mopups" Version="1.3.1" />
-		<PackageReference Include="SkiaSharp" Version="2.88.8" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SkiaSharp" Version="2.88.9" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.8" />
 		<PackageReference Include="YamlDotNet" Version="15.3.0" />
+		<PackageReference Include="YoloSharp" Version="6.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -200,9 +204,18 @@
 	  <Compile Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml.cs">
 	    <DependentUpon>CustomTextEntry.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Manufacturers\FirearmManufacturers\AmmoManuPage.xaml.cs">
+	    <DependentUpon>AmmoManuPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Manufacturers\FirearmManufacturers\BulletManuPage.xaml.cs">
+	    <DependentUpon>BulletManuPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDatetimePickerPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomDataViewCell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -236,10 +249,34 @@
 	  <MauiXaml Update="Extensions\CustomXamlComponents\CustomTextEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\AmmunitionAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\AmmunitionsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\Bullets\BulletAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\Bullets\BulletsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmAddOrEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Firearms\FirearmsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\MuzzleVelocities\MuzzleVelocitiesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Firearms\MuzzleVelocities\MuzzleVelocityAddOrEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\AmmoManuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\BulletManuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Manufacturers\FirearmManufacturers\FirearmManuPage.xaml">
@@ -257,7 +294,13 @@
 	  <MauiXaml Update="Pages\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Other\ImportExportPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Other\InitialSetupPopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Records\Popups\WeatherEditPopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Records\RecordDetailsPage.xaml">

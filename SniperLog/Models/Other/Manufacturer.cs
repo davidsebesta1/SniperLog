@@ -54,12 +54,10 @@ namespace SniperLog.Models
 
                 if (ID == -1)
                 {
-                    ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId,
-                         GetSqliteParams(false));
+                    ID = await SqLiteDatabaseConnection.Instance.ExecuteScalarIntAsync(InsertQueryNoId, GetSqliteParams(false));
                     return ID;
                 }
-                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery,
-                       GetSqliteParams(true));
+                return await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(InsertQuery, GetSqliteParams(true));
             }
             finally
             {

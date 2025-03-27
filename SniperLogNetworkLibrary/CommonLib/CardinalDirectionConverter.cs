@@ -1,6 +1,4 @@
 ﻿
-
-
 namespace SniperLogNetworkLibrary.CommonLib
 {
     public static class CardinalDirectionConverter

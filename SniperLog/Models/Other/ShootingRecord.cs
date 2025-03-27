@@ -26,41 +26,64 @@ namespace SniperLog.Models
 
         [ObservableProperty]
         [ForeignKey(typeof(SubRange), nameof(SubRange.ID))]
-        public int _subRange_ID;
+        private int _subRange_ID;
 
         [ObservableProperty]
         [ForeignKey(typeof(Firearm), nameof(Firearm.ID))]
         private int _firearm_ID;
 
         [ObservableProperty]
+        [ForeignKey(typeof(Ammunition), nameof(Ammunition.ID))]
+        private int _ammo_ID;
+
+        [ObservableProperty]
         [ForeignKey(typeof(Weather), nameof(Weather.ID))]
         private int? _weather_ID;
 
+        /// <summary>
+        /// Total clicks done from 0.
+        /// </summary>
         [ObservableProperty]
         private int _elevationClicksOffset;
 
+        /// <summary>
+        /// Total clicks done from 0.
+        /// </summary>
         [ObservableProperty]
         private int _windageClicksOffset;
 
+        /// <summary>
+        /// Distance at which this record was taken.
+        /// </summary>
         [ObservableProperty]
         private int _distance;
 
+        /// <summary>
+        /// Bitwise representation of time for serialization. Use <see cref="Date"/> for actual date.
+        /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(Date))]
         private long _timeTaken;
 
+        /// <summary>
+        /// Date and time at which this record was taken.
+        /// </summary>
         public DateTime Date => DateTime.FromBinary(TimeTaken);
 
         #endregion
 
         #region Ctor
 
-        public ShootingRecord(int iD, int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken)
+        /// <summary>
+        /// Main ctor.
+        /// </summary>
+        public ShootingRecord(int iD, int srange_ID, int subrange_ID, int firearm_ID, int ammo_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken)
         {
             ID = iD;
             ShootingRange_ID = srange_ID;
             SubRange_ID = subrange_ID;
             Firearm_ID = firearm_ID;
+            Ammo_ID = ammo_ID;
             Weather_ID = weather_ID;
             ElevationClicksOffset = elevationClicksOffset;
             WindageClicksOffset = windageClicksOffset;
@@ -68,17 +91,22 @@ namespace SniperLog.Models
             TimeTaken = timeTaken;
         }
 
-        public ShootingRecord(int srange_ID, int subrange_ID, int firearm_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken) : this(-1, srange_ID, subrange_ID, firearm_ID, weather_ID, elevationClicksOffset, windageClicksOffset, distance, timeTaken) { }
+        /// <summary>
+        /// ID-less ctor.
+        /// </summary>
+        public ShootingRecord(int srange_ID, int subrange_ID, int firearm_ID, int ammo_ID, int? weather_ID, int elevationClicksOffset, int windageClicksOffset, int distance, long timeTaken) : this(-1, srange_ID, subrange_ID, firearm_ID, ammo_ID, weather_ID, elevationClicksOffset, windageClicksOffset, distance, timeTaken) { }
 
         #endregion
 
         #region DAO
 
+        /// <inheritdoc/>
         public static IDataAccessObject LoadFromRow(DataRow row)
         {
             return new ShootingRecord(row);
         }
 
+        /// <inheritdoc/>
         public async Task<int> SaveAsync()
         {
             try
@@ -96,6 +124,7 @@ namespace SniperLog.Models
             }
         }
 
+        /// <inheritdoc/>
         public async Task<bool> DeleteAsync()
         {
             try
@@ -113,10 +142,9 @@ namespace SniperLog.Models
         #region Model specific
 
         /// <summary>
-        /// Saves an image object with reference to this record
+        /// Saves an image object with reference to this record.
         /// </summary>
-        /// <param name="paths"></param>
-        /// <returns></returns>
+        /// <param name="paths">Path to the image.</param>
         public async Task SaveImageAsync(DrawableImagePaths paths)
         {
             ShootingRecordImage recordImage = new ShootingRecordImage(ID);

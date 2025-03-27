@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
              xmlns:model="clr-namespace:SniperLog.Models"
-             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
              BackgroundColor="#AA111111"
              x:Class="SniperLog.Pages.Other.InitialSetupPopupPage"
              BindingContext="viewmodel:InitialSetupPopupPageViewModel"

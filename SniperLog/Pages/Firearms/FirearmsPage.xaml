@@ -33,8 +33,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Firearm">
                     <Frame HeightRequest="140" CornerRadius="10" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="0">
-                        <Grid ColumnDefinitions="*,40" RowDefinitions="*,40" Padding="0" Margin="0">
-                            <Image Source="firearmbackgroundicon.png" HorizontalOptions="End" Grid.ColumnSpan="2" Margin="0,10,0,0"/>
+                        <Grid ColumnDefinitions="*,40,40" RowDefinitions="*,40" Padding="0" Margin="0">
+                            <Image Source="firearmbackgroundicon.png" HorizontalOptions="End" Grid.ColumnSpan="3" Margin="0,10,0,0"/>
 
                             <VerticalStackLayout Grid.Column="0" Margin="15,0,0,0" VerticalOptions="Center">
                                 <Label Text="{Binding Name}" FontSize="28"/>
@@ -43,11 +43,15 @@
                             </VerticalStackLayout>
 
                             <Grid Grid.Column="1" Padding="0,0,15,0" HeightRequest="110">
+                                <ImageButton Source="settingsicon.png" VerticalOptions="End" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmsPageViewModel}}, Path=OpenMuzzleVelocitiesCommand}" CommandParameter="{Binding .}"/>
+                            </Grid>
+
+                            <Grid Grid.Column="2" Padding="0,0,15,0" HeightRequest="110">
                                 <ImageButton Source="settingsicon.png" VerticalOptions="Start" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmsPageViewModel}}, Path=EditCommand}" CommandParameter="{Binding .}"/>
                                 <ImageButton Source="deleteicon.png" VerticalOptions="End"  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FirearmsPageViewModel}}, Path=DeleteCommand}" CommandParameter="{Binding .}"/>
                             </Grid>
 
-                            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" Grid.Row="1" Grid.ColumnSpan="2" Padding="0" CornerRadius="0">
+                            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" Grid.Row="1" Grid.ColumnSpan="3" Padding="0" CornerRadius="0">
                                 <Label Text="{Binding NotesText}" VerticalTextAlignment="Center" Margin="15,0,0,0"/> 
                             </Frame>
                         </Grid>

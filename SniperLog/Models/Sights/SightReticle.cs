@@ -31,7 +31,7 @@ namespace SniperLog.Models
             Name = name;
         }
 
-        public SightReticle(string name, string backgroundImgPath) : this(-1, name)
+        public SightReticle(string name) : this(-1, name)
         {
 
         }

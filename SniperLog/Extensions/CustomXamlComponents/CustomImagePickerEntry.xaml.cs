@@ -133,9 +133,11 @@ public partial class CustomImagePickerEntry : CustomEntryBase
         OnPropertyChanged(nameof(EntryRowDefs));
 
         CustomImageEditorPopupViewModel vm = ServicesHelper.GetService<CustomImageEditorPopupViewModel>();
+        /*
         vm.Entry = this;
 
         _editorPopup = new CustomImageEditorPopup(vm);
+        */
     }
 
     private async void GalleryOption_Tapped(object sender, TappedEventArgs e)
@@ -205,6 +207,7 @@ public partial class CustomImagePickerEntry : CustomEntryBase
             return;
         }
 
+        _editorPopup = new CustomImageEditorPopup(ServicesHelper.GetService<CustomImageEditorPopupViewModel>());
         CustomImageEditorPopupViewModel vm = (_editorPopup.BindingContext as CustomImageEditorPopupViewModel);
         vm.BackgroundImage = SelectedImagePath;
 

@@ -4,6 +4,7 @@
              x:Class="SniperLog.Pages.MainPage"
              xmlns:model="clr-namespace:SniperLog.Models"
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              x:DataType="viewmodel:MainPageViewModel"
              BackgroundColor="{StaticResource Background}"
              Title="{Binding PageTitle}"
@@ -16,11 +17,4 @@
             </HorizontalStackLayout>
         </Grid>
     </Shell.TitleView>
-
-    <VerticalStackLayout>
-        <Label 
-            Text="Text"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
 </ContentPage>

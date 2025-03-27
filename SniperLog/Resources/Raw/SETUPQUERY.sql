@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Manufacturer(
     ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     Country_ID INTEGER NOT NULL,
     ManufacturerType_ID INTEGER NOT NULL,
-    Name VARCHAR(30) NOT NULL UNIQUE,
+    Name VARCHAR(30) NOT NULL,
     
     FOREIGN KEY (Country_ID) REFERENCES Country(ID),
     FOREIGN KEY (ManufacturerType_ID) REFERENCES ManufacturerType(ID)
@@ -87,6 +87,42 @@ CREATE TABLE IF NOT EXISTS FirearmSightSetting(
     WindageValue INT,
     
     FOREIGN KEY (FirearmSight_ID) REFERENCES FirearmSight(ID)
+);
+
+--Ammo
+CREATE TABLE IF NOT EXISTS Bullet(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Caliber_ID INTEGER NOT NULL,
+    Manufacturer_ID INTEGER NOT NULL,
+    WeightGrams DECIMAL(10,2),
+    BulletDiameter DECIMAL(10,2),
+    BulletLength DECIMAL(10,2),
+    BCG1 DECIMAL(10,2),
+    BCG7 DECIMAL(10,2),
+
+    FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID)
+    FOREIGN KEY (Caliber_ID) REFERENCES FirearmCaliber(ID)
+);
+
+--Ammunition
+CREATE TABLE IF NOT EXISTS Ammunition(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Bullet_ID INTEGER NOT NULL,
+    TotalLengthMm DECIMAL(10,2) NOT NULL,
+    GunpowderAmountGrams DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (Bullet_ID) REFERENCES Bullet(ID)
+);
+
+--Muzzle velocities
+CREATE TABLE IF NOT EXISTS MuzzleVelocity(
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Ammo_ID INTEGER NOT NULL,
+    Firearm_ID INTEGER NOT NULL,
+    VelocityMS DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (Ammo_ID) REFERENCES Ammunition(ID),
+    FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID)
 );
 
 -- Optic
@@ -128,6 +164,7 @@ CREATE TABLE IF NOT EXISTS Firearm(
     RateOfTwist VARCHAR(10),
     Weight DECIMAL(10,2),
     HandednessForLeft BOOLEAN,
+    SightHeightCm DECIMAL(10,2),
      
     FOREIGN KEY (FirearmType_ID) REFERENCES FirearmType(ID),
     FOREIGN KEY (Manufacturer_ID) REFERENCES Manufacturer(ID),
@@ -151,6 +188,7 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
     ShootingRange_ID INTEGER NOT NULL,
     SubRange_ID INTEGER NOT NULL,
     Firearm_ID INTEGER NOT NULL,
+    Ammo_ID INTEGER NOT NULL,
     Weather_ID INTEGER,
     ElevationClicksOffset INTEGER NOT NULL,
     WindageClicksOffset INTEGER NOT NULL,
@@ -161,6 +199,7 @@ CREATE TABLE IF NOT EXISTS ShootingRecord(
     FOREIGN KEY (ShootingRange_ID) REFERENCES ShootingRange(ID),
     FOREIGN KEY (SubRange_ID) REFERENCES SubRange(ID),
     FOREIGN KEY (Firearm_ID) REFERENCES Firearm(ID),
+    FOREIGN KEY (Ammo_ID) REFERENCES Ammunition(ID),
     FOREIGN KEY (Weather_ID) REFERENCES Weather(ID)
 );
 
@@ -178,6 +217,6 @@ CREATE TRIGGER IF NOT EXISTS DeleteShootingRecordImages
             ON ShootingRecord
       FOR EACH ROW
 BEGIN
-    DELETE FROM ShootingRecordImagePath
-          WHERE ShootingRecordImagePath.ShootingRecord_ID = OLD.ID;
+    DELETE FROM ShootingRecordImage
+          WHERE ShootingRecordImage.ShootingRecord_ID = OLD.ID;
 END;

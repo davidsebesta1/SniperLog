@@ -13,7 +13,7 @@ namespace SniperLog
             EntryHandler.Mapper.AppendToMapping("CursorColor", (handler, view) =>
             {
 #if __ANDROID__
-        handler.PlatformView.TextCursorDrawable.SetTint(Colors.White.ToInt());
+                handler.PlatformView.TextCursorDrawable.SetTint(Colors.White.ToInt());
 #endif
             });
 

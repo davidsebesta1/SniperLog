@@ -18,7 +18,7 @@
 
         <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Grid.Row="1" VerticalOptions="FillAndExpand" Padding="5">
             <Grid Padding="5,0,5,0">
-                <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="10">
+                <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="8">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                     </Frame.GestureRecognizers>

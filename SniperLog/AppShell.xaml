@@ -9,7 +9,9 @@
     xmlns:sights="clr-namespace:SniperLog.Pages.Sights"
     xmlns:reticles="clr-namespace:SniperLog.Pages.Reticles"
     xmlns:firearms="clr-namespace:SniperLog.Pages.Firearms"
+    xmlns:bullets="clr-namespace:SniperLog.Pages.Firearms.Bullets"
     xmlns:records="clr-namespace:SniperLog.Pages.Records"
+    xmlns:other="clr-namespace:SniperLog.Pages.Other"
     Title="SniperLog"
     Shell.FlyoutBehavior="Flyout"
     FlyoutHeaderBehavior="CollapseOnScroll"
@@ -21,10 +23,13 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate local:MainPage}" Icon="homeicon.png"></ShellContent>
         <ShellContent Title="Records" ContentTemplate="{DataTemplate records:RecordsPage}" Icon="recordsicon.png"></ShellContent>
         <ShellContent Title="Firearms" ContentTemplate="{DataTemplate firearms:FirearmsPage}" Icon="firearmsicon.png"></ShellContent>
+        <ShellContent Title="Ammunition" ContentTemplate="{DataTemplate firearms:AmmunitionsPage}" Icon="ammoicon.png"></ShellContent>
+        <ShellContent Title="Bullets" ContentTemplate="{DataTemplate bullets:BulletsPage}" Icon="bulletsicon.png"></ShellContent>
         <ShellContent Title="Shooting Ranges" ContentTemplate="{DataTemplate sRanges:SRangesPage}" Icon="shootingrangesicon.png"></ShellContent>
         <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate manufacturers:ManufacturersPage}" Icon="manufacturersicon.png"></ShellContent>
         <ShellContent Title="Sights" ContentTemplate="{DataTemplate sights:SightsPage}" Icon="sightsicon.png"></ShellContent>
         <ShellContent Title="Reticles" ContentTemplate="{DataTemplate reticles:ReticlesPage}" Icon="reticlesicon.png"></ShellContent>
+        <ShellContent Title="Import/Export" ContentTemplate="{DataTemplate other:ImportExportPage}" Icon="reticlesicon.png"></ShellContent>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

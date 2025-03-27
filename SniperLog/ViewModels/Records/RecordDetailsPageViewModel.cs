@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using SniperLog.Extensions.WrapperClasses;
+using SniperLog.Pages.Records.Popups;
 
 namespace SniperLog.ViewModels.Records
 {
@@ -96,6 +98,8 @@ namespace SniperLog.ViewModels.Records
                     await image.SaveImageAsync(Img);
                 }
 
+                await Record.SaveAsync();
+
             }
             catch (Exception e)
             {
@@ -105,6 +109,15 @@ namespace SniperLog.ViewModels.Records
             {
                 await Shell.Current.GoToAsync("..");
             }
+        }
+
+        [RelayCommand]
+        private async Task OpenWeatherEditPopup()
+        {
+            WeatherEditPopupPage popup = ServicesHelper.GetService<WeatherEditPopupPage>();
+            (popup.BindingContext as WeatherEditPopupPageViewModel).Record = Record;
+
+            await MopupService.Instance.PushAsync(popup);
         }
     }
 }

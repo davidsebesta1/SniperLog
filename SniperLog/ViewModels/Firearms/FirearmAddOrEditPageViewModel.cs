@@ -56,6 +56,9 @@ namespace SniperLog.ViewModels.Firearms
         private string _notes;
 
         [ObservableProperty]
+        private double? _sightOffsetCm;
+
+        [ObservableProperty]
         private ObservableCollection<FirearmType> _firearmTypes;
 
         [ObservableProperty]
@@ -101,6 +104,7 @@ namespace SniperLog.ViewModels.Firearms
             Weight = value.Weight;
             HandednessRight = !value.HandednessForLeft;
             Notes = value.NotesText;
+            SightOffsetCm = value.SightHeightCm;
         }
 
         [RelayCommand]
@@ -131,12 +135,11 @@ namespace SniperLog.ViewModels.Firearms
             if (Firearm == null)
             {
                 string notes = Notes;
-                Firearm = new Firearm(FirearmType.ID, Manufacturer.ID, FirearmCaliber.ID, FirearmSight.ID, Name, Model, SerialNumber, TotalLengthMm, BarrelLengthInch, RateOfTwist, Weight, !HandednessRight);
+                Firearm = new Firearm(FirearmType.ID, Manufacturer.ID, FirearmCaliber.ID, FirearmSight.ID, Name, Model, SerialNumber, TotalLengthMm, BarrelLengthInch, RateOfTwist, Weight, !HandednessRight, SightOffsetCm);
 
                 if (!string.IsNullOrEmpty(notes))
-                {
                     await Firearm.SaveNotesAsync(notes);
-                }
+                
             }
             else
             {
@@ -152,11 +155,11 @@ namespace SniperLog.ViewModels.Firearms
                 Firearm.RateOfTwist = RateOfTwist;
                 Firearm.Weight = Weight;
                 Firearm.HandednessForLeft = !HandednessRight;
+                Firearm.SightHeightCm = SightOffsetCm;
 
                 if (Notes != Firearm.NotesText)
-                {
                     await Firearm.SaveNotesAsync(Notes);
-                }
+                
             }
 
             await Firearm.SaveAsync();

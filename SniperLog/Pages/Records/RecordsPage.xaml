@@ -5,6 +5,7 @@
              xmlns:model="clr-namespace:SniperLog.Models"
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
              xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:RecordsPageViewModel"
              Title="{Binding PageTitle}">
 
@@ -22,17 +23,26 @@
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" VerticalTextAlignment="Center"/>
 
+            <!-- Firearm & shooting range selectors -->
             <custom:CustomPickerEntry x:Name="FirearmEntry" SourceCollection="{Binding Firearms}" SelectedItem="{Binding SelectedFirearm, Mode=TwoWay}" CanSelectNone="False" EntryHeight="1" EntryTitle="Firearm" Margin="0,15,0,0"/>
             <custom:CustomPickerEntry x:Name="SRangeEntry" SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Shooting Range" ErrorText="Must be selected for new log"/>
             <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
+            <!-- Trajectories -->
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
-            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
+                <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding ElevationSeries}"/>
+            </Frame>
 
             <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
-            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200"/>
+            <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
+                <lvc:CartesianChart x:Name="YGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxisesWindage}" Series="{Binding WindageSeries}"/>
+            </Frame>
 
+            <!-- Entry -->
             <Label Text="Shooting Record" Style="{StaticResource Headline}" VerticalTextAlignment="Center" Margin="0,15,0,0"/>
+            <custom:CustomPickerEntry x:Name="AmmoEntry" EntryTitle="Fired Ammunition" SourceCollection="{Binding Ammunitions}" SelectedItem="{Binding SelectedAmmunition, Mode=TwoWay}" EntryHeight="1"/>
             <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
             <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
             <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
@@ -44,6 +54,7 @@
             <Label Text="Search by date" FontSize="24" Margin="0,25,0,0"/>
             <custom:CustomDateSearchBar DateValue="{Binding DateSearchVal}" EnterCommand="{Binding SearchRecordsCommand}"/>
 
+            <!-- Table -->
             <Grid ColumnDefinitions="100,60,60,100,*" RowDefinitions="25,475" Margin="0,10,0,0" HeightRequest="500">
                 <Label Grid.Column="0" Text="Date" HorizontalOptions="Center"/>
                 <Label Grid.Column="1" Text="Up" HorizontalOptions="Center"/>

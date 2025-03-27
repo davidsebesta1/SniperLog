@@ -1,6 +1,9 @@
 ﻿using SniperLog.Pages.Firearms;
+using SniperLog.Pages.Firearms.Bullets;
+using SniperLog.Pages.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Manufacturers;
 using SniperLog.Pages.Manufacturers.FirearmManufacturers;
+using SniperLog.Pages.Other;
 using SniperLog.Pages.Records;
 using SniperLog.Pages.Reticles;
 using SniperLog.Pages.ShootingRanges;
@@ -16,30 +19,43 @@ namespace SniperLog
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("AddOrEditRange", typeof(SRangesAddOrEditPage));
-            Routing.RegisterRoute("RangeDetails", typeof(SRangeDetailsPage));
-            Routing.RegisterRoute("Subranges", typeof(SubRangesPage));
-            Routing.RegisterRoute("AddOrEditSubrange", typeof(SubRangeAddOrEditPage));
+            Routing.RegisterRoute(nameof(SRangesAddOrEditPage), typeof(SRangesAddOrEditPage));
+            Routing.RegisterRoute(nameof(SRangeDetailsPage), typeof(SRangeDetailsPage));
+            Routing.RegisterRoute(nameof(SubRangesPage), typeof(SubRangesPage));
+            Routing.RegisterRoute(nameof(SubRangeAddOrEditPage), typeof(SubRangeAddOrEditPage));
 
-            Routing.RegisterRoute("Manufacturers", typeof(ManufacturersPage));
-            Routing.RegisterRoute("Manufacturers/FirearmManufacturers", typeof(FirearmManuPage));
-            Routing.RegisterRoute("Manufacturers/SightManufacturers", typeof(SightManuPage));
-            Routing.RegisterRoute("Manufacturers/AddOrEdit", typeof(ManufacturerAddOrEditPage));
+            Routing.RegisterRoute(nameof(ManufacturersPage), typeof(ManufacturersPage));
+            Routing.RegisterRoute(nameof(BulletManuPage), typeof(BulletManuPage));
+            Routing.RegisterRoute(nameof(SightManuPage), typeof(SightManuPage));
+            Routing.RegisterRoute(nameof(AmmoManuPage), typeof(AmmoManuPage));
+            Routing.RegisterRoute(nameof(FirearmManuPage), typeof(FirearmManuPage));
+            Routing.RegisterRoute(nameof(ManufacturerAddOrEditPage), typeof(ManufacturerAddOrEditPage));
 
-            Routing.RegisterRoute("Sights", typeof(SightsPage));
-            Routing.RegisterRoute("Sights/AddOrEdit", typeof(SightAddOrEditPage));
+            Routing.RegisterRoute(nameof(SightsPage), typeof(SightsPage));
+            Routing.RegisterRoute(nameof(SightAddOrEditPage), typeof(SightAddOrEditPage));
 
-            Routing.RegisterRoute("Reticles", typeof(ReticlesPage));
-            Routing.RegisterRoute("Reticles/AddOrEdit", typeof(ReticleAddOrEditPage));
+            Routing.RegisterRoute(nameof(ReticlesPage), typeof(ReticlesPage));
+            Routing.RegisterRoute(nameof(ReticleAddOrEditPage), typeof(ReticleAddOrEditPage));
 
-            Routing.RegisterRoute("SightClickSettings", typeof(SightClickSettingsPage));
-            Routing.RegisterRoute("SightClickSettings/AddOrEdit", typeof(SightClickSettingAddOrEditPage));
+            Routing.RegisterRoute(nameof(SightClickSettingsPage), typeof(SightClickSettingsPage));
+            Routing.RegisterRoute(nameof(SightClickSettingAddOrEditPage), typeof(SightClickSettingAddOrEditPage));
 
-            Routing.RegisterRoute("Firearms", typeof(FirearmsPage));
-            Routing.RegisterRoute("Firearms/AddOrEdit", typeof(FirearmAddOrEditPage));
+            Routing.RegisterRoute(nameof(FirearmsPage), typeof(FirearmsPage));
+            Routing.RegisterRoute(nameof(FirearmAddOrEditPage), typeof(FirearmAddOrEditPage));
 
-            Routing.RegisterRoute("Records", typeof(RecordsPage));
-            Routing.RegisterRoute("Records/RecordDetail", typeof(RecordDetailsPage));
+            Routing.RegisterRoute(nameof(RecordsPage), typeof(RecordsPage));
+            Routing.RegisterRoute(nameof(RecordDetailsPage), typeof(RecordDetailsPage));
+
+            Routing.RegisterRoute(nameof(AmmunitionsPage), typeof(AmmunitionsPage));
+            Routing.RegisterRoute(nameof(AmmunitionAddOrEditPage), typeof(AmmunitionAddOrEditPage));
+
+            Routing.RegisterRoute(nameof(BulletsPage), typeof(BulletsPage));
+            Routing.RegisterRoute(nameof(BulletAddOrEditPage), typeof(BulletAddOrEditPage));
+
+            Routing.RegisterRoute(nameof(MuzzleVelocitiesPage), typeof(MuzzleVelocitiesPage));
+            Routing.RegisterRoute(nameof(MuzzleVelocityAddOrEditPage), typeof(MuzzleVelocityAddOrEditPage));
+
+            Routing.RegisterRoute(nameof(ImportExportPage), typeof(ImportExportPage));
         }
     }
 }

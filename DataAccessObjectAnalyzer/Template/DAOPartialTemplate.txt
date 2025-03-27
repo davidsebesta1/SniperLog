@@ -11,7 +11,7 @@ namespace %Namespace%
     /// <br></br>
     /// Author David Šebesta
     /// <br></br>
-    /// Copyright (c) %curYear% All Rights Reserved
+    /// Copyright (c) %CurYear% All Rights Reserved
     /// <br></br>
     /// <br></br>
     /// The following additional sources may be generated:

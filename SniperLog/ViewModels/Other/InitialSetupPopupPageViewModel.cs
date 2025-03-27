@@ -2,11 +2,6 @@
 using SniperLog.Config;
 using SniperLog.Extensions;
 using SniperLog.Services.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SniperLog.ViewModels.Other
 {
@@ -22,7 +17,7 @@ namespace SniperLog.ViewModels.Other
         [RelayCommand]
         private async Task LoadInitialDatabase()
         {
-            await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(await MauiAssetHelper.ReadTextFileAsync("SETUPQUERY.sql"));
+            await SqLiteDatabaseConnection.Instance.ExecuteNonQueryAsync(await MauiExtensions.ReadTextFileAsync("SETUPQUERY.sql"));
         }
 
         [RelayCommand]
@@ -60,8 +55,8 @@ namespace SniperLog.ViewModels.Other
             await manufacturer4.SaveAsync();
 
             //Reticles
-            SightReticle reticle1 = new SightReticle("TestRet", string.Empty);
-            SightReticle reticle2 = new SightReticle("TreeReticle", string.Empty);
+            SightReticle reticle1 = new SightReticle("TestRet");
+            SightReticle reticle2 = new SightReticle("TreeReticle");
 
             await reticle1.SaveAsync();
             await reticle2.SaveAsync();
@@ -81,8 +76,8 @@ namespace SniperLog.ViewModels.Other
             await set2.SaveAsync();
             await set3.SaveAsync();
 
-            Firearm firearm1 = new Firearm(1, 2, 3, sight1.ID, "Tikka", null, null, 1200, 17, "1:8", 8, false);
-            Firearm firearm2 = new Firearm(2, 1, 15, sight2.ID, "AR-15", "Gen1", "VGDH366V3-D", 800, 13, "1:8", 4, false);
+            Firearm firearm1 = new Firearm(1, 2, 3, sight1.ID, "Tikka", null, null, 1200, 17, "1:8", 8, false, 3d);
+            Firearm firearm2 = new Firearm(2, 1, 15, sight2.ID, "AR-15", "Gen1", "VGDH366V3-D", 800, 13, "1:8", 4, false, 3.5d);
 
             await firearm1.SaveAsync();
             await firearm2.SaveAsync();

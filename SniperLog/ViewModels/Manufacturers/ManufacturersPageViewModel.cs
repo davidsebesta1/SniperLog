@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using SniperLog.Pages.Manufacturers.FirearmManufacturers;
 
 namespace SniperLog.ViewModels.Manufacturers
 {
@@ -12,13 +13,25 @@ namespace SniperLog.ViewModels.Manufacturers
         [RelayCommand]
         private async Task GoToFirearmManufacturers()
         {
-            await Shell.Current.GoToAsync("Manufacturers/FirearmManufacturers");
+            await Shell.Current.GoToAsync(nameof(BulletManuPage));
         }
 
         [RelayCommand]
         private async Task GoToSightManufacturers()
         {
-            await Shell.Current.GoToAsync("Manufacturers/SightManufacturers");
+            await Shell.Current.GoToAsync(nameof(SightManuPage));
+        }
+
+        [RelayCommand]
+        private async Task GoToBulletManufacturers()
+        {
+            await Shell.Current.GoToAsync(nameof(BulletManuPage));
+        }
+
+        [RelayCommand]
+        private async Task GoToAmmunitionManufacturers()
+        {
+            await Shell.Current.GoToAsync(nameof(AmmoManuPage));
         }
     }
 }

@@ -5,3 +5,5 @@ Sniper log is an android/desktop application made for saving data for any firear
 These data are then processed, saved and shown to a user in an nice and simple manner.
 It allows the user to correct his rifle for a later use and see how did he perform at that time.
 This application also automatically saves all required weather conditions such as temperature, pressure, humidity, wind speed and wind direction if the user is connected to the interner or nearby weather station device (todo).
+
+https://www.figma.com/design/2ca9TYEWmeJG5Sesapl2VD/SniperLog?node-id=0-1&t=CFNcEpz8xl3NrZd5-1
