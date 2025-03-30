@@ -29,7 +29,7 @@
         <ShellContent Title="Manufacturers" ContentTemplate="{DataTemplate manufacturers:ManufacturersPage}" Icon="manufacturersicon.png"></ShellContent>
         <ShellContent Title="Sights" ContentTemplate="{DataTemplate sights:SightsPage}" Icon="sightsicon.png"></ShellContent>
         <ShellContent Title="Reticles" ContentTemplate="{DataTemplate reticles:ReticlesPage}" Icon="reticlesicon.png"></ShellContent>
-        <ShellContent Title="Import/Export" ContentTemplate="{DataTemplate other:ImportExportPage}" Icon="reticlesicon.png"></ShellContent>
+        <ShellContent Title="Import/Export" ContentTemplate="{DataTemplate other:ImportExportPage}" Icon="sniperlogwhite.png"></ShellContent>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
@@ -44,6 +44,15 @@
             </HorizontalStackLayout>
         </Frame>
     </Shell.FlyoutFooter>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="45,*,80">
+            <HorizontalStackLayout Grid.Column="1">
+                <Image Source="sniperlogwhite.png" WidthRequest="20"/>
+                <Label Text="Sniper Log" FontSize="24" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Margin="10, 0, 0, 0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
 
 
 </Shell>

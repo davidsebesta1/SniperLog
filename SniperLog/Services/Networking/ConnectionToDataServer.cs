@@ -153,7 +153,8 @@ namespace SniperLog.Services.ConnectionToServer
         {
             try
             {
-                if (_tcpClient == null || !_tcpClient.Connected) return false;
+                if (_tcpClient == null || !_tcpClient.Connected)
+                    return false;
 
                 _tcpClient.Close();
             }

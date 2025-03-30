@@ -8,15 +8,6 @@
              x:DataType="viewmodel:SRangesAddOrEditPageViewModel"
              Title="{Binding PageTitle}">
 
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="45,*,80">
-            <HorizontalStackLayout Grid.Column="1">
-                <Image Source="logo.png" WidthRequest="25"/>
-                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
-            </HorizontalStackLayout>
-        </Grid>
-    </Shell.TitleView>
-
     <ScrollView>
         <VerticalStackLayout Padding="15">
             <Label Text="{Binding HeadlineText}" Style="{StaticResource Headline}" Padding="0,0,0,15"/>

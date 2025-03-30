@@ -1,6 +1,7 @@
 ﻿using BallisticCalculator;
 using Gehtsoft.Measurements;
 using SniperLogNetworkLibrary;
+using System.Collections.ObjectModel;
 
 namespace SniperLog.Services.Ballistics;
 
@@ -77,8 +78,8 @@ public class BallisticCalculatorService
             new Wind()
                 {
                     Direction = new Measurement<AngularUnit>((double)weather.DirectionDegrees, AngularUnit.Degree),
-                    Velocity = new Measurement<VelocityUnit>((double)weather.WindSpeed, VelocityUnit.MetersPerSecond),
-                    MaximumRange = new Measurement<DistanceUnit>(500, DistanceUnit.Meter),
+                    Velocity = new Measurement<VelocityUnit>(0, VelocityUnit.MetersPerSecond),
+                    MaximumRange = new Measurement<DistanceUnit>(100, DistanceUnit.Meter),
                 }
         ];
 

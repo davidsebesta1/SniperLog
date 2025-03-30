@@ -464,6 +464,7 @@ namespace SniperLog.ViewModels.Records
             finally
             {
                 ResetForm();
+                await RefreshChart();
             }
 
         }

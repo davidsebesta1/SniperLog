@@ -151,6 +151,7 @@
 	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\firearmsighticonwhite.svg" />
 	  <None Remove="Resources\Images\ManufacturersbackgroundIcons\manufacturerbackground.png" />
 	  <None Remove="Resources\Images\searchicon.svg" />
+	  <None Remove="Resources\Images\sniperLogWhite.png" />
 	  <None Remove="Resources\Images\stariconfav.svg" />
 	  <None Remove="Resources\Images\stariconnormal.svg" />
 	  <None Remove="Resources\Images\Untitled.png" />
