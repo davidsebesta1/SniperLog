@@ -1,5 +1,6 @@
 ﻿using SniperLogNetworkLibrary.Networking;
 using SniperLogNetworkLibrary.Networking.Messages;
+using SniperLogServer.Logging;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -55,7 +56,7 @@ namespace SniperLogServer.Connection
                     lock (_lock)
                     {
                         _connectedClients.Add(client);
-                        Console.WriteLine((client.Client.RemoteEndPoint as IPEndPoint).Address.MapToIPv4().ToString() + " has connected");
+                        Logger.Log((client.Client.RemoteEndPoint as IPEndPoint).Address.MapToIPv4().ToString() + " has connected");
                     }
 
                     await Task.Run(() =>
@@ -65,7 +66,7 @@ namespace SniperLogServer.Connection
                 }
                 catch (Exception ex)
                 {
-                    await Console.Out.WriteLineAsync(ex.ToString());
+                    await Logger.LogError(ex);
                 }
             }
         }
@@ -86,9 +87,9 @@ namespace SniperLogServer.Connection
 
                             while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                             {
-                                Console.WriteLine("Read: " + bytesRead + "bytes");
+                                await Logger.Log("Read: " + bytesRead + "bytes");
                                 int id = reader.ReadInt32();
-                                Console.WriteLine("Received ID: " + id);
+                                await Logger.Log("Received ID: " + id);
                                 ResolveNetworkMessage(client, id, reader);
 
                                 reader.BaseStream.Position = 0;
@@ -99,11 +100,11 @@ namespace SniperLogServer.Connection
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                await Logger.LogError(ex);
             }
             finally
             {
-                Console.WriteLine(client + " has disconnected");
+                await Logger.Log(client + " has disconnected");
 
                 lock (_lock)
                 {
@@ -115,7 +116,7 @@ namespace SniperLogServer.Connection
         public async void SendDataToClient(TcpClient client, INetworkMessage msg)
         {
             byte[] data = msg.Serialize();
-            Console.WriteLine("Sending: " + msg.ToString() + " to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.MapToIPv4().ToString());
+            await Logger.Log("Sending: " + msg.ToString() + " to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.MapToIPv4().ToString());
 
             try
             {
@@ -124,7 +125,7 @@ namespace SniperLogServer.Connection
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending data to client: {ex.Message}");
+                await Logger.Log($"Error sending data to client: {ex.Message}");
 
                 lock (_lock)
                 {
@@ -135,7 +136,8 @@ namespace SniperLogServer.Connection
 
         public bool RegisterNetworkMessageHandler<T>(IServerNetworkMessageHandler handler) where T : INetworkMessage
         {
-            if (_networkMessageHandlers.ContainsKey(T.ID)) return false;
+            if (_networkMessageHandlers.ContainsKey(T.ID)) 
+                return false;
 
             _networkMessageHandlers.Add(T.ID, handler);
             _networkMessagesByType.Add(T.ID, typeof(T));

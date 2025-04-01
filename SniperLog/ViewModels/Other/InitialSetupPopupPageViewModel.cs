@@ -5,6 +5,9 @@ using SniperLog.Services.Serialization;
 
 namespace SniperLog.ViewModels.Other
 {
+    /// <summary>
+    /// View model to initially setup the database.
+    /// </summary>
     public partial class InitialSetupPopupPageViewModel : BaseViewModel
     {
         private readonly CsvProcessor _csvProcessor;
@@ -29,6 +32,7 @@ namespace SniperLog.ViewModels.Other
             await _csvProcessor.LoadToDatabase<FirearmCaliber>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("FirearmCalibers.csv")));
             await _csvProcessor.LoadToDatabase<ManufacturerType>(new StreamReader(await FileSystem.Current.OpenAppPackageFileAsync("ManufacturerTypes.csv")));
 
+            /*
             //Shooting ranges
             ShootingRange s1 = new ShootingRange("Oleško", "Oleško, Litoměřice", 50.486238d, 14.201412d, false);
             ShootingRange s2 = new ShootingRange("TestFav", "Fav", 1d, 2d, true);
@@ -81,6 +85,7 @@ namespace SniperLog.ViewModels.Other
 
             await firearm1.SaveAsync();
             await firearm2.SaveAsync();
+            */
         }
 
         [RelayCommand]

@@ -18,9 +18,19 @@
             <custom:CustomPickerEntry x:Name="SRangeEntry" SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Shooting Range" ErrorText="Must be selected for new log"/>
             <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
+            <FlexLayout Padding="0, 10" JustifyContent="SpaceEvenly" AlignItems="Center">
+                <Border BackgroundColor="{StaticResource Primary}" Padding="2" WidthRequest="25" HeightRequest="8"/>
+                <Label Text="Zero"/>
+                
+                <Border BackgroundColor="#EE8100" Padding="2" WidthRequest="25" HeightRequest="8"/>
+                <Label Text="Closest Weather"/>
+                
+                <Border BackgroundColor="#FF0000" Padding="2" WidthRequest="25" HeightRequest="8"/>
+                <Label Text="Ballistic Calculator"/>
+            </FlexLayout>
+
             <!-- Trajectories -->
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
-
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
                 <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding ElevationSeries}"/>
             </Frame>
