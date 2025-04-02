@@ -39,14 +39,14 @@ namespace DataAccessObjectAnalyzer.Generators
         /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            if (node == _targetClassNode)
-            {
-                base.VisitClassDeclaration(node);
+            if (node != _targetClassNode)
+                return;
 
-                _sb.AppendLine(BaseTemplate);
-                _sb.Replace("%sqliteParams%", GetParamsString(true));
-                _sb.Replace("%sqliteParamsNoId%", GetParamsString(false));
-            }
+            base.VisitClassDeclaration(node);
+
+            _sb.AppendLine(BaseTemplate);
+            _sb.Replace("%sqliteParams%", GetParamsString(true));
+            _sb.Replace("%sqliteParamsNoId%", GetParamsString(false));
         }
 
         /// <inheritdoc/>

@@ -35,7 +35,7 @@ namespace DataAccessObjectAnalyzer.Generators
         /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            if (node == _targetClassNode)
+            if (node != _targetClassNode)
                 return;
 
             base.VisitClassDeclaration(node);

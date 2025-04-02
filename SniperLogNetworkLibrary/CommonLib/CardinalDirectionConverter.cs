@@ -1,6 +1,9 @@
 ﻿
 namespace SniperLogNetworkLibrary.CommonLib
 {
+    /// <summary>
+    /// Convertor between degrees and <see cref="CardinalDirection"/>.
+    /// </summary>
     public static class CardinalDirectionConverter
     {
         private static readonly CardinalDirection[] _cardinalDirections =
@@ -15,21 +18,24 @@ namespace SniperLogNetworkLibrary.CommonLib
             new CardinalDirection("South-West", 290, 335)
             ];
 
+        /// <summary>
+        /// Gets the name of the direction by degrees.
+        /// </summary>
+        /// <param name="degree">Degrees.</param>
+        /// <returns>Name of the direction.</returns>
         public static string GetNameByDegree(int degree)
         {
             CardinalDirection dir = _cardinalDirections.FirstOrDefault(n => n.Contains(degree));
 
             if (dir.Equals(default(CardinalDirection)))
-            {
                 return "Unknown Direction";
-            }
 
             return dir.Name;
         }
     }
 
     /// <summary>
-    /// Struct representing cardinal direction by its name and degree ranges
+    /// Struct representing cardinal direction by its name and degree ranges.
     /// </summary>
     public readonly struct CardinalDirection
     {
@@ -39,12 +45,12 @@ namespace SniperLogNetworkLibrary.CommonLib
         public readonly string Name;
 
         /// <summary>
-        /// Starting degree of the direction, exclusive
+        /// Starting degree of the direction, exclusive.
         /// </summary>
         public readonly int StartingDegree;
 
         /// <summary>
-        /// Ending degree of the direction, inclusive
+        /// Ending degree of the direction, inclusive.
         /// </summary>
         public readonly int EndingDegree;
 
@@ -56,10 +62,10 @@ namespace SniperLogNetworkLibrary.CommonLib
         }
 
         /// <summary>
-        /// Returns information whenever the input degree is within direction range
+        /// Returns information whenever the input degree is within direction range.
         /// </summary>
-        /// <param name="degree">Degree</param>
-        /// <returns>True if degree is in valid range. False if not or input is less than 0 or more than 360</returns>
+        /// <param name="degree">Degree.</param>
+        /// <returns>True if degree is in valid range. False if not or input is less than 0 or more than 360.</returns>
         public bool Contains(int degree)
         {
             if (degree < 0 || degree > 360)

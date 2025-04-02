@@ -11,9 +11,9 @@ public static class StringBuilderPool
     private static readonly ConcurrentBag<StringBuilder> _stored = new ConcurrentBag<StringBuilder>();
 
     /// <summary>
-    /// Gets a stringbuilder.
+    /// Gets a <see cref="StringBuilder"/>.
     /// </summary>
-    /// <returns>String Builder instance.</returns>
+    /// <returns><see cref="StringBuilder"/> instance.</returns>
     public static StringBuilder Get()
     {
         if (!_stored.TryTake(out StringBuilder sb))
@@ -23,9 +23,9 @@ public static class StringBuilderPool
     }
 
     /// <summary>
-    /// Returns stringbuilder to the pool.
+    /// Returns <see cref="StringBuilder"/> to the pool.
     /// </summary>
-    /// <param name="sb">Stringbuilder to be returned.</param>
+    /// <param name="sb"><see cref="StringBuilder"/> to be returned.</param>
     public static void Return(StringBuilder sb)
     {
         sb.Clear();
@@ -33,10 +33,10 @@ public static class StringBuilderPool
     }
 
     /// <summary>
-    /// Returns stringbuilder to the pool and returns result string.
+    /// Returns <see cref="StringBuilder"/> to the pool and returns result <see langword="string"/>.
     /// </summary>
     /// <param name="sb">Stringbuilder to be returned.</param>
-    /// <returns>Result tostring of the stringbuilder.</returns>
+    /// <returns>Result <see cref="StringBuilder.ToString()"/> of the <see cref="StringBuilder"/>.</returns>
     public static string ReturnToString(StringBuilder sb)
     {
         string result = sb.ToString();
