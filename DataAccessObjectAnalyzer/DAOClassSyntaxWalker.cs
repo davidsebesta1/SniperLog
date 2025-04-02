@@ -6,48 +6,61 @@ using Microsoft.CodeAnalysis.Text;
 using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DataAccessObjectAnalyzer
 {
+    /// <summary>
+    /// Main syntax walker to generate whole partial class for any DAO class.
+    /// </summary>
     public class DAOClassSyntaxWalker : CSharpSyntaxWalker
     {
+        /// <summary>
+        /// Main <see cref="StringBuilder"/>.
+        /// </summary>
         public static StringBuilder MainStringBuilder = new StringBuilder(2048);
+
+        /// <summary>
+        /// Template used during <see cref="VisitClassDeclaration(ClassDeclarationSyntax)"/> for caching purposes.
+        /// </summary>
+        public static string BaseTemplate = File.ReadAllText(Path.Combine(Extensions.SyntaxExtensions.GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt"));
 
         private readonly GeneratorExecutionContext _context;
 
-        public static string GetSrcFilePath([CallerFilePath] string callerFilePath = null)
-        {
-            return callerFilePath ?? string.Empty;
-        }
-
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public DAOClassSyntaxWalker(GeneratorExecutionContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
             base.VisitClassDeclaration(node);
 
-            if (node.BaseList != null && node.BaseList.Types.Any(n => n != null && n.Type.ToString() == "IDataAccessObject"))
-            {
-                MainStringBuilder.Append(File.ReadAllText(Path.Combine(GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
+            if (node.BaseList != null && node.BaseList.Types.Any(static n => n != null && n.Type.ToString() == "IDataAccessObject"))
+                return;
 
-                GenerateNoteSaveableCode(node);
-                GenerateImageSaveableCode(node);
-                GenerateDAOCodeForClass(node);
+            MainStringBuilder.Append(BaseTemplate);
 
-                SourceText sourceText = CSharpSyntaxTree.ParseText(MainStringBuilder.ToString().Trim()).GetRoot().NormalizeWhitespace().SyntaxTree.GetText();
-                SourceText sourceResultEncoded = SourceText.From(sourceText.ToString(), Encoding.UTF8);
+            GenerateNoteSaveableCode(node);
+            GenerateImageSaveableCode(node);
+            GenerateDAOCodeForClass(node);
 
-                string className = node.Identifier.Text;
-                _context.AddSource($"{className}.g.cs", sourceResultEncoded);
-                MainStringBuilder.Clear();
-            }
+            SourceText sourceText = CSharpSyntaxTree.ParseText(MainStringBuilder.ToString().Trim()).GetRoot().NormalizeWhitespace().SyntaxTree.GetText();
+            SourceText sourceResultEncoded = SourceText.From(sourceText.ToString(), Encoding.UTF8);
+
+            string className = node.Identifier.Text;
+            _context.AddSource($"{className}.g.cs", sourceResultEncoded);
+            MainStringBuilder.Clear();
         }
 
+        /// <summary>
+        /// Generates the additional DAO code for the class.
+        /// </summary>
+        /// <param name="classNode"></param>
         private void GenerateDAOCodeForClass(ClassDeclarationSyntax classNode)
         {
             string className = classNode.Identifier.Text;
@@ -73,9 +86,13 @@ namespace DataAccessObjectAnalyzer
             MainStringBuilder.Replace("%ClassName%", className);
         }
 
+        /// <summary>
+        /// Generates the IImageSaveable code.
+        /// </summary>
+        /// <param name="classNode">Target class node.</param>
         private void GenerateImageSaveableCode(ClassDeclarationSyntax classNode)
         {
-            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n != null && n.Type.ToString() == "IImageSaveable"))
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(static n => n != null && n.Type.ToString() == "IImageSaveable"))
             {
                 ImageSaveableGenerator imageSaveableGenerator = new ImageSaveableGenerator(classNode);
                 imageSaveableGenerator.Visit(classNode);
@@ -87,9 +104,13 @@ namespace DataAccessObjectAnalyzer
             }
         }
 
+        /// <summary>
+        /// Generates the INotesSaveable code.
+        /// </summary>
+        /// <param name="classNode">Target class node.</param>
         private void GenerateNoteSaveableCode(ClassDeclarationSyntax classNode)
         {
-            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n != null && n.Type.ToString() == "INoteSaveable"))
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(static n => n != null && n.Type.ToString() == "INoteSaveable"))
             {
                 NoteSaveableGenerator noteSaveableGenerator = new NoteSaveableGenerator(classNode);
                 noteSaveableGenerator.Visit(classNode);

@@ -8,30 +8,55 @@ using System.Runtime.CompilerServices;
 
 namespace DataAccessObjectAnalyzer.Extensions
 {
+    /// <summary>
+    /// Extensíons for declaration syntaxes.
+    /// </summary>
     public static class SyntaxExtensions
     {
+        public const string ForeignKeyAttributeName = "ForeignKey";
+        /// <summary>
+        /// Gets the source file path from which this method is being called from.
+        /// </summary>
+        /// <returns>An absolute path to the source file.</returns>
+        /// https://stackoverflow.com/questions/47841441/how-do-i-get-the-path-to-the-current-c-sharp-source-code-file
         public static string GetSrcFilePath([CallerFilePath] string callerFilePath = null)
         {
             return callerFilePath ?? string.Empty;
         }
 
-        public static bool HasAnyForeignKeyProperty(this ClassDeclarationSyntax node)
+        /// <summary>
+        /// Checks whether has this class any foreign key attributes.
+        /// </summary>
+        /// <param name="classNode">This class syntax.</param>
+        /// <returns>Whether this class has any foreign key attribute.</returns>
+        public static bool HasAnyForeignKeyProperty(this ClassDeclarationSyntax classNode)
         {
-            return node.Members.OfType<PropertyDeclarationSyntax>().Any(n => HasAttribute(n, "ForeignKey")) || node.Members.OfType<FieldDeclarationSyntax>().Any(n => HasAttribute(n, "ForeignKey"));
+            return classNode.Members.OfType<PropertyDeclarationSyntax>().Any(static n => HasAttribute(n, ForeignKeyAttributeName)) || classNode.Members.OfType<FieldDeclarationSyntax>().Any(n => HasAttribute(n, ForeignKeyAttributeName));
         }
 
-        public static bool HasAttribute(this MemberDeclarationSyntax propertyDeclaration, string name)
+        /// <summary>
+        /// Checks whether this member has attribute of the specified type name.
+        /// </summary>
+        /// <param name="memberNode">This member declaration.</param>
+        /// <param name="name">Target attribute name.</param>
+        /// <returns>Whether this member has the specified attribute applied.</returns>
+        public static bool HasAttribute(this MemberDeclarationSyntax memberNode, string name)
         {
-            return propertyDeclaration.AttributeLists.Any(attrList => attrList.Attributes.Any(attr => attr.Name.ToString() == name));
+            return memberNode.AttributeLists.Any(attrList => attrList.Attributes.Any(attr => attr.Name.ToString() == name));
         }
 
-        public static ForeignKeyAttribute GetForeignKeyAttribute(this MemberDeclarationSyntax propertyDeclaration)
+        /// <summary>
+        /// Gets the foreign key attribute from this member declaration.
+        /// </summary>
+        /// <param name="memberNode">This member declaration.</param>
+        /// <returns>Foreign key attribute struct.</returns>
+        public static ForeignKeyAttribute GetForeignKeyAttribute(this MemberDeclarationSyntax memberNode)
         {
-            foreach (AttributeListSyntax attributes in propertyDeclaration.AttributeLists)
+            foreach (AttributeListSyntax attributes in memberNode.AttributeLists)
             {
                 foreach (AttributeSyntax attr in attributes.Attributes)
                 {
-                    if (attr.Name.ToString() == "ForeignKey")
+                    if (attr.Name.ToString() == ForeignKeyAttributeName)
                     {
                         var arguments = attr.ArgumentList.Arguments;
 
@@ -46,56 +71,93 @@ namespace DataAccessObjectAnalyzer.Extensions
             return default;
         }
 
-        public static IEnumerable<MemberDeclarationSyntax> GetForeignKeys(this ClassDeclarationSyntax node)
+        /// <summary>
+        /// Gets foreign key declearations from this class.
+        /// </summary>
+        /// <param name="classNode">This class node.</param>
+        /// <returns>Enumarable of the member nodes.</returns>
+        public static IEnumerable<MemberDeclarationSyntax> GetForeignKeys(this ClassDeclarationSyntax classNode)
         {
-            foreach (MemberDeclarationSyntax property in node.Members.OfType<PropertyDeclarationSyntax>().Cast<MemberDeclarationSyntax>().Concat(node.Members.OfType<FieldDeclarationSyntax>()))
+            foreach (MemberDeclarationSyntax property in classNode.Members.OfType<PropertyDeclarationSyntax>().Cast<MemberDeclarationSyntax>().Concat(classNode.Members.OfType<FieldDeclarationSyntax>()))
             {
-                if (HasAttribute(property, "ForeignKey")) yield return property;
+                if (HasAttribute(property, ForeignKeyAttributeName))
+                    yield return property;
             }
         }
 
-        public static IEnumerable<FieldDeclarationSyntax> GetAllFields(this ClassDeclarationSyntax node)
+        /// <summary>
+        /// Gets all fields from this class node.
+        /// </summary>
+        /// <param name="classNode">This class node.</param>
+        /// <returns>Enumarable of the fields.</returns>
+        public static IEnumerable<FieldDeclarationSyntax> GetAllFields(this ClassDeclarationSyntax classNode)
         {
-            foreach (FieldDeclarationSyntax property in node.Members.OfType<FieldDeclarationSyntax>())
-            {
+            foreach (FieldDeclarationSyntax property in classNode.Members.OfType<FieldDeclarationSyntax>())
                 yield return property;
-            }
         }
-
-        public static IEnumerable<PropertyDeclarationSyntax> GetAllProperties(this ClassDeclarationSyntax node)
+        
+        /// <summary>
+        /// Gets all properties form this class node.
+        /// </summary>
+        /// <param name="classNode">This class node.</param>
+        /// <returns>Enumerable of the properties.</returns>
+        public static IEnumerable<PropertyDeclarationSyntax> GetAllProperties(this ClassDeclarationSyntax classNode)
         {
-            foreach (PropertyDeclarationSyntax property in node.Members.OfType<PropertyDeclarationSyntax>())
-            {
+            foreach (PropertyDeclarationSyntax property in classNode.Members.OfType<PropertyDeclarationSyntax>())
                 yield return property;
-            }
         }
 
+        /// <summary>
+        /// Gets whether this property is declared as static.
+        /// </summary>
+        /// <param name="propertyNode">This property node.</param>
+        /// <returns>Whether this property is static.</returns>
         public static bool IsPropertyStatic(this PropertyDeclarationSyntax propertyNode)
         {
-            return propertyNode.Modifiers.Any(n => n.IsKind(SyntaxKind.StaticKeyword));
+            return propertyNode.Modifiers.Any(static n => n.IsKind(SyntaxKind.StaticKeyword));
         }
 
+        /// <summary>
+        /// Gets whether this property is declared as readonly.
+        /// </summary>
+        /// <param name="propertyNode">This property node.</param>
+        /// <returns>Whether this property is readonly.</returns>
         public static bool IsReadonly(this PropertyDeclarationSyntax propertyNode)
         {
             bool isExpressionBodied = propertyNode.ExpressionBody != null;
-            bool isGetOnly = propertyNode.AccessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)) == false;
+            bool isGetOnly = propertyNode.AccessorList?.Accessors.Any(static n => n.IsKind(SyntaxKind.SetAccessorDeclaration)) == false;
 
             return isExpressionBodied || isGetOnly;
         }
 
-        public static bool IsReadonly(this FieldDeclarationSyntax fieldDeclarationSyntax)
+        /// <summary>
+        /// Gets whether this field is declared as readonly.
+        /// </summary>
+        /// <param name="fieldNode">This field node.</param>
+        /// <returns>Whether this field is readonly.</returns>
+        public static bool IsReadonly(this FieldDeclarationSyntax fieldNode)
         {
-            return fieldDeclarationSyntax.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
+            return fieldNode.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
         }
 
-        public static bool IsNullable(this PropertyDeclarationSyntax propertyDeclaration)
+        /// <summary>
+        /// Gets whether this property is declared as nullable.
+        /// </summary>
+        /// <param name="propertyNode">This property node.</param>
+        /// <returns>Whether this property is nullable.</returns>
+        public static bool IsNullable(this PropertyDeclarationSyntax propertyNode)
         {
-            return propertyDeclaration.Type is NullableTypeSyntax;
+            return propertyNode.Type is NullableTypeSyntax;
         }
 
-        public static bool IsNullable(this FieldDeclarationSyntax fieldDeclaration)
+        /// <summary>
+        /// Gets whether this field is declared as nullable.
+        /// </summary>
+        /// <param name="fieldNode">This field node.</param>
+        /// <returns>Whether this field is nullable.</returns>
+        public static bool IsNullable(this FieldDeclarationSyntax fieldNode)
         {
-            return fieldDeclaration.Declaration.Type is NullableTypeSyntax;
+            return fieldNode.Declaration.Type is NullableTypeSyntax;
         }
     }
 }

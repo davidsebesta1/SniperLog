@@ -9,33 +9,47 @@ using SyntaxExtensions = DataAccessObjectAnalyzer.Extensions.SyntaxExtensions;
 
 namespace DataAccessObjectAnalyzer.Generators
 {
+    /// <summary>
+    /// Generates GetSqlParams() method to get all SqlParameters array for all properties of the targeted class.
+    /// </summary>
     public class SqliteParamsGenerator : CSharpSyntaxWalker
     {
-        private readonly ClassDeclarationSyntax _targetClassNode;
+        /// <summary>
+        /// Template used during <see cref="VisitClassDeclaration(ClassDeclarationSyntax)"/> for caching purposes.
+        /// </summary>
+        public static string BaseTemplate = File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/SqliteParamsTemplate.txt"));
 
-        private readonly StringBuilder _sb = new StringBuilder(2048);
-
+        /// <summary>
+        /// Result string text of the source.
+        /// </summary>
         public string ResultString => _sb.ToString();
 
+        private readonly ClassDeclarationSyntax _targetClassNode;
+        private readonly StringBuilder _sb = new StringBuilder(2048);
         private List<MemberDeclarationSyntax> _propertiesAndFields = new List<MemberDeclarationSyntax>();
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public SqliteParamsGenerator(ClassDeclarationSyntax targetClassNode)
         {
             _targetClassNode = targetClassNode;
         }
 
+        /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
             if (node == _targetClassNode)
             {
                 base.VisitClassDeclaration(node);
 
-                _sb.AppendLine(File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/SqliteParamsTemplate.txt")));
+                _sb.AppendLine(BaseTemplate);
                 _sb.Replace("%sqliteParams%", GetParamsString(true));
                 _sb.Replace("%sqliteParamsNoId%", GetParamsString(false));
             }
         }
 
+        /// <inheritdoc/>
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
         {
             base.VisitPropertyDeclaration(node);
@@ -46,6 +60,7 @@ namespace DataAccessObjectAnalyzer.Generators
             }
         }
 
+        /// <inheritdoc/>
         public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
             base.VisitFieldDeclaration(node);
@@ -56,11 +71,16 @@ namespace DataAccessObjectAnalyzer.Generators
             }
         }
 
+        /// <summary>
+        /// Gets the params source code string.
+        /// </summary>
+        /// <param name="includeId">Whether the ID should be included.</param>
+        /// <returns>String representation of the source code.</returns>
         private string GetParamsString(bool includeId)
         {
             StringBuilder stringBuilder = new StringBuilder(1024);
 
-            var all = _propertiesAndFields.OrderBy(n => n.SpanStart);
+            var all = _propertiesAndFields.OrderBy(static n => n.SpanStart);
 
             var lastProperty = all.Last();
             foreach (var property in all)
@@ -89,12 +109,19 @@ namespace DataAccessObjectAnalyzer.Generators
                     stringBuilder.Append($"new SqliteParameter(@\"{newValue}\", {GetReturnCheckDBNullable(newValue, fieldDecl.IsNullable())})");
                 }
 
-                if (lastProperty != property) stringBuilder.Append(',');
+                if (lastProperty != property) 
+                    stringBuilder.Append(',');
             }
 
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Gets the ternary operator to handle nullable DB values.
+        /// </summary>
+        /// <param name="name">Property name.</param>
+        /// <param name="nullable">Whether is it nullable.</param>
+        /// <returns>String to get the db null or no.</returns>
         private string GetReturnCheckDBNullable(string name, bool nullable)
         {
             return nullable ? $"{name} != null ? {name} : DBNull.Value" : name;
