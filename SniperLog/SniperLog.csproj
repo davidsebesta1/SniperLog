@@ -104,7 +104,7 @@
 		
 		<MauiImage Update="Resources\Images\FlyoutIcons\*" Resize="True" BaseSize="64,64" TintColor="#FFFFFF" />
 		
-		<MauiImage Update="Resources\Images\searchicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
+		<MauiImage Update="Resources\Images\searchicon.svg" Resize="True" BaseSize="32,32" TintColor="#6D758C" />
 		<MauiImage Update="Resources\Images\cancelicon.svg" Resize="True" BaseSize="64,64" TintColor="#6D758C" />
 		<MauiImage Update="Resources\Images\hamburgermenuicon.svg" Resize="True" BaseSize="20,15" TintColor="#6D758C" />
 		

@@ -81,7 +81,7 @@ public partial class Firearm : ObservableObject, IDataAccessObject, INoteSaveabl
     /// </summary>
     [ObservableProperty]
     private double? _barrelLengthInch;
-    
+
     /// <summary>
     /// Rate of twist of the firearm.
     /// </summary>
@@ -99,7 +99,7 @@ public partial class Firearm : ObservableObject, IDataAccessObject, INoteSaveabl
     /// </summary>
     [ObservableProperty]
     private bool? _handednessForLeft;
-    
+
     /// <summary>
     /// Vertical offset of the firearm sight and barrel in cm.
     /// </summary>
@@ -223,7 +223,13 @@ public partial class Firearm : ObservableObject, IDataAccessObject, INoteSaveabl
     /// <inheritdoc/>
     public static bool operator ==(Firearm? left, Firearm? right)
     {
-        return left is Firearm f1 && right is Firearm f2 && f1.Equals(f2);
+        if (ReferenceEquals(left, right))
+            return true;
+
+        if (left is null || right is null)
+            return false;
+
+        return left.Equals(right);
     }
 
     /// <inheritdoc/>

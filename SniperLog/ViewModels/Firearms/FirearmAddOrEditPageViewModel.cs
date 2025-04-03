@@ -90,21 +90,21 @@ namespace SniperLog.ViewModels.Firearms
 
         partial void OnFirearmChanged(Firearm value)
         {
-            FirearmType = value.ReferencedFirearmType;
-            Manufacturer = value.ReferencedManufacturer;
-            FirearmCaliber = value.ReferencedFirearmCaliber;
-            FirearmSight = value.ReferencedFirearmSight;
+            FirearmType = value?.ReferencedFirearmType;
+            Manufacturer = value?.ReferencedManufacturer;
+            FirearmCaliber = value?.ReferencedFirearmCaliber;
+            FirearmSight = value?.ReferencedFirearmSight;
 
-            Name = value.Name;
-            Model = value.Model;
-            SerialNumber = value.SerialNumber;
-            TotalLengthMm = value.TotalLengthMm;
-            BarrelLengthInch = value.BarrelLengthInch;
-            RateOfTwist = value.RateOfTwist;
-            Weight = value.Weight;
-            HandednessRight = !value.HandednessForLeft;
-            Notes = value.NotesText;
-            SightOffsetCm = value.SightHeightCm;
+            Name = value?.Name ?? string.Empty;
+            Model = value?.Model ?? string.Empty;
+            SerialNumber = value?.SerialNumber ?? string.Empty;
+            TotalLengthMm = value?.TotalLengthMm;
+            BarrelLengthInch = value?.BarrelLengthInch;
+            RateOfTwist = value?.RateOfTwist;
+            Weight = value?.Weight;
+            HandednessRight = !value?.HandednessForLeft;
+            Notes = value?.NotesText;
+            SightOffsetCm = value?.SightHeightCm;
         }
 
         [RelayCommand]

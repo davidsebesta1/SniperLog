@@ -15,6 +15,7 @@ namespace SniperLog.Pages.Firearms
         }
 
         protected override async void OnAppearing()
+
         {
             base.OnAppearing();
 
@@ -30,6 +31,8 @@ namespace SniperLog.Pages.Firearms
             _validatorService.TryAddValidation(WeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
             await (BindingContext as FirearmAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
+            //(BindingContext as FirearmAddOrEditPageViewModel).Firearm = new Firearm(1, 1, 1, 1, "a", "", "", 1, 1, "", 1, false, 1);
+            //(BindingContext as FirearmAddOrEditPageViewModel).Firearm = null;
         }
 
         protected override void OnDisappearing()

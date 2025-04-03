@@ -46,7 +46,7 @@
     </Shell.FlyoutFooter>
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="45,*,80">
+        <Grid ColumnDefinitions="45,*,80" HorizontalOptions="Center" Margin="{OnPlatform Android='-20, 0, 0, 0'}">
             <HorizontalStackLayout Grid.Column="1">
                 <Image Source="sniperlogwhite.png" WidthRequest="20"/>
                 <Label Text="Sniper Log" FontSize="24" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Margin="10, 0, 0, 0"/>

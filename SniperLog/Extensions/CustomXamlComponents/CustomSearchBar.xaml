@@ -5,11 +5,11 @@
              x:Name="this"
              x:Class="SniperLog.Extensions.CustomXamlComponents.CustomSearchBar">
 
-    <Frame x:Name="Main" BindingContext="{x:Reference this}" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}">
-        <Grid ColumnDefinitions="20,10,*,20" HeightRequest="50">
-            <ImageButton Source="searchicon.png" Grid.Column="0" Command="{Binding EnterCommand}"/>
+    <Frame x:Name="Main" BindingContext="{x:Reference this}" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="{OnPlatform Android='15,0', WinUI='10'}">
+        <Grid ColumnDefinitions="{OnPlatform Android='20,10,*,20', WinUI='40, 10, *, 50'}" HeightRequest="30">
+            <ImageButton Source="searchicon.png" Grid.Column="0" Command="{Binding EnterCommand}" Background="Transparent" MinimumHeightRequest="10" MinimumWidthRequest="10"/>
             <Entry Grid.Column="2" HeightRequest="70" Placeholder="{Binding PlaceholderText}" Text="{Binding TextValue, Mode=TwoWay}" ClearButtonVisibility="Never" TextChanged="Entry_TextChanged"/>
-            <ImageButton Source="cancelicon.png" Grid.Column="3" Pressed="ImageButton_Pressed" />
+            <ImageButton Source="cancelicon.png" Grid.Column="3" Pressed="ImageButton_Pressed" Background="Transparent" MinimumHeightRequest="10" MinimumWidthRequest="10"/>
         </Grid>
     </Frame>
 </ContentView>

@@ -75,13 +75,13 @@ public class DataCacherService<T> where T : IDataAccessObject
     }
 
     /// <summary>
-    /// 
+    /// Removes the item from cache.
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
     public bool Remove(T item)
     {
-        bool res = _cachedPerId.Remove(item.ID, out var val) && _objects.Remove(item);
+        bool res = _cachedPerId.Remove(item.ID, out T? val) && _objects.Remove(item);
         OnDelete?.Invoke(this, new DataServiceOnDeleteArgs<T>(item));
         return res;
     }
