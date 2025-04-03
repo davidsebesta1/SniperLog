@@ -11,7 +11,7 @@
     <ScrollView>
         <Grid RowDefinitions="90,*,50" Padding="15" RowSpacing="15">
             <HorizontalStackLayout Grid.Row="0">
-                <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
+                <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}" BackgroundColor="Transparent"/>
                 <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
             </HorizontalStackLayout>
 

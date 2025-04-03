@@ -18,7 +18,7 @@
             <custom:CustomPickerEntry x:Name="SRangeEntry" SourceCollection="{Binding ShootingRanges}" SelectedItem="{Binding SelectedRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Shooting Range" ErrorText="Must be selected for new log"/>
             <custom:CustomPickerEntry x:Name="SubRangeEntry" SourceCollection="{Binding SubRanges}" SelectedItem="{Binding SelectedSubRange, Mode=TwoWay}" CanSelectNone="True" EntryHeight="1" EntryTitle="Sub Range" ErrorText="Must be selected for new log"/>
 
-            <FlexLayout Padding="0, 10" JustifyContent="SpaceEvenly" AlignItems="Center">
+            <FlexLayout Padding="0, 10" JustifyContent="SpaceEvenly" AlignItems="Center" MaximumWidthRequest="500">
                 <Border BackgroundColor="{StaticResource Primary}" Padding="2" WidthRequest="25" HeightRequest="8"/>
                 <Label Text="Zero"/>
                 
@@ -32,12 +32,12 @@
             <!-- Trajectories -->
             <Label Text="Up Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start"/>
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
-                <lvc:CartesianChart x:Name="XGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding ElevationSeries}"/>
+                <lvc:CartesianChart Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxises}" Series="{Binding ElevationSeries}"/>
             </Frame>
 
             <Label Text="Windage Setting Bullet Trajetory" FontSize="22" HorizontalOptions="Start" Margin="0,15,0,0"/>
             <Frame BackgroundColor="{StaticResource PanelBackgroundLight}" HeightRequest="200" Padding="0">
-                <lvc:CartesianChart x:Name="YGraph" Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxisesWindage}" Series="{Binding WindageSeries}"/>
+                <lvc:CartesianChart Margin="0" Padding="0" XAxes="{Binding XAxises}" YAxes="{Binding YAxisesWindage}" Series="{Binding WindageSeries}"/>
             </Frame>
 
             <!-- Entry -->
@@ -46,7 +46,7 @@
             <custom:CustomTextEntry x:Name="ElevOffsetEntry" Keyboard="Numeric" EntryTitle="Elevation Offset Clicks" TextValue="{Binding ElevationClicks, Mode=TwoWay}" EntryHeight="1"/>
             <custom:CustomTextEntry x:Name="WindOffsetEntry" Keyboard="Numeric" EntryTitle="Windage Offset Clicks" TextValue="{Binding WindageClicks, Mode=TwoWay}" EntryHeight="1"/>
             <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters"  TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
-            <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" IsMandatory="False" SelectedImagePath="{Binding ImgPath, Mode=TwoWay}" EntryHeight="25"/>
+            <custom:CustomImagePickerEntry x:Name="ImageEntry" EntryTitle="Image" IsMandatory="False" SelectedImagePath="{Binding ImgPath, Mode=TwoWay}" EntryHeight="{OnPlatform Android='25', WinUI='100'}"/>
             <custom:CustomTextEntry x:Name="NotesEntry" EntryTitle="Notes" IsMandatory="False" TextValue="{Binding Notes, Mode=TwoWay}" EntryHeight="1"/>
 
             <Button Text="Log" Command="{Binding CreateNewCommand}"/>

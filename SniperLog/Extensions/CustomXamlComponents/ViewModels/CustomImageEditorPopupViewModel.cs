@@ -6,6 +6,7 @@ using Compunet.YoloSharp.Data;
 using Microsoft.Maui.Graphics.Platform;
 using Mopups.Services;
 using SixLabors.ImageSharp;
+using SkiaSharp;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLog.Services.AI;
 using SniperLog.ViewModels;
@@ -73,25 +74,30 @@ public partial class CustomImageEditorPopupViewModel : BaseViewModel
             return;
 
         string tmpSavePath = Path.Combine(FileSystem.Current.CacheDirectory, Guid.NewGuid().ToString() + ".png");
-
-        using Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath));
-
-        int targetWidth = (int)originalImage.Width;
-        int targetHeight = (int)originalImage.Height;
-
-
-        using (FileStream localFileStream = File.OpenWrite(tmpSavePath))
+        using (Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath)))
         {
-            using (Stream stream = drawingView.CaptureDrawingView())
-            {
-                using Microsoft.Maui.Graphics.IImage img = PlatformImage.FromStream(stream);
-                using Microsoft.Maui.Graphics.IImage imgResized = img.Resize(targetWidth, targetHeight, ResizeMode.Fit);
+            int targetWidth = (int)originalImage.Width;
+            int targetHeight = (int)originalImage.Height;
 
-                await imgResized.SaveAsync(localFileStream, ImageFormat.Png);
+            using (Stream stream = drawingView.CaptureDrawingView())
+            using (var drawingBitmap = SKBitmap.Decode(stream))
+            {
+                using (var resizedBitmap = drawingBitmap.Resize(new SKImageInfo(targetWidth, targetHeight), SKFilterQuality.High))
+                {
+                    using (var localFileStream = File.OpenWrite(tmpSavePath))
+                    using (var img = SKImage.FromBitmap(resizedBitmap))
+                    using (var data = img.Encode(SKEncodedImageFormat.Png, 100))
+                    {
+                        data.SaveTo(localFileStream);
+                    }
+                }
             }
         }
 
+        // Update the path to the modified overdraw image
         BackgroundImage.OverDrawPath = tmpSavePath;
+
+        // Close the popup
         await MopupService.Instance.PopAsync();
     }
 

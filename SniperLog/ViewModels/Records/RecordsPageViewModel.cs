@@ -54,7 +54,6 @@ namespace SniperLog.ViewModels.Records
         {
             NamePaint = new SolidColorPaint(SKColors.White),
             LabelsPaint = new SolidColorPaint(SKColors.White),
-            LabelsDensity = 0.01f,
         }];
 
         /// <summary>
@@ -65,7 +64,6 @@ namespace SniperLog.ViewModels.Records
         {
             NamePaint = new SolidColorPaint(SKColors.White),
             LabelsPaint = new SolidColorPaint(SKColors.White),
-            LabelsDensity = 1f,
         }];
 
         /// <summary>
@@ -215,12 +213,12 @@ namespace SniperLog.ViewModels.Records
                     return;
 
                 ObservableCollection<FirearmSightSetting> baseSightSettings = await SelectedFirearm.ReferencedFirearmSight.GetBaseSightSettingsAsync();
-                var ord = baseSightSettings.OrderBy(n => n.Distance);
-                var distances = ord.Select(n => n.Distance);
+                var ord = baseSightSettings.OrderBy(static n => n.Distance);
+                IEnumerable<int> distances = ord.Select(static n => n.Distance);
 
                 XAxises[0].Labels.Clear();
 
-                foreach (var item in distances)
+                foreach (int item in distances)
                     XAxises[0].Labels.Add(item.ToString());
 
                 NetworkAccess accessType = Connectivity.Current.NetworkAccess;
@@ -287,7 +285,17 @@ namespace SniperLog.ViewModels.Records
                 if (SelectedRange != null)
                 {
                     BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
-                    List<ClickOffset> offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
+
+                    List<ClickOffset> offset = null;
+                    try
+                    {
+                        offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        await Shell.Current.DisplayAlert("Error", e.Message, "Okay");
+                        return;
+                    }
 
                     ElevationSeries.Add(new LineSeries<int?>
                     {

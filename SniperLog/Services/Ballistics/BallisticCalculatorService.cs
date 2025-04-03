@@ -24,6 +24,11 @@ public class BallisticCalculatorService
     public async Task<List<ClickOffset>> CalculateOffset(Firearm firearm, Models.Ammunition ammo, WeatherResponseMessage weather, int minRange, int maxRange, int step, double oneClickValue)
     {
         ObservableCollection<MuzzleVelocity> velocities = (await ServicesHelper.GetService<DataCacherService<MuzzleVelocity>>().GetAllBy(n => n.Ammo_ID == ammo.ID && n.Firearm_ID == firearm.ID));
+
+        if(velocities.Count == 0)
+        {
+            throw new ArgumentException("No muzzle velocities.");
+        }
         double vel = velocities.Average(n => n.VelocityMS);
 
         BallisticCalculator.Ammunition ballisticAmmo = new BallisticCalculator.Ammunition(

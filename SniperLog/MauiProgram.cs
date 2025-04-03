@@ -39,6 +39,7 @@ using SniperLog.ViewModels.Manufacturers.AmmunitionManufacturers;
 using SniperLog.ViewModels.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Firearms.MuzzleVelocities;
 using SniperLog.Services.AI;
+using LiveChartsCore.SkiaSharpView.Maui;
 
 namespace SniperLog
 {
