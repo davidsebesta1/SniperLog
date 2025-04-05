@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace SniperLog.Config.Interfaces;
 
-namespace SniperLog.Config.Interfaces
+/// <summary>
+/// Interface for all configuration files of the program.
+/// </summary>
+public interface IConfig
 {
-    public interface IConfig
-    {
-        public static abstract string Name { get; }
-    }
+    /// <summary>
+    /// Name of the configuration file without extension.
+    /// </summary>
+    public static abstract string Name { get; }
 }

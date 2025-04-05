@@ -18,9 +18,9 @@ namespace SniperLog.Pages.Firearms.MuzzleVelocities
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(AmmunitionEntry, n => n != null);
+            _validatorService.TryAddValidation(AmmunitionEntry, static n => n != null);
 
-            _validatorService.TryAddValidation(MuzzleVelEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res >= 0d));
+            _validatorService.TryAddValidation(MuzzleVelEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res >= 0d));
 
             MuzzleVelocityAddOrEditPageViewModel vm = BindingContext as MuzzleVelocityAddOrEditPageViewModel;
             await vm.RefreshPickersCommand.ExecuteAsync(null);

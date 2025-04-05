@@ -26,9 +26,8 @@ public class BallisticCalculatorService
         ObservableCollection<MuzzleVelocity> velocities = (await ServicesHelper.GetService<DataCacherService<MuzzleVelocity>>().GetAllBy(n => n.Ammo_ID == ammo.ID && n.Firearm_ID == firearm.ID));
 
         if(velocities.Count == 0)
-        {
-            throw new ArgumentException("No muzzle velocities.");
-        }
+            throw new ArgumentException("No muzzle velocities found. Unable to calculate offsets.");
+        
         double vel = velocities.Average(n => n.VelocityMS);
 
         BallisticCalculator.Ammunition ballisticAmmo = new BallisticCalculator.Ammunition(

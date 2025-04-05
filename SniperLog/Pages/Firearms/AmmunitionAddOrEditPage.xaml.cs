@@ -18,10 +18,10 @@ namespace SniperLog.Pages.Firearms
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(BulletEntry, n => n != null);
+            _validatorService.TryAddValidation(BulletEntry, static n => n != null);
 
-            _validatorService.TryAddValidation(TotalLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(PowerWeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(TotalLenEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(PowerWeightEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
             await (BindingContext as AmmunitionAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
         }

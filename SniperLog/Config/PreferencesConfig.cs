@@ -1,68 +1,76 @@
 ﻿using SniperLog.Config.Interfaces;
 
-namespace SniperLog.Config
+namespace SniperLog.Config;
+
+/// <summary>
+/// Preferneces of the user.
+/// </summary>
+public class PreferencesConfig : IConfig
 {
-    public class PreferencesConfig : IConfig
+    /// <inheritdoc/>
+    public static string Name => "Preferences";
+
+    /// <summary>
+    /// Id of the last selected firearm for the records page.
+    /// </summary>
+    public int LastSelectedFirearm { get; set; } = 0;
+
+    /// <summary>
+    /// Last selected ammunition Id for the records page.
+    /// </summary>
+    public Dictionary<int, int> LastSelectedAmmunitionForFirearm { get; set; } = new Dictionary<int, int>();
+
+    /// <summary>
+    /// Gets the last selected firearm. Or null.
+    /// </summary>
+    /// <returns>The last selected firearm or null if there isn't any.</returns>
+    public async Task<Firearm?> GetLastSelectedFirearm()
     {
-        public static string Name => "Preferences";
+        DataCacherService<Firearm> firearmCacher = ServicesHelper.GetService<DataCacherService<Firearm>>();
 
-        public int LastSelectedFirearm { get; set; } = 0;
+        return await firearmCacher.GetFirstBy(n => n.ID == LastSelectedFirearm);
+    }
 
-        public Dictionary<int, int> LastSelectedAmmunitionForFirearm { get; set; } = new Dictionary<int, int>();
+    /// <summary>
+    /// Sets the last selected firearm for record preferences.
+    /// </summary>
+    /// <param name="firearm">The firearm.</param>
+    public void SetLastSelectedFirearm(Firearm? firearm)
+    {
+        if (firearm == null)
+            LastSelectedFirearm = 0;
+        else
+            LastSelectedFirearm = firearm.ID;
 
-        /// <summary>
-        /// Gets the last selected firearm. Or null.
-        /// </summary>
-        /// <returns>The last selected firearm or null if there isn't any.</returns>
-        public async Task<Firearm?> GetLastSelectedFirearm()
-        {
-            DataCacherService<Firearm> firearmCacher = ServicesHelper.GetService<DataCacherService<Firearm>>();
+        ApplicationConfigService.SaveConfig(this);
+    }
 
-            return await firearmCacher.GetFirstBy(n => n.ID == LastSelectedFirearm);
-        }
+    /// <summary>
+    /// Gets the last selected ammunition for this firearm for recording entries.
+    /// </summary>
+    /// <returns>Ammunition that was lastly selected or null.</returns>
+    public async Task<Ammunition?> GetLastSelectedAmmunition(Firearm firearm)
+    {
+        DataCacherService<Ammunition> ammoCacher = ServicesHelper.GetService<DataCacherService<Ammunition>>();
 
-        /// <summary>
-        /// Sets the last selected firearm for record preferences.
-        /// </summary>
-        /// <param name="firearm">The firearm.</param>
-        public void SetLastSelectedFirearm(Firearm? firearm)
-        {
-            if (firearm == null)
-                LastSelectedFirearm = 0;
-            else
-                LastSelectedFirearm = firearm.ID;
+        if (LastSelectedAmmunitionForFirearm.TryGetValue(firearm.ID, out int ammoId))
+            return await ammoCacher.GetFirstBy(n => n.ID == ammoId);
 
-            ApplicationConfigService.SaveConfig(this);
-        }
+        return null;
+    }
 
-        /// <summary>
-        /// Gets the last selected ammunition for this firearm for recording entries.
-        /// </summary>
-        /// <returns>Ammunition that was lastly selected or null.</returns>
-        public async Task<Ammunition?> GetLastSelectedAmmunition(Firearm firearm)
-        {
-            DataCacherService<Ammunition> ammoCacher = ServicesHelper.GetService<DataCacherService<Ammunition>>();
+    /// <summary>
+    /// Sets the last selected ammunition for provided firearm and saves the preferences.
+    /// </summary>
+    /// <param name="firearm">The firearm to this preference is for.</param>
+    /// <param name="ammo">The ammunition that has been selected as last.</param>
+    public void SetLastSelectedAmmunition(Firearm firearm, Ammunition? ammo)
+    {
+        if (ammo == null)
+            LastSelectedAmmunitionForFirearm.Remove(firearm.ID);
+        else
+            LastSelectedAmmunitionForFirearm[firearm.ID] = ammo.ID;
 
-            if (LastSelectedAmmunitionForFirearm.TryGetValue(firearm.ID, out int ammoId))
-                return await ammoCacher.GetFirstBy(n => n.ID == ammoId);
-
-            return null;
-        }
-
-        /// <summary>
-        /// Sets the last selected ammunition for provided firearm and saves the preferences.
-        /// </summary>
-        /// <param name="firearm">The firearm to this preference is for.</param>
-        /// <param name="ammo">The ammunition that has been selected as last.</param>
-        public void SetLastSelectedAmmunition(Firearm firearm, Ammunition? ammo)
-        {
-            if (ammo == null)
-                LastSelectedAmmunitionForFirearm.Remove(firearm.ID);
-            else
-                LastSelectedAmmunitionForFirearm[firearm.ID] = ammo.ID;
-
-
-            ApplicationConfigService.SaveConfig(this);
-        }
+        ApplicationConfigService.SaveConfig(this);
     }
 }

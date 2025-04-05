@@ -16,6 +16,15 @@ namespace SniperLog.Pages.Reticles
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            _validatorService.TryAddValidation(NameEntry, static n => !string.IsNullOrEmpty((string)n));
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            _validatorService.ClearAll();
         }
     }
 }

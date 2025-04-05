@@ -112,7 +112,8 @@ namespace SniperLog.Services.Database
 
         public async Task<DataTable?> ExecuteQueryAsync(string query, params SqliteParameter[] parameters)
         {
-            if (string.IsNullOrEmpty(query)) return null;
+            if (string.IsNullOrEmpty(query)) 
+                return null;
 
             try
             {

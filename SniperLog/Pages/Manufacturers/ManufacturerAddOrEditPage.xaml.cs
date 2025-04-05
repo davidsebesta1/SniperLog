@@ -17,8 +17,8 @@ namespace SniperLog.Pages.Manufacturers
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(NameEntry, n => !string.IsNullOrEmpty((string)n));
-            _validatorService.TryAddValidation(CountryEntry, n => n != null);
+            _validatorService.TryAddValidation(NameEntry, static n => !string.IsNullOrEmpty((string)n));
+            _validatorService.TryAddValidation(CountryEntry, static n => n != null);
 
             await (BindingContext as ManufacturerAddOrEditPageViewModel).RefreshCountriesCommand.ExecuteAsync(null);
         }

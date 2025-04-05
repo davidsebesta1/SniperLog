@@ -56,6 +56,13 @@ namespace SniperLog
             Routing.RegisterRoute(nameof(MuzzleVelocityAddOrEditPage), typeof(MuzzleVelocityAddOrEditPage));
 
             Routing.RegisterRoute(nameof(ImportExportPage), typeof(ImportExportPage));
+
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(SettingsPage));
         }
     }
 }

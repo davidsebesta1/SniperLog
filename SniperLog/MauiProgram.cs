@@ -161,6 +161,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ImportExportPageViewModel>();
 
+            builder.Services.AddSingleton<SettingsPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -212,6 +214,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ImportExportPage>();
 
+            builder.Services.AddSingleton<SettingsPage>();
+
             #endregion
 
             #region Processors
@@ -226,10 +230,12 @@ namespace SniperLog
             builder.Services.AddSingleton<BulletHoleDetectionService>();
 
             AppConfig config = ApplicationConfigService.GetConfig<AppConfig>();
+
+            IPAddress.TryParse(config.ServerHostname, out IPAddress address);
             ConnectionToDataServer connectionToDataServer = new ConnectionToDataServer()
             {
                 //HostName = config.ServerHostname,
-                IpAddress = IPAddress.Parse("10.0.2.2"),
+                IpAddress = address,
                 Port = config.ServerPort,
             };
 
