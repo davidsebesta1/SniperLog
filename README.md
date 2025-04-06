@@ -39,6 +39,10 @@ Designed in [figma](https://www.figma.com/design/2ca9TYEWmeJG5Sesapl2VD/SniperLo
 Ballistic calculator by [gehtsoft-usa](https://github.com/gehtsoft-usa/BallisticCalculator1)<br>
 Labelling images for AI using [LabelImg](https://github.com/HumanSignal/labelImg)<br>
 Bullet hole detection AI powered by [YOLOv8](https://yolov8.com/)<br>
+YOLOv8 usage NuGet via [YoloSharp](https://github.com/dme-compunet/YoloSharp)<br>
+Configuration using YAML Nuget from [YamlDotNet](https://github.com/aaubry/YamlDotNet/wiki)<br>
+Popup NuGet from [Mopups](https://github.com/LuckyDucko/Mopups)<br>
+Charts UI via [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)
 
 ## Contributing
 If you have suggestions, feature requests, or want to contribute, feel free to open a pull request or an issue.
