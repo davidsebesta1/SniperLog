@@ -42,7 +42,8 @@ Bullet hole detection AI powered by [YOLOv8](https://yolov8.com/)<br>
 YOLOv8 usage NuGet via [YoloSharp](https://github.com/dme-compunet/YoloSharp)<br>
 Configuration using YAML Nuget from [YamlDotNet](https://github.com/aaubry/YamlDotNet/wiki)<br>
 Popup NuGet from [Mopups](https://github.com/LuckyDucko/Mopups)<br>
-Charts UI via [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)
+Charts UI via [LiveCharts2](https://github.com/beto-rodriguez/LiveCharts2)<br>
+Weather API from [OpenWeatherMap](https://openweathermap.org/)
 
 ## Contributing
 If you have suggestions, feature requests, or want to contribute, feel free to open a pull request or an issue.
