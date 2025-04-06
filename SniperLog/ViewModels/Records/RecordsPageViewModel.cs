@@ -184,6 +184,14 @@ public partial class RecordsPageViewModel : BaseViewModel
 
     #endregion
 
+    #region Colors
+
+    private static SolidColorPaint _zeroLineColor => new SolidColorPaint(SKColor.Parse("#6281EE"));
+    private static SolidColorPaint _weatherLineColor => new SolidColorPaint(SKColor.Parse("#EE8100"));
+    private static SolidColorPaint _calculatorLineColor => new SolidColorPaint(SKColor.Parse("#FF0000"));
+
+    #endregion
+
     #endregion
 
     #region Ctor
@@ -230,100 +238,104 @@ public partial class RecordsPageViewModel : BaseViewModel
 
             WeatherResponseMessage msg = SelectedRange == null ? default : await SelectedRange.GetCurrentWeather();
 
-            List<ClickOffset?>? weatherOffsets = await GetNearestWeatherClicksFromBase(distances, msg);
-            ElevationSeries.Clear();
-
-            // Base clicks
-            ElevationSeries.Add(new LineSeries<int>
+            await Task.Run(async () =>
             {
-                Values = ord.Select(n => n.ElevationValue).ToList(),
-                Name = "Base",
-                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                Fill = null,
-                LineSmoothness = 0,
+                List<ClickOffset?>? weatherOffsets = await GetNearestWeatherClicksFromBase(distances, msg);
+                ElevationSeries.Clear();
 
-            });
-
-            // Weather offsets
-            if (weatherOffsets != null)
-            {
-                ElevationSeries.Add(new LineSeries<int?>
+                // Base clicks
+                ElevationSeries.Add(new LineSeries<int>
                 {
-                    Values = weatherOffsets.Where(n => n.HasValue && n.Value.VerticalClicks != null).Select(n => n.Value.VerticalClicks).ToList(),
+                    Values = ord.Select(static n => n.ElevationValue).ToList(),
                     Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
+                    Stroke = _zeroLineColor,
+                    GeometryStroke = _zeroLineColor,
                     Fill = null,
                     LineSmoothness = 0,
+
                 });
-            }
 
-            WindageSeries.Clear();
-
-            WindageSeries.Add(new LineSeries<int>
-            {
-                Values = ord.Select(n => n.WindageValue).ToList(),
-                Name = "Base",
-                Stroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                GeometryStroke = new SolidColorPaint(SKColor.Parse("#6281EE")),
-                Fill = null,
-                LineSmoothness = 0,
-            });
-
-            if (weatherOffsets != null)
-            {
-                WindageSeries.Add(new LineSeries<int?>
+                // Weather offsets
+                if (weatherOffsets != null)
                 {
-                    Values = weatherOffsets.Where(n => n.HasValue && n.Value.WindageClicks != null).Select(n => n.Value.WindageClicks).ToList(),
-                    Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#EE8100")),
-                    Fill = null,
-                    LineSmoothness = 0,
-                });
-            }
-
-            // Calculated offsets
-            if (SelectedRange != null)
-            {
-                BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
-
-                List<ClickOffset> offset = null;
-                try
-                {
-                    offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
-                }
-                catch (ArgumentException e)
-                {
-                    bool goToSettings = await Shell.Current.DisplayAlert("Warning", e.Message, "Go to settings", "Okay");
-
-                    if (goToSettings)
-                        await Shell.Current.GoToAsync(nameof(MuzzleVelocitiesPage), new Dictionary<string, object>(1) { { "Firearm", SelectedFirearm } });
-
-                    return;
+                    ElevationSeries.Add(new LineSeries<int?>
+                    {
+                        Values = weatherOffsets.Where(static n => n.HasValue && n.Value.VerticalClicks != null).Select(static n => n.Value.VerticalClicks).ToList(),
+                        Name = "Base",
+                        Stroke = _weatherLineColor,
+                        GeometryStroke = _weatherLineColor,
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
                 }
 
-                ElevationSeries.Add(new LineSeries<int?>
+                WindageSeries.Clear();
+
+                WindageSeries.Add(new LineSeries<int>
                 {
-                    Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(static n => n.VerticalClicks).ToList(),
+                    Values = ord.Select(static n => n.WindageValue).ToList(),
                     Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
+                    Stroke = _zeroLineColor,
+                    GeometryStroke = _zeroLineColor,
                     Fill = null,
                     LineSmoothness = 0,
                 });
 
-                WindageSeries.Add(new LineSeries<int?>
+                if (weatherOffsets != null)
                 {
-                    Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(static n => n.WindageClicks).ToList(),
-                    Name = "Base",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#FF0000")),
-                    Fill = null,
-                    LineSmoothness = 0,
-                });
-            }
+                    WindageSeries.Add(new LineSeries<int?>
+                    {
+                        Values = weatherOffsets.Where(static n => n.HasValue && n.Value.WindageClicks != null).Select(static n => n.Value.WindageClicks).ToList(),
+                        Name = "Base",
+                        Stroke = _weatherLineColor,
+                        GeometryStroke = _weatherLineColor,
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+                }
+
+                // Calculated offsets
+                if (SelectedRange != null)
+                {
+                    BallisticCalculatorService ballisticCalculatorService = new BallisticCalculatorService();
+
+                    List<ClickOffset> offset = null;
+                    try
+                    {
+                        offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        bool goToSettings = await Shell.Current.DisplayAlert("Warning", e.Message, "Go to settings", "Okay");
+
+                        if (goToSettings)
+                            await Shell.Current.GoToAsync(nameof(MuzzleVelocitiesPage), new Dictionary<string, object>(1) { { "Firearm", SelectedFirearm } });
+
+                        return;
+                    }
+
+                    ElevationSeries.Add(new LineSeries<int?>
+                    {
+                        Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(static n => n.VerticalClicks).ToList(),
+                        Name = "Base",
+                        Stroke = _calculatorLineColor,
+                        GeometryStroke = _calculatorLineColor,
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+
+                    WindageSeries.Add(new LineSeries<int?>
+                    {
+                        Values = offset.Where(n => distances.Any(x => x == n.Distance)).Select(static n => n.WindageClicks).ToList(),
+                        Name = "Base",
+                        Stroke = _calculatorLineColor,
+                        GeometryStroke = _calculatorLineColor,
+                        Fill = null,
+                        LineSmoothness = 0,
+                    });
+
+                }
+            });
         }
         catch (TimeoutException timeoutEx)
         {
