@@ -1,16 +1,24 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
-using SniperLog.Extensions;
 using SniperLog.Services.Serialization;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Other;
 
+/// <summary>
+/// Handles the import/export page logic.
+/// </summary>
 public partial class ImportExportPageViewModel : BaseViewModel
 {
+    /// <summary>
+    /// All exportable firearms.
+    /// </summary>
     [ObservableProperty]
     private ObservableCollection<Firearm> _firearms;
 
+    /// <summary>
+    /// Selected firearm from the list.
+    /// </summary>
     [ObservableProperty]
     private Firearm _selectedFirearm;
 
@@ -26,18 +34,27 @@ public partial class ImportExportPageViewModel : BaseViewModel
                     { DevicePlatform.macOS, new[] { ".json" } },
                 });
 
+    /// <summary>
+    /// Ctor.
     public ImportExportPageViewModel(DataCacherService<Firearm> firearmService) : base()
     {
         PageTitle = "Import/Export";
         _firearmsService = firearmService;
     }
 
+    /// <summary>
+    /// Loads all firearms to the <see cref="Firearms"/>.
+    /// </summary>
     [RelayCommand]
     private async Task LoadFirearms()
     {
         Firearms = await _firearmsService.GetAll();
     }
 
+    /// <summary>
+    /// Saves the <see cref="Firearm"/> to the JSON file.
+    /// </summary>
+    /// <returns></returns>
     [RelayCommand]
     private async Task SaveFirearm()
     {
@@ -54,6 +71,9 @@ public partial class ImportExportPageViewModel : BaseViewModel
 
     }
 
+    /// <summary>
+    /// Loads the <see cref="Firearm"/> and its related objects to the DB if they don't exists yet.
+    /// </summary>
     [RelayCommand]
     private async Task LoadFirearm()
     {

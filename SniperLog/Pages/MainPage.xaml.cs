@@ -10,7 +10,7 @@ namespace SniperLog.Pages
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage(MainPageViewModel vm)
+        public MainPage(MainPageViewModel vm) : base()
         {
             InitializeComponent();
             BindingContext = vm;

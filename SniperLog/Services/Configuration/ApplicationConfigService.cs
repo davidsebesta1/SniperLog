@@ -11,7 +11,8 @@ namespace SniperLog.Services.Configuration
 
         public static T? GetConfig<T>() where T : IConfig
         {
-            if (_configs == null) return default;
+            if (_configs == null) 
+                return default;
 
             if (_configs.TryGetValue(typeof(T), out object? config))
             {

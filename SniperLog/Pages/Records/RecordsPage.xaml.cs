@@ -19,14 +19,14 @@ namespace SniperLog.Pages.Records
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(FirearmEntry, n => n != null);
-            _validatorService.TryAddValidation(SRangeEntry, n => n != null);
-            _validatorService.TryAddValidation(SubRangeEntry, n => n != null);
-            _validatorService.TryAddValidation(AmmoEntry, n => n != null);
+            _validatorService.TryAddValidation(FirearmEntry, static n => n != null);
+            _validatorService.TryAddValidation(SRangeEntry, static n => n != null);
+            _validatorService.TryAddValidation(SubRangeEntry, static n => n != null);
+            _validatorService.TryAddValidation(AmmoEntry, static n => n != null);
 
-            _validatorService.TryAddValidation(ElevOffsetEntry, n => int.TryParse((string)n, out int res));
-            _validatorService.TryAddValidation(WindOffsetEntry, n => int.TryParse((string)n, out int res));
-            _validatorService.TryAddValidation(DistanceEntry, n => int.TryParse((string)n, out int res) && res > 0);
+            _validatorService.TryAddValidation(ElevOffsetEntry, static n => int.TryParse((string)n, out int res));
+            _validatorService.TryAddValidation(WindOffsetEntry, static n => int.TryParse((string)n, out int res));
+            _validatorService.TryAddValidation(DistanceEntry, static n => int.TryParse((string)n, out int res) && res > 0);
 
             RecordsPageViewModel vm = (BindingContext as RecordsPageViewModel);
             await vm.RefreshEntriesCommand.ExecuteAsync(false);

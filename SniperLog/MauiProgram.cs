@@ -39,6 +39,7 @@ using SniperLog.ViewModels.Manufacturers.AmmunitionManufacturers;
 using SniperLog.ViewModels.Firearms.MuzzleVelocities;
 using SniperLog.Pages.Firearms.MuzzleVelocities;
 using SniperLog.Services.AI;
+using LiveChartsCore.SkiaSharpView.Maui;
 
 namespace SniperLog
 {
@@ -160,6 +161,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ImportExportPageViewModel>();
 
+            builder.Services.AddSingleton<SettingsPageViewModel>();
+
             #endregion
 
             #region Pages
@@ -211,6 +214,8 @@ namespace SniperLog
 
             builder.Services.AddSingleton<ImportExportPage>();
 
+            builder.Services.AddSingleton<SettingsPage>();
+
             #endregion
 
             #region Processors
@@ -225,10 +230,12 @@ namespace SniperLog
             builder.Services.AddSingleton<BulletHoleDetectionService>();
 
             AppConfig config = ApplicationConfigService.GetConfig<AppConfig>();
+
+            IPAddress.TryParse(config.ServerHostname, out IPAddress address);
             ConnectionToDataServer connectionToDataServer = new ConnectionToDataServer()
             {
                 //HostName = config.ServerHostname,
-                IpAddress = IPAddress.Parse("10.0.2.2"),
+                IpAddress = address,
                 Port = config.ServerPort,
             };
 

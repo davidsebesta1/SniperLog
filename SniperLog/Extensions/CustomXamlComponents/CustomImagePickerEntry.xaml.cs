@@ -203,10 +203,8 @@ public partial class CustomImagePickerEntry : CustomEntryBase
     private async void EditImage_Tapped(object sender, TappedEventArgs e)
     {
         if (string.IsNullOrEmpty(SelectedImagePath.ImagePath))
-        {
             return;
-        }
-
+        
         _editorPopup = new CustomImageEditorPopup(ServicesHelper.GetService<CustomImageEditorPopupViewModel>());
         CustomImageEditorPopupViewModel vm = (_editorPopup.BindingContext as CustomImageEditorPopupViewModel);
         vm.BackgroundImage = SelectedImagePath;

@@ -1,16 +1,17 @@
 ﻿using SniperLog.Config.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SniperLog.Config
+namespace SniperLog.Config;
+
+/// <summary>
+/// Version control config.
+/// </summary>
+public class VersionControl : IConfig
 {
-    public class VersionControl : IConfig
-    {
-        public static string Name => "VersionControl";
+    /// <inheritdoc/>
+    public static string Name => "VersionControl";
 
-        public bool FirstLaunchEver { get; set; } = true;
-    }
+    /// <summary>
+    /// Value whether this is the first launch ever of the app. Used to initialize database.
+    /// </summary>
+    public bool FirstLaunchEver { get; set; } = true;
 }

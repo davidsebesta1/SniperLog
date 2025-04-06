@@ -8,18 +8,9 @@
              x:DataType="viewmodel:MuzzleVelocitiesPageViewModel"
              Title="{Binding PageTitle}">
 
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="45,*,80">
-            <HorizontalStackLayout Grid.Column="1">
-                <Image Source="logo.png" WidthRequest="25"/>
-                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
-            </HorizontalStackLayout>
-        </Grid>
-    </Shell.TitleView>
-
     <Grid RowDefinitions="90,55,*" Padding="15">
         <HorizontalStackLayout Grid.Row="0">
-            <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
+            <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}" BackgroundColor="Transparent"/>
             <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
         </HorizontalStackLayout>
 

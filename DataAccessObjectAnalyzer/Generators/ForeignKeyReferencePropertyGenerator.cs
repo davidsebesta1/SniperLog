@@ -11,30 +11,71 @@ namespace DataAccessObjectAnalyzer.Generators
 {
     public class ForeignKeyReferencePropertyGenerator : CSharpSyntaxWalker
     {
-        private readonly ClassDeclarationSyntax _targetClassNode;
-        private readonly StringBuilder _sb = new StringBuilder(2048);
+        /// <summary>
+        /// Template used during <see cref="VisitClassDeclaration(ClassDeclarationSyntax)"/> for caching purposes.
+        /// </summary>
+        public static string BaseTemplate = File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/FKPropertyTemplate.txt"));
 
+        /// <summary>
+        /// Notify property changed template for custom DAO.
+        /// </summary>
+        public static string NotifyTemplate = (File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/NotifyPropertyChangedTemplate.txt")));
+
+        /// <summary>
+        /// Result string text of the source.
+        /// </summary>
         public string ResultString => _sb.ToString();
 
+        private readonly ClassDeclarationSyntax _targetClassNode;
+        private readonly StringBuilder _sb = new StringBuilder(2048);
         private List<MemberDeclarationSyntax> _propertiesAndFields = new List<MemberDeclarationSyntax>();
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public ForeignKeyReferencePropertyGenerator(ClassDeclarationSyntax targetClassNode)
         {
             _targetClassNode = targetClassNode;
         }
 
+        /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            if (node == _targetClassNode)
-            {
-                base.VisitClassDeclaration(node);
-                GenerateReferences();
-            }
+            if (node != _targetClassNode)
+                return;
+
+            base.VisitClassDeclaration(node);
+            GenerateReferences();
         }
 
+        /// <inheritdoc/>
+        public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
+        {
+            base.VisitPropertyDeclaration(node);
+
+            if (!node.HasAttribute("ForeignKey"))
+                return;
+
+            _propertiesAndFields.Add(node);
+        }
+
+        /// <inheritdoc/>
+        public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
+        {
+            base.VisitFieldDeclaration(node);
+
+            if (!node.HasAttribute("ForeignKey"))
+                return;
+
+            _propertiesAndFields.Add(node);
+        }
+
+        /// <summary>
+        /// Generates the references source code for the ref-ID properties.
+        /// </summary>
         private void GenerateReferences()
         {
-            string templateText = File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/FKPropertyTemplate.txt"));
+            string templateText = BaseTemplate;
             foreach (MemberDeclarationSyntax member in _propertiesAndFields)
             {
                 _sb.AppendLine(templateText);
@@ -63,7 +104,7 @@ namespace DataAccessObjectAnalyzer.Generators
 
                     if (generateNotifyChanged)
                     {
-                        _sb.AppendLine(File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "../..", "Template/NotifyPropertyChangedTemplate.txt")));
+                        _sb.AppendLine(NotifyTemplate);
                     }
 
                     _sb.Replace("%refClass%", fkAttribute.ReferencedClass);
@@ -74,24 +115,6 @@ namespace DataAccessObjectAnalyzer.Generators
                     _sb.Replace("%propertyType%", generateNotifyTypeName);
                 }
             }
-        }
-
-        public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
-        {
-            base.VisitPropertyDeclaration(node);
-
-            if (!node.HasAttribute("ForeignKey")) return;
-
-            _propertiesAndFields.Add(node);
-        }
-
-        public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
-        {
-            base.VisitFieldDeclaration(node);
-
-            if (!node.HasAttribute("ForeignKey")) return;
-
-            _propertiesAndFields.Add(node);
         }
     }
 }

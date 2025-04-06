@@ -16,7 +16,7 @@ namespace SniperLog.Services
         /// <summary>
         /// Gets whether are all fields validated.
         /// </summary>
-        public bool AllValid => _validationValues.Values.All(x => x == true);
+        public bool AllValid => _validationValues.Values.All(static x => x == true);
 
         /// <summary>
         /// Base constructor.
@@ -56,7 +56,7 @@ namespace SniperLog.Services
             bool res = _validationValues.Remove(entry) && _validationFunctions.Remove(entry);
 
             if (res)
-                entry.OnEntryInputChanged -= EntryInput;        
+                entry.OnEntryInputChanged -= EntryInput;
 
             return res;
         }

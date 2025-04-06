@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SniperLog.Pages.Other.SettingsPage"
+             xmlns:model="clr-namespace:SniperLog.Models"
+             xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Other"
+              xmlns:custom="clr-namespace:SniperLog.Extensions.CustomXamlComponents"
+             x:DataType="viewmodel:SettingsPageViewModel"
+             Title="{Binding PageTitle}">
+
+    <VerticalStackLayout Padding="15" Spacing="5">
+        <Label Text="Settings" Grid.Row="0" Style="{StaticResource Headline}"/>
+        <custom:CustomTextEntry x:Name="WeatherServerIP" EntryTitle="Weather Server" EntryHeight="1" ErrorText="Must be IP" TextValue="{Binding WeatherServerTarget, Mode=TwoWay}"/>
+        <custom:CustomTextEntry x:Name="WeatherServerPort" EntryTitle="Weather Server Port" EntryHeight="1" ErrorText="Must be valid port" Keyboard="Numeric" TextValue="{Binding WeatherServerPort, Mode=TwoWay}"/>
+
+        <Button Text="Save" Command="{Binding SaveSettingsCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

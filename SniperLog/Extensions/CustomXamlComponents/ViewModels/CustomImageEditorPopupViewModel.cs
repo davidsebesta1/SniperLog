@@ -6,6 +6,7 @@ using Compunet.YoloSharp.Data;
 using Microsoft.Maui.Graphics.Platform;
 using Mopups.Services;
 using SixLabors.ImageSharp;
+using SkiaSharp;
 using SniperLog.Extensions.WrapperClasses;
 using SniperLog.Services.AI;
 using SniperLog.ViewModels;
@@ -73,21 +74,23 @@ public partial class CustomImageEditorPopupViewModel : BaseViewModel
             return;
 
         string tmpSavePath = Path.Combine(FileSystem.Current.CacheDirectory, Guid.NewGuid().ToString() + ".png");
-
-        using Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath));
-
-        int targetWidth = (int)originalImage.Width;
-        int targetHeight = (int)originalImage.Height;
-
-
-        using (FileStream localFileStream = File.OpenWrite(tmpSavePath))
+        using (Microsoft.Maui.Graphics.IImage originalImage = PlatformImage.FromStream(File.OpenRead(BackgroundImage.ImagePath)))
         {
-            using (Stream stream = drawingView.CaptureDrawingView())
-            {
-                using Microsoft.Maui.Graphics.IImage img = PlatformImage.FromStream(stream);
-                using Microsoft.Maui.Graphics.IImage imgResized = img.Resize(targetWidth, targetHeight, ResizeMode.Fit);
+            int targetWidth = (int)originalImage.Width;
+            int targetHeight = (int)originalImage.Height;
 
-                await imgResized.SaveAsync(localFileStream, ImageFormat.Png);
+            using (Stream stream = drawingView.CaptureDrawingView())
+            using (SKBitmap drawingBitmap = SKBitmap.Decode(stream))
+            {
+                using (SKBitmap resizedBitmap = drawingBitmap.Resize(new SKImageInfo(targetWidth, targetHeight), SKFilterQuality.High))
+                {
+                    using (FileStream localFileStream = File.OpenWrite(tmpSavePath))
+                    using (SKImage img = SKImage.FromBitmap(resizedBitmap))
+                    using (SKData data = img.Encode(SKEncodedImageFormat.Png, 100))
+                    {
+                        data.SaveTo(localFileStream);
+                    }
+                }
             }
         }
 

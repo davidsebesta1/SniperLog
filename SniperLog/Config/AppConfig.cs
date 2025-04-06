@@ -1,19 +1,27 @@
 ﻿using SniperLog.Config.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SniperLog.Config
+namespace SniperLog.Config;
+
+/// <summary>
+/// Misc app configuration.
+/// </summary>
+public sealed class AppConfig : IConfig
 {
-    public sealed class AppConfig : IConfig
-    {
-        public static string Name => "MainConfig";
+    /// <inheritdoc/>
+    public static string Name => "MainConfig";
 
-        public List<Version> AppliedPatches = new List<Version>();
+    /// <summary>
+    /// List of applied patches to the db.
+    /// </summary>
+    public List<Version> AppliedPatches = new List<Version>();
 
-        public string ServerHostname { get; set; } = "dev.spsejecna.net";
-        public ushort ServerPort { get; set; } = 8000;
-    }
+    /// <summary>
+    /// Host name of the weather server to connect to.
+    /// </summary>
+    public string ServerHostname { get; set; } = "dev.spsejecna.net";
+
+    /// <summary>
+    /// Port to connect to for the <see cref="ServerHostname"/>.
+    /// </summary>
+    public ushort ServerPort { get; set; } = 8000;
 }

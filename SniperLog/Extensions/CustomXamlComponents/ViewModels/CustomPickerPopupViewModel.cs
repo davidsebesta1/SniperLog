@@ -98,6 +98,15 @@ public partial class CustomPickerPopupViewModel : BaseViewModel
     }
 
     /// <summary>
+    /// Closes the popup.
+    /// </summary>
+    [RelayCommand]
+    private async Task Close()
+    {
+        await MopupService.Instance.PopAsync();
+    }
+
+    /// <summary>
     /// Command that to execute the base <see cref="CustomPickerEntry"/> selection changed command.
     /// </summary>
     [RelayCommand]

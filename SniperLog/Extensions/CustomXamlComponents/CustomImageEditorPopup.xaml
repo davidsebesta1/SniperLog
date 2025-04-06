@@ -12,7 +12,7 @@
              CloseWhenBackgroundIsClicked="False"
              Title="{Binding PageTitle}">
 
-    <Frame WidthRequest="350" MaximumHeightRequest="700" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
+    <Frame WidthRequest="350" Margin="0,10" VerticalOptions="CenterAndExpand" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="25" CornerRadius="15">
         <VerticalStackLayout>
             <VerticalStackLayout Grid.Row="0" Spacing="15">
                 <Label Text="{Binding PageTitle}" FontSize="20" FontAttributes="Bold"/>

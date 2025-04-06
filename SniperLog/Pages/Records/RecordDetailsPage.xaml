@@ -7,20 +7,11 @@
              xmlns:viewmodel="clr-namespace:SniperLog.ViewModels.Records"
              x:DataType="viewmodel:RecordDetailsPageViewModel"
              Title="{Binding PageTitle}">
-
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="45,*,80">
-            <HorizontalStackLayout Grid.Column="1">
-                <Image Source="logo.png" WidthRequest="25"/>
-                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
-            </HorizontalStackLayout>
-        </Grid>
-    </Shell.TitleView>
-
+    
     <ScrollView>
         <Grid RowDefinitions="90,*,50" Padding="15" RowSpacing="15">
             <HorizontalStackLayout Grid.Row="0">
-                <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}"/>
+                <ImageButton Source="arrowback.png" HeightRequest="40" Command="{Binding ReturnBackCommand}" BackgroundColor="Transparent"/>
                 <Label Text="{Binding PageTitle}" Style="{StaticResource Headline}" Margin="15,0,0,0"/>
             </HorizontalStackLayout>
 
@@ -32,7 +23,7 @@
                 <custom:CustomTextEntry x:Name="DistanceEntry" Keyboard="Numeric" EntryTitle="Distance Meters" TextValue="{Binding DistanceMeters, Mode=TwoWay}" EntryHeight="1"/>
 
                 <Label Text="Data" FontSize="24"/>
-                <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="250" Padding="12">
+                <Frame BackgroundColor="{StaticResource PanelBackgroundDark}" HeightRequest="260" Padding="12">
                     <VerticalStackLayout Padding="0">
                         <Label Text="{Binding Record.ReferencedFirearm.Name, StringFormat='Firearm: {0}', TargetNullValue='Firearm: None'}"/>
                         <Label Text="{Binding Record.ReferencedFirearm.ReferencedFirearmSight.Name, StringFormat='Sight: {0}', TargetNullValue='Sight: None'}"/>

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using SniperLog.Pages.Sights;
+using SniperLog.Pages.Sights.ClickSettings;
 using System.Collections.ObjectModel;
 
 namespace SniperLog.ViewModels.Sights.ClickSettings
@@ -53,7 +53,7 @@ namespace SniperLog.ViewModels.Sights.ClickSettings
         [RelayCommand]
         protected async Task EditClickSettings(FirearmSightSetting clickSettings)
         {
-            await Shell.Current.GoToAsync(nameof(SightAddOrEditPage), new Dictionary<string, object>(2) { { "Setting", clickSettings }, { "Sight", Sight } });
+            await Shell.Current.GoToAsync(nameof(SightClickSettingAddOrEditPage), new Dictionary<string, object>(2) { { "Setting", clickSettings }, { "Sight", Sight } });
         }
 
         [RelayCommand]
@@ -71,7 +71,7 @@ namespace SniperLog.ViewModels.Sights.ClickSettings
         [RelayCommand]
         protected async Task CreateNewClickSettings()
         {
-            await Shell.Current.GoToAsync(nameof(SightAddOrEditPage), new Dictionary<string, object>(21) { { "Setting", null }, { "Sight", Sight } });
+            await Shell.Current.GoToAsync(nameof(SightClickSettingAddOrEditPage), new Dictionary<string, object>(2) { { "Setting", null }, { "Sight", Sight } });
         }
     }
 }

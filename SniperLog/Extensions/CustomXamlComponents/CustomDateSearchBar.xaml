@@ -5,17 +5,17 @@
              xmlns:local="clr-namespace:SniperLog.Extensions.CustomXamlComponents.Abstract"
              x:Class="SniperLog.Extensions.CustomXamlComponents.CustomDateSearchBar">
 
-    <Frame x:Name="Main" BindingContext="{x:Reference this}" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}">
+    <Frame x:Name="Main" BindingContext="{x:Reference this}" HeightRequest="50" BackgroundColor="{StaticResource PanelBackgroundDark}" Padding="{OnPlatform Android='15,0', WinUI='10'}">
         <Frame.GestureRecognizers>
             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
         </Frame.GestureRecognizers>
-        
-        <Grid ColumnDefinitions="20,10,*,20" HeightRequest="50">
-            <ImageButton Source="searchicon.png" Grid.Column="0" Command="{Binding EnterCommand}"/>
+
+        <Grid ColumnDefinitions="{OnPlatform Android='20,10,*,20', WinUI='40, 10, *, 50'}" HeightRequest="30">
+            <ImageButton Source="searchicon.png" Grid.Column="0" Command="{Binding EnterCommand}" MinimumHeightRequest="10" MinimumWidthRequest="10" Background="Transparent"/>
 
             <Label Grid.Column="2" Text="{Binding StringVal}" TextColor="{Binding TextColorVal}" VerticalOptions="Center" FontSize="18"/>
             <DatePicker Date="{Binding DateValue}" x:Name="DatePickerEntry" Grid.Column="2" IsVisible="False" HeightRequest="0" DateSelected="DatePicker_DateSelected"/>
-            <ImageButton Source="cancelicon.png" Grid.Column="3" Pressed="ImageButton_Pressed" />
+            <ImageButton Source="cancelicon.png" Grid.Column="3" Pressed="ImageButton_Pressed" MinimumHeightRequest="10" MinimumWidthRequest="10" Background="Transparent"/>
         </Grid>
     </Frame>
 </ContentView>

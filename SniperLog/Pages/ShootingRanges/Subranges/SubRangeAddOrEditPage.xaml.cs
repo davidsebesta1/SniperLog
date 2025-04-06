@@ -20,10 +20,10 @@ namespace SniperLog.Pages.ShootingRanges.Subranges
             base.OnAppearing();
 
             _validatorService.TryAddValidation(PrefixEntry, (obj) => ((string)obj).Length == 1 && !(_cacher.GetAllBy(n => n.ShootingRange_ID == (BindingContext as SubRangeAddOrEditPageViewModel).OwningRange.ID && ((BindingContext as SubRangeAddOrEditPageViewModel).Subrange == null || n.ID != (BindingContext as SubRangeAddOrEditPageViewModel).Subrange.ID))).GetAwaiter().GetResult().Any(n => n.Prefix.ToString() == (string)obj));
-            _validatorService.TryAddValidation(RangeEntry, (obj) => double.TryParse((string)obj, out double val) && val >= 0d);
-            _validatorService.TryAddValidation(AltEntry, (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val));
-            _validatorService.TryAddValidation(FiringDirEntry, (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val) && val >= 0d && val <= 360d);
-            _validatorService.TryAddValidation(VerticalDirEntry, (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val));
+            _validatorService.TryAddValidation(RangeEntry, static (obj) => double.TryParse((string)obj, out double val) && val >= 0d);
+            _validatorService.TryAddValidation(AltEntry, static (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val));
+            _validatorService.TryAddValidation(FiringDirEntry, static (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val) && val >= 0d && val <= 360d);
+            _validatorService.TryAddValidation(VerticalDirEntry, static (obj) => string.IsNullOrEmpty((string)obj) || double.TryParse((string)obj, out double val));
 
             await (BindingContext as SubRangeAddOrEditPageViewModel).RefreshEntriesCommand.ExecuteAsync(null);
         }

@@ -11,15 +11,24 @@ using SyntaxExtensions = DataAccessObjectAnalyzer.Extensions.SyntaxExtensions;
 
 namespace DataAccessObjectAnalyzer
 {
+    /// <summary>
+    /// Generator entry point.
+    /// </summary>
     [Generator]
     public class MainGenerator : IIncrementalGenerator
     {
+        /// <summary>
+        /// Template used during <see cref="GenerateDAOCodeForClass"/> for caching purposes.
+        /// </summary>
+        public static string BaseTemplate = File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt"));
+
+        /// <inheritdoc/>
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             IncrementalValuesProvider<ClassDeclarationSyntax> daoClasses = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsCandidateClass(s),
-                    transform: static (context, _) => GetClassWithInterfaces(context))
+                    transform: static (context, _) => GetClassDeclaration(context))
                 .Where(classDecl => classDecl != null);
 
             context.RegisterSourceOutput(daoClasses, (spc, classDecl) =>
@@ -33,21 +42,36 @@ namespace DataAccessObjectAnalyzer
             });
         }
 
-        private static bool IsCandidateClass(SyntaxNode node)
+        /// <summary>
+        /// Gets whether this class is candidate for partial code generation.
+        /// </summary>
+        /// <param name="classNode">The class node the check one</param>
+        /// <returns>Whether the code should be generated for this class.</returns>
+        private static bool IsCandidateClass(SyntaxNode classNode)
         {
-            return node is ClassDeclarationSyntax classDecl && classDecl.BaseList != null && classDecl.BaseList.Types.Any(n => n?.Type.ToString() == "IDataAccessObject");
+            return classNode is ClassDeclarationSyntax classDecl && classDecl.BaseList != null && classDecl.BaseList.Types.Any(n => n?.Type.ToString() == "IDataAccessObject");
         }
 
-        private static ClassDeclarationSyntax GetClassWithInterfaces(GeneratorSyntaxContext context)
+        /// <summary>
+        /// Gets the class node from the syntax context.
+        /// </summary>
+        /// <param name="context">The generator syntax context.</param>
+        /// <returns>Class declaration syntax.</returns>
+        private static ClassDeclarationSyntax GetClassDeclaration(GeneratorSyntaxContext context)
         {
             return context.Node as ClassDeclarationSyntax;
         }
 
+        /// <summary>
+        /// Generates the DAO class code for this class.
+        /// </summary>
+        /// <param name="classNode">Class node to generate the code for.</param>
+        /// <returns></returns>
         private static string GenerateDAOCodeForClass(ClassDeclarationSyntax classNode)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(File.ReadAllText(Path.Combine(SyntaxExtensions.GetSrcFilePath(), "..", "Template/DAOPartialTemplate.txt")));
+            stringBuilder.Append(BaseTemplate);
 
             GenerateNoteSaveableCode(stringBuilder, classNode);
             GenerateImageSaveableCode(stringBuilder, classNode);
@@ -58,7 +82,7 @@ namespace DataAccessObjectAnalyzer
 
         private static void GenerateNoteSaveableCode(StringBuilder stringBuilder, ClassDeclarationSyntax classNode)
         {
-            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n?.Type.ToString() == "INoteSaveable"))
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(static n => n?.Type.ToString() == "INoteSaveable"))
             {
                 NoteSaveableGenerator noteSaveableGenerator = new NoteSaveableGenerator(classNode);
                 noteSaveableGenerator.Visit(classNode);
@@ -72,7 +96,7 @@ namespace DataAccessObjectAnalyzer
 
         private static void GenerateImageSaveableCode(StringBuilder stringBuilder, ClassDeclarationSyntax classNode)
         {
-            if (classNode.BaseList != null && classNode.BaseList.Types.Any(n => n?.Type.ToString() == "IImageSaveable"))
+            if (classNode.BaseList != null && classNode.BaseList.Types.Any(static n => n?.Type.ToString() == "IImageSaveable"))
             {
                 ImageSaveableGenerator imageSaveableGenerator = new ImageSaveableGenerator(classNode);
                 imageSaveableGenerator.Visit(classNode);

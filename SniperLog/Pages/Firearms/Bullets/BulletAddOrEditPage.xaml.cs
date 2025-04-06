@@ -18,14 +18,14 @@ namespace SniperLog.Pages.Firearms.Bullets
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(CaliberEntry, n => n != null);
-            _validatorService.TryAddValidation(ManufacturerEntry, n => n != null);
+            _validatorService.TryAddValidation(CaliberEntry, static n => n != null);
+            _validatorService.TryAddValidation(ManufacturerEntry, static n => n != null);
 
-            _validatorService.TryAddValidation(WeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(BulletDiameterEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(BulletLengthEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(BC1Entry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(BC7Entry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(WeightEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BulletDiameterEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BulletLengthEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BC1Entry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BC7Entry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
             await (BindingContext as BulletAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
         }

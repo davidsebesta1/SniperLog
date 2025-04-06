@@ -10,16 +10,7 @@
              BackgroundColor="{StaticResource Background}"
              Title="{Binding PageTitle}">
 
-    <Shell.TitleView>
-        <Grid ColumnDefinitions="45,*,80">
-            <HorizontalStackLayout Grid.Column="1">
-                <Image Source="logo.png" WidthRequest="25"/>
-                <Label Text="SniperLog" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="24" Padding="10,0,0,0"/>
-            </HorizontalStackLayout>
-        </Grid>
-    </Shell.TitleView>
-
-    <Grid RowDefinitions="100,620" Padding="15,15,15,0">
+    <Grid RowDefinitions="100,*" Padding="15,15,15,0">
 
         <VerticalStackLayout Grid.Row="0">
             <Label Text="Shooting Ranges" Style="{StaticResource Headline}" Padding="0,0,0,10"/>
@@ -65,7 +56,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" HorizontalOptions="End" VerticalOptions="End" Command="{Binding AddNewRangeCommand}"/>
+            <Button HeightRequest="65" WidthRequest="65" CornerRadius="35" Text="+" FontSize="56" Padding="1,-12,0,0" Margin="0,0,0,15" HorizontalOptions="End" VerticalOptions="End" Command="{Binding AddNewRangeCommand}"/>
         </Grid>
     </Grid>
 </ContentPage>

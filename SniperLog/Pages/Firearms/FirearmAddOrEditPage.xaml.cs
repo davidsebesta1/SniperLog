@@ -15,21 +15,24 @@ namespace SniperLog.Pages.Firearms
         }
 
         protected override async void OnAppearing()
+
         {
             base.OnAppearing();
 
-            _validatorService.TryAddValidation(NameEntry, n => !string.IsNullOrEmpty((string)n));
-            _validatorService.TryAddValidation(FirearmTypeEntry, n => n != null);
-            _validatorService.TryAddValidation(ManufacturerEntry, n => n != null);
-            _validatorService.TryAddValidation(CaliberEntry, n => n != null);
-            _validatorService.TryAddValidation(SightEntry, n => n != null);
-            _validatorService.TryAddValidation(SightOffsetEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(NameEntry, static n => !string.IsNullOrEmpty((string)n));
+            _validatorService.TryAddValidation(FirearmTypeEntry, static n => n != null);
+            _validatorService.TryAddValidation(ManufacturerEntry, static n => n != null);
+            _validatorService.TryAddValidation(CaliberEntry, static n => n != null);
+            _validatorService.TryAddValidation(SightEntry, static n => n != null);
+            _validatorService.TryAddValidation(SightOffsetEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
-            _validatorService.TryAddValidation(TotalLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(BarrelLenEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
-            _validatorService.TryAddValidation(WeightEntry, n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(TotalLenEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(BarrelLenEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
+            _validatorService.TryAddValidation(WeightEntry, static n => string.IsNullOrEmpty((string)n) || (double.TryParse((string)n, CultureInfo.InvariantCulture, out double res) && res > 0d));
 
             await (BindingContext as FirearmAddOrEditPageViewModel).RefeshPickersCommand.ExecuteAsync(null);
+            //(BindingContext as FirearmAddOrEditPageViewModel).Firearm = new Firearm(1, 1, 1, 1, "a", "", "", 1, 1, "", 1, false, 1);
+            //(BindingContext as FirearmAddOrEditPageViewModel).Firearm = null;
         }
 
         protected override void OnDisappearing()
