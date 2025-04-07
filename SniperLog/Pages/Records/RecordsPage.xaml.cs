@@ -1,3 +1,6 @@
+using Mopups.Services;
+using SniperLog.Config;
+using SniperLog.Pages.Other;
 using SniperLog.ViewModels.Records;
 
 namespace SniperLog.Pages.Records

@@ -10,7 +10,7 @@
 
     <VerticalStackLayout Padding="15" Spacing="5">
         <Label Text="Import/Export" Grid.Row="0" Style="{StaticResource Headline}"/>
-        <custom:CustomPickerEntry SelectedItem="{Binding SelectedFirearm}" SourceCollection="{Binding Firearms}" EntryHeight="1" EntryTitle="Firearms"/>
+        <custom:CustomPickerEntry SelectedItem="{Binding SelectedFirearm, Mode=TwoWay}" SourceCollection="{Binding Firearms}" EntryHeight="1" EntryTitle="Firearms"/>
         <Button Text="Save" Command="{Binding SaveFirearmCommand}"/>
         <Button Text="Load" Command="{Binding LoadFirearmCommand}"/>
     </VerticalStackLayout>

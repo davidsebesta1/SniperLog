@@ -238,7 +238,7 @@ public partial class RecordsPageViewModel : BaseViewModel
 
             WeatherResponseMessage msg = SelectedRange == null ? default : await SelectedRange.GetCurrentWeather();
 
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 List<ClickOffset?>? weatherOffsets = await GetNearestWeatherClicksFromBase(distances, msg);
                 ElevationSeries.Clear();
@@ -304,12 +304,23 @@ public partial class RecordsPageViewModel : BaseViewModel
                     {
                         offset = await ballisticCalculatorService.CalculateOffset(SelectedFirearm, SelectedAmmunition, msg, 100, 300, 50, SelectedFirearm.ReferencedFirearmSight.OneClickValue);
                     }
+                    catch (ArgumentNullException e)
+                    {
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
+                        {
+                            await Shell.Current.DisplayAlert("Warning", e.Message, "Okay");
+                        });
+                        return;
+                    }
                     catch (ArgumentException e)
                     {
-                        bool goToSettings = await Shell.Current.DisplayAlert("Warning", e.Message, "Go to settings", "Okay");
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
+                        {
+                            bool goToSettings = await Shell.Current.DisplayAlert("Warning", e.Message, "Go to settings", "Okay");
 
-                        if (goToSettings)
-                            await Shell.Current.GoToAsync(nameof(MuzzleVelocitiesPage), new Dictionary<string, object>(1) { { "Firearm", SelectedFirearm } });
+                            if (goToSettings)
+                                await Shell.Current.GoToAsync(nameof(MuzzleVelocitiesPage), new Dictionary<string, object>(1) { { "Firearm", SelectedFirearm } });
+                        });
 
                         return;
                     }

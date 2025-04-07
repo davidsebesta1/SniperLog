@@ -30,6 +30,12 @@ public class BallisticCalculatorService
 
         double vel = velocities.Average(n => n.VelocityMS);
 
+        if(firearm.SightHeightCm == null)
+            throw new ArgumentNullException("Sight height offset cm is not set.");
+
+        if (string.IsNullOrEmpty(firearm.RateOfTwist))
+            throw new ArgumentNullException("Firearm's rate of twist is not set.");
+
         BallisticCalculator.Ammunition ballisticAmmo = new BallisticCalculator.Ammunition(
             weight: new Measurement<WeightUnit>(ammo.ReferencedBullet.WeightGrams, WeightUnit.Gram),
 

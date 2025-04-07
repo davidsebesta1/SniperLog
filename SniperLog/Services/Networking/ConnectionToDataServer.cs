@@ -74,7 +74,7 @@ public class ConnectionToDataServer
         }
 
         _tcpClient = new TcpClient();
-        if (!_tcpClient.ConnectAsync(IpAddress, Port).Wait(5))
+        if (!_tcpClient.ConnectAsync(IpAddress, Port).Wait(2000))
         {
             throw new TimeoutException("Connection timeout");
         }
