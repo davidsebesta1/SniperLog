@@ -48,10 +48,6 @@ public class BulletHoleDetectionService
     {
         SessionOptions sessionOptions = new SessionOptions();
 
-#if ANDROID
-        sessionOptions.AppendExecutionProvider_Nnapi(); //Nnapi to improve performance on mobile devices
-#endif
-
         YoloPredictorOptions options = new YoloPredictorOptions
         {
             SessionOptions = sessionOptions

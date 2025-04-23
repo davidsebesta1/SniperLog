@@ -53,7 +53,7 @@ public partial class InitialSetupPopupPageViewModel : BaseViewModel
         //Subranges
         SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B');
         await testSub.SaveAsync();
-        await testSub.SaveNotesAsync("test notes markiplier");
+        await testSub.SaveNotesAsync("test notes");
 
         //Manufacturers
         Manufacturer manufacturer = new Manufacturer(15, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Firearm")).ID, "TestMan");
