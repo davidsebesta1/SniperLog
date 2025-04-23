@@ -53,20 +53,28 @@ public partial class InitialSetupPopupPageViewModel : BaseViewModel
         //Subranges
         SubRange testSub = new SubRange(s1.ID, 300, 123, 46, 0, 'B');
         await testSub.SaveAsync();
-        await testSub.SaveNotesAsync("test notes markiplier");
+        await testSub.SaveNotesAsync("test notes");
 
         //Manufacturers
-        Manufacturer manufacturer = new Manufacturer(15, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "TestMan");
-        Manufacturer manufacturer2 = new Manufacturer(16, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Firearm")).ID, "Ceska Zbrojovka");
+        Manufacturer manufacturer = new Manufacturer(15, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Firearm")).ID, "TestMan");
+        Manufacturer manufacturer2 = new Manufacturer(16, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Firearm")).ID, "Ceska Zbrojovka");
 
         await manufacturer.SaveAsync();
         await manufacturer2.SaveAsync();
 
-        Manufacturer manufacturer3 = new Manufacturer(14, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Sight")).ID, "Vortex");
-        Manufacturer manufacturer4 = new Manufacturer(13, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(n => n.Name == "Sight")).ID, "Morkite");
+        Manufacturer manufacturer3 = new Manufacturer(14, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Sight")).ID, "Vortex");
+        Manufacturer manufacturer4 = new Manufacturer(13, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Sight")).ID, "Morkite");
 
         await manufacturer3.SaveAsync();
         await manufacturer4.SaveAsync();
+
+        Manufacturer manufacturer5 = new Manufacturer(14, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Bullet")).ID, "Lapua");
+
+        await manufacturer5.SaveAsync();
+
+        Manufacturer manufacturer6 = new Manufacturer(14, (await ServicesHelper.GetService<DataCacherService<ManufacturerType>>().GetFirstBy(static n => n.Name == "Ammunition")).ID, "Lapua");
+
+        await manufacturer6.SaveAsync();
 
         //Reticles
         SightReticle reticle1 = new SightReticle("TestRet");
@@ -76,8 +84,8 @@ public partial class InitialSetupPopupPageViewModel : BaseViewModel
         await reticle2.SaveAsync();
 
         //Sights
-        FirearmSight sight1 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == "MRAD")).ID, 3, reticle1.ID, "Vortex1", 0.1d);
-        FirearmSight sight2 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(n => n.ClickTypeName == "MOA")).ID, 4, reticle2.ID, "MOAScope", 0.25d);
+        FirearmSight sight1 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(static n => n.ClickTypeName == "MRAD")).ID, 3, reticle1.ID, "Vortex1", 0.1d);
+        FirearmSight sight2 = new FirearmSight((await ServicesHelper.GetService<DataCacherService<SightClickType>>().GetFirstBy(static n => n.ClickTypeName == "MOA")).ID, 4, reticle2.ID, "MOAScope", 0.25d);
 
         await sight1.SaveAsync();
         await sight2.SaveAsync();
@@ -95,6 +103,15 @@ public partial class InitialSetupPopupPageViewModel : BaseViewModel
 
         await firearm1.SaveAsync();
         await firearm2.SaveAsync();
+
+        Bullet bullet = new Bullet((await ServicesHelper.GetService<DataCacherService<FirearmCaliber>>().GetFirstBy(static n => n.Caliber.Contains(".308"))).ID, manufacturer5.ID, 13.6d, 13, 34, 0.3d, 0.7d);
+        await bullet.SaveAsync();
+
+        Ammunition ammunition = new Ammunition(bullet.ID, 120, 2.2d);
+        await ammunition.SaveAsync();
+
+        MuzzleVelocity muzzleVelocity = new MuzzleVelocity(ammunition.ID, firearm1.ID, 380d);
+        muzzleVelocity.SaveAsync();
 #endif
     }
 

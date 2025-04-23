@@ -1,3 +1,6 @@
+using Mopups.Services;
+using SniperLog.Config;
+using SniperLog.Pages.Other;
 using SniperLog.ViewModels.Records;
 
 namespace SniperLog.Pages.Records
@@ -5,19 +8,27 @@ namespace SniperLog.Pages.Records
     public partial class RecordsPage : ContentPage
     {
         private readonly ValidatorService _validatorService;
-        private readonly DataCacherService<Firearm> _firearmCacher;
 
-        public RecordsPage(RecordsPageViewModel vm, ValidatorService validatorService, DataCacherService<Firearm> firearmCacher)
+        public RecordsPage(RecordsPageViewModel vm, ValidatorService validatorService)
         {
             InitializeComponent();
             BindingContext = vm;
             _validatorService = validatorService;
-            _firearmCacher = firearmCacher;
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            //First time setup
+            await Task.Delay(1000);
+            VersionControl tracking = ApplicationConfigService.GetConfig<VersionControl>();
+
+            if (tracking.FirstLaunchEver)
+            {
+                await MopupService.Instance.PushAsync(ServicesHelper.GetService<InitialSetupPopupPage>());
+                return;
+            }
 
             _validatorService.TryAddValidation(FirearmEntry, static n => n != null);
             _validatorService.TryAddValidation(SRangeEntry, static n => n != null);

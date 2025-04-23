@@ -36,6 +36,7 @@ public partial class ImportExportPageViewModel : BaseViewModel
 
     /// <summary>
     /// Ctor.
+    /// </summary>
     public ImportExportPageViewModel(DataCacherService<Firearm> firearmService) : base()
     {
         PageTitle = "Import/Export";
@@ -58,10 +59,16 @@ public partial class ImportExportPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task SaveFirearm()
     {
+        if (SelectedFirearm == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "No firearm selected", "Okay");
+            return;
+        }
+
         FolderPickerResult result = await FolderPicker.Default.PickAsync();
         if (result.IsSuccessful)
         {
-            await DatabaseExporterService.ExportFirearmToJson(SelectedFirearm.ID, result.Folder.Path + $"firearm-{SelectedFirearm.Name}-export.json");
+            await DatabaseExporterService.ExportFirearmToJson(SelectedFirearm.ID, Path.Combine(result.Folder.Path, $"firearm-{SelectedFirearm.Name}-export.json"));
             await Shell.Current.DisplayAlert("Export", $"Exported {SelectedFirearm.Name}", "Okay");
         }
         else

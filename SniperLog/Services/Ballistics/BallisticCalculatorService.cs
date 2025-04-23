@@ -23,12 +23,21 @@ public class BallisticCalculatorService
     /// <returns>A new list of click offsets.</returns>
     public async Task<List<ClickOffset>> CalculateOffset(Firearm firearm, Models.Ammunition ammo, WeatherResponseMessage weather, int minRange, int maxRange, int step, double oneClickValue)
     {
+        if(ammo == null)
+            throw new ArgumentNullException("No selected ammunition");
+
         ObservableCollection<MuzzleVelocity> velocities = (await ServicesHelper.GetService<DataCacherService<MuzzleVelocity>>().GetAllBy(n => n.Ammo_ID == ammo.ID && n.Firearm_ID == firearm.ID));
 
         if (velocities.Count == 0)
             throw new ArgumentException("No muzzle velocities found. Unable to calculate offsets.");
 
         double vel = velocities.Average(n => n.VelocityMS);
+
+        if(firearm.SightHeightCm == null)
+            throw new ArgumentNullException("Sight height offset cm is not set.");
+
+        if (string.IsNullOrEmpty(firearm.RateOfTwist))
+            throw new ArgumentNullException("Firearm's rate of twist is not set.");
 
         BallisticCalculator.Ammunition ballisticAmmo = new BallisticCalculator.Ammunition(
             weight: new Measurement<WeightUnit>(ammo.ReferencedBullet.WeightGrams, WeightUnit.Gram),

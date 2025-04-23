@@ -17,7 +17,7 @@ public static class ParseExtensions
         if (string.IsNullOrEmpty(input))
             return null;
 
-        return double.Parse(input, CultureInfo.InvariantCulture);
+        return double.Parse(input.Replace(',', '.'), CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static class ParseExtensions
         if (string.IsNullOrEmpty(input))
             return null;
 
-        return float.Parse(input, CultureInfo.InvariantCulture);
+        return float.Parse(input.Replace(',', '.'), CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public static class ParseExtensions
         if (string.IsNullOrEmpty(input))
             return null;
 
-        return int.Parse(input, CultureInfo.InvariantCulture);
+        return int.Parse(input.Replace(',', '.'), CultureInfo.InvariantCulture);
     }
 }
 

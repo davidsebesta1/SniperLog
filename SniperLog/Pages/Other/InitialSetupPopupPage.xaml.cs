@@ -1,5 +1,6 @@
 using Mopups.Pages;
 using Mopups.Services;
+using SniperLog.Pages.Records;
 using SniperLog.ViewModels.Other;
 
 namespace SniperLog.Pages.Other
@@ -39,10 +40,11 @@ namespace SniperLog.Pages.Other
                 vm.FinalizeInitialLoadCommand.Execute(null);
 
                 await MopupService.Instance.PopAsync();
+                await Shell.Current.GoToAsync(nameof(RecordsPage));
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("FATAL ERROR", ex.ToString(), "Okay");
+                await Shell.Current.DisplayAlert("FATAL ERROR, PLEASE CONTACT DEVELOPER", ex.ToString(), "Okay");
             }
         }
     }
