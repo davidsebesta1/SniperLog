@@ -29,7 +29,7 @@ Steps:
 - Start using .exe file.
 ### Android
 #### Requirements
-- Android 5.0 (API 21)
+- Android 5.0 (API 24) Minimum
   
 #### Installation
 Steps:
