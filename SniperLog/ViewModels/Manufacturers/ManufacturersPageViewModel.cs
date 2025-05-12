@@ -13,7 +13,7 @@ namespace SniperLog.ViewModels.Manufacturers
         [RelayCommand]
         private async Task GoToFirearmManufacturers()
         {
-            await Shell.Current.GoToAsync(nameof(BulletManuPage));
+            await Shell.Current.GoToAsync(nameof(FirearmManuPage));
         }
 
         [RelayCommand]
